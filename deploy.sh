@@ -5,7 +5,7 @@ set -e
 cd /tmp && python3 generate_web.py
 
 # Sync all three files into the repo
-cp /tmp/tread_customers.html ~/Code/customer-pulse/index.html
+cp ~/Desktop/tread_customers.html ~/Code/customer-pulse/index.html
 cp /tmp/generate_web.py      ~/Code/customer-pulse/generate_web.py
 cp /tmp/create_deck_v3.py    ~/Code/customer-pulse/create_deck_v3.py
 
