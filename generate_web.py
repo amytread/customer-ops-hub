@@ -1165,6 +1165,43 @@ select option { background:var(--surf2); }
 .cat-Driver-Type-Role-Correction{ background:rgba(14,165,233,.2);  color:#7DD3FC; }
 .cat-Ticket-Management          { background:rgba(45,212,191,.2);  color:#99F6E4; }
 .cat-Other                      { background:rgba(100,116,139,.2); color:#94A3B8; }
+/* state spans */
+.state-open    { color:#4ADE80; }
+.state-done    { color:#6EE7B7; }
+.state-backlog { color:#94A3B8; }
+.state-other   { color:#B0BEC5; }
+.state-unknown { color:#64748B; font-style:italic; }
+body.light .state-open    { color:#166534; }
+body.light .state-done    { color:#14532D; }
+body.light .state-backlog { color:#475569; }
+body.light .state-other   { color:#475569; }
+body.light .state-unknown { color:#6B8A9E; }
+/* light mode cat pills */
+body.light .cat-Login-Account-Access       { color:#92400E; }
+body.light .cat-App-Mobile-Issues          { color:#4C1D95; }
+body.light .cat-Reporting                  { color:#312E81; }
+body.light .cat-Vendor-Management          { color:#164E63; }
+body.light .cat-Billing-Invoicing          { color:#581C87; }
+body.light .cat-Rates-Pricing-Issues       { color:#7C2D12; }
+body.light .cat-Feature-Requests           { color:#14532D; }
+body.light .cat-Add-Onboard-Driver         { color:#064E3B; }
+body.light .cat-Driver-Type-Role-Correction{ color:#0C4A6E; }
+body.light .cat-Ticket-Management          { color:#134E4A; }
+body.light .cat-Other                      { color:#374151; }
+body.light .iact-src.Intercom { color:#1A6FA8; background:rgba(96,171,222,.18); }
+body.light .iact-src.Linear   { color:#4C1D95; background:rgba(167,139,250,.18); }
+body.light .iact-src.Project  { color:#4C1D95; background:rgba(167,139,250,.18); }
+body.light .hcall-title  { color:var(--yellow2); }
+body.light .hcall-risk   { color:#991B1B; }
+/* line expand notes */
+.le-notes { padding:12px 16px 14px; border-top:1px solid var(--border); background:var(--surf2); }
+.le-notes-title { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px; }
+.le-notes-list  { display:flex; flex-direction:column; gap:5px; margin-bottom:8px; }
+.le-notes-row   { display:flex; gap:8px; align-items:flex-end; }
+.le-notes-input { flex:1; background:var(--surface); border:1px solid var(--border); border-radius:6px; color:var(--text); font-size:12px; font-family:inherit; padding:6px 9px; resize:none; min-height:44px; max-height:100px; }
+.le-notes-input:focus { outline:none; border-color:var(--yellow); }
+.le-notes-save  { background:var(--yellow); color:#000; border:none; border-radius:6px; font-size:12px; font-weight:700; font-family:inherit; padding:6px 12px; cursor:pointer; white-space:nowrap; flex-shrink:0; }
+.le-notes-save:hover { opacity:.85; }
 /* Stacked category bars */
 .stacked-bar-inner { display:flex; height:8px; border-radius:4px; overflow:hidden; width:100%; }
 .stacked-seg { height:100%; min-width:2px; transition:opacity .15s; }
@@ -1880,15 +1917,15 @@ function iactHtml(item, source) {
   const cat   = item.category || 'Other';
   const date  = item.date || item.createdAt || '';
   const srcCss = source === 'Project' ? 'Project' : source;
-  const stateColor = state === 'open' ? '#4ADE80' : state === 'Done' ? '#6EE7B7' : state === 'Backlog' ? '#94A3B8' : '#B0BEC5';
-  const stubTag = item._stub ? `<span style="font-size:9px;color:#94A3B8;margin-left:4px;font-style:italic">tracked</span>` : '';
+  const stateCls = state === 'open' ? 'state-open' : state === 'Done' ? 'state-done' : state === 'Backlog' ? 'state-backlog' : 'state-other';
+  const stubTag = item._stub ? `<span style="font-size:9px;margin-left:4px;font-style:italic" class="state-unknown">tracked</span>` : '';
   return `<div class="iact">
     <span class="iact-src ${srcCss}">${source}</span>
     <div class="iact-body">
       <div class="iact-title"><a href="${esc(url)}" target="_blank">${esc(title||url)}</a>
         <span class="cat-pill ${catClass(cat)}">${esc(cat)}</span>${stubTag}
       </div>
-      <div class="iact-meta">${date ? esc(date) : '<span style="color:#64748B;font-style:italic">date unknown</span>'} · <span style="color:${stateColor}">${esc(state)}</span></div>
+      <div class="iact-meta">${date ? esc(date) : '<span class="state-unknown">date unknown</span>'} · <span class="${stateCls}">${esc(state)}</span></div>
     </div>
   </div>`;
 }
@@ -2107,8 +2144,23 @@ function toggleLineExpand(idx, rowEl) {
     expandEl.innerHTML =
       `<div class="le-strip">${stripHtml}</div>` +
       (hasRisk && foot ? `<div class="le-foot m-foot">${foot}</div>` : '') +
-      `<div class="le-body"><div class="le-col">${left}</div><div class="le-col">${right}</div></div>`;
+      `<div class="le-body"><div class="le-col">${left}</div><div class="le-col">${right}</div></div>` +
+      `<div class="le-notes">
+        <div class="le-notes-title">Notes</div>
+        <div class="le-notes-list" id="le-nl-${idx}"></div>
+        <div class="le-notes-row">
+          <textarea class="le-notes-input" id="le-ni-${idx}" placeholder="Add a note… (Cmd+Enter to save)" rows="2"></textarea>
+          <button class="le-notes-save" onclick="saveLeNote(${idx},'${co.name.replace(/'/g,"\\'")}',document.getElementById('le-ni-${idx}').value);document.getElementById('le-ni-${idx}').value=''">Save</button>
+        </div>
+      </div>`;
     expandEl.dataset.built = '1';
+    _renderLeNotes(idx, co.name);
+    document.getElementById('le-ni-'+idx).addEventListener('keydown', e => {
+      if ((e.metaKey||e.ctrlKey) && e.key==='Enter') {
+        saveLeNote(idx, co.name, e.target.value);
+        e.target.value = '';
+      }
+    });
   }
   expandEl.classList.add('open');
   _expandedRow = rowEl;
@@ -3182,6 +3234,38 @@ function deleteNote(name, id) {
   if (all[name]) all[name] = all[name].filter(n => n.id !== id);
   localStorage.setItem(NOTES_KEY, JSON.stringify(all));
   _renderNotesList(name);
+}
+
+function _renderLeNotes(idx, name) {
+  const list = document.getElementById('le-nl-'+idx);
+  if (!list) return;
+  const all = _allNotes();
+  const notes = (all[name] || []).slice().sort((a,b) => b.id - a.id);
+  if (!notes.length) { list.innerHTML = '<div class="notes-empty">No notes yet</div>'; return; }
+  list.innerHTML = notes.map(n => {
+    const d = new Date(n.id);
+    const ts = d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) + ' · ' + d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+    return `<div class="note-item">
+      <div class="note-meta"><span class="note-ts">${ts}</span>
+        <button class="note-del" onclick="deleteLeNote(${idx},${JSON.stringify(name)},${n.id})" title="Delete">&#x2715;</button>
+      </div>
+      <div class="note-text">${esc(n.text)}</div>
+    </div>`;
+  }).join('');
+}
+function saveLeNote(idx, name, text) {
+  if (!text.trim()) return;
+  const all = _allNotes();
+  if (!all[name]) all[name] = [];
+  all[name].push({ id: Date.now(), text: text.trim() });
+  localStorage.setItem(NOTES_KEY, JSON.stringify(all));
+  _renderLeNotes(idx, name);
+}
+function deleteLeNote(idx, name, id) {
+  const all = _allNotes();
+  if (all[name]) all[name] = all[name].filter(n => n.id !== id);
+  localStorage.setItem(NOTES_KEY, JSON.stringify(all));
+  _renderLeNotes(idx, name);
 }
 
 document.getElementById('notes-save-btn').addEventListener('click', () => {
