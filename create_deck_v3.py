@@ -338,8 +338,11 @@ FEATURE_OVERRIDES = {
 }
 
 # ── Usage status & tenure ──────────────────────────────────────────────────
-# status: "Primary system" | "Onboarding" | "Sporadic" | "Disengaged"
+# status: "Primary system" | "Onboarding" | "Sporadic" | "Disengaged" | "Churned"
 USAGE_STATUS = {
+    "HOLCIM - NORTH CENTRAL (FARGO)":   "Primary system",
+    "RAM-CO TRUCKING SERVICES":         "Churned",
+    "MIDTEX MATERIALS":                 "Churned",
     "4M TRUCKING":                      "Primary system",
     "AHS":                              "Primary system",
     "AMRIZE: SASK + WINNIPEG":          "Onboarding",

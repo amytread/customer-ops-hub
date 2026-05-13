@@ -830,6 +830,7 @@ body.light .tag.status.Primary-system { color:#166534; }
 body.light .tag.status.Onboarding     { color:#1A6FA8; }
 body.light .tag.status.Sporadic       { color:#7C4A00; }
 body.light .tag.status.Disengaged     { color:#991B1B; }
+body.light .tag.status.Churned        { color:#475569; }
 /* Counters */
 body.light .counter.tickets { color:#991B1B; border-color:rgba(239,68,68,.3); }
 body.light .counter.support  { color:#1A6FA8; border-color:rgba(96,171,222,.4); }
@@ -1097,6 +1098,7 @@ body.light .kanban-col-hdr { background:var(--surf2); }
 .tag.status.Onboarding { background:rgba(96,171,222,.15); color:#93C5FD; }
 .tag.status.Sporadic   { background:rgba(245,158,11,.15); color:#FCD34D; }
 .tag.status.Disengaged { background:rgba(239,68,68,.15); color:#FCA5A5; }
+.tag.status.Churned    { background:rgba(100,116,139,.15); color:#94A3B8; text-decoration:line-through; }
 .tag.status { background:rgba(255,255,255,.08); color:var(--text2); }
 .card-meta { padding:8px 14px 10px; border-top:1px solid var(--border); }
 .meta-row { font-size:12px; color:var(--muted); display:flex; gap:12px; flex-wrap:wrap; margin-bottom:3px; }
@@ -1592,6 +1594,7 @@ body.light .quo-date      { color:#1A6FA8; }
       <option value="Primary system">Primary System</option>
       <option value="Sporadic">Sporadic</option>
       <option value="Disengaged">Disengaged</option>
+      <option value="Churned">Churned</option>
     </select>
     <select id="f-csm">
       <option value="">All CSMs</option>
@@ -1966,7 +1969,7 @@ function renderGrid() {
       type:   ['Hauler','Producer','Construction','Agriculture','Mixed'],
       csm:    ['Latefa Redjouh','unassigned'],
       tenure: ['New','~1 Year','~2 Years','3+ Years'],
-      usage:  ['Onboarding','Primary system','Sporadic','Disengaged'],
+      usage:  ['Onboarding','Primary system','Sporadic','Disengaged','Churned'],
     };
     const GRP_LABEL = {
       health: {red:'At Risk', yellow:'Needs Attention', gray:'Inactive', green:'Healthy'},
@@ -2133,6 +2136,7 @@ function _buildContent(idx) {
       'Onboarding':     'currently onboarding',
       'Sporadic':       'using Tread sporadically',
       'Disengaged':     'disengaged from the platform',
+      'Churned':        'churned',
     };
     const usageDesc = usageMap[co.usage_status] || null;
     if (co.dispatch_loads) {
