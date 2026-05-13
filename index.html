@@ -56,7 +56,12 @@ body.light {
 }
 /* ── Light mode element overrides ── */
 body.light .tab-btn:hover { background:rgba(0,0,0,.05); }
-body.light .card-meta { background:rgba(0,0,0,.04); }
+/* Card meta strip: use page bg instead of dark overlay */
+body.light .card-meta { background:var(--surf2); }
+/* Tread logo: invert white SVG to dark */
+body.light .header-logo img { filter:brightness(0) opacity(.75); }
+/* Logo badge: add border so it's visible on white card */
+body.light .badge.has-logo { background:#fff; border:1px solid var(--border2); }
 /* Health chips */
 body.light .chip.green  { color:#166534; border-color:rgba(34,197,94,.5); }
 body.light .chip.yellow { color:#7C4A00; border-color:rgba(245,158,11,.5); }
@@ -81,6 +86,10 @@ body.light .counter.tickets { color:#991B1B; border-color:rgba(239,68,68,.3); }
 body.light .counter.support  { color:#1A6FA8; border-color:rgba(96,171,222,.4); }
 body.light .counter.risks    { color:#7C4A00; border-color:rgba(245,158,11,.4); }
 body.light .counter.none     { background:rgba(0,0,0,.06); }
+/* Risk banner: stronger bg + dark readable text */
+body.light .m-foot         { background:rgba(245,158,11,.13); border-color:rgba(245,158,11,.35); }
+body.light .le-foot.m-foot { background:rgba(245,158,11,.13); border-color:rgba(245,158,11,.35); }
+body.light .m-risk         { color:#92400E; }
 /* Modal */
 body.light .m-badge,
 body.light .m-badge-pill { background:rgba(0,0,0,.07); border-color:rgba(0,0,0,.13); color:var(--text2); }
