@@ -1515,8 +1515,9 @@ body.light .hcall-risk   { color:#991B1B; }
     <button class="tab-btn" id="toggle-dash">Insights</button>
     <button class="tab-btn" id="toggle-senti">Sentiment</button>
   </nav>
-  <div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;">
+  <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px;">
     <span style="font-size:11px;color:var(--muted);">Updated BUILD_DATE_PLACEHOLDER · refreshes hourly</span>
+    <button id="theme-btn" title="Toggle light/dark mode" style="background:none;border:1px solid var(--border2);border-radius:6px;color:var(--muted);padding:5px 9px;cursor:pointer;font-size:14px;line-height:1;transition:color .15s,border-color .15s;flex-shrink:0;">☀︎</button>
   </div>
 </div>
 
@@ -1588,7 +1589,6 @@ body.light .hcall-risk   { color:#991B1B; }
       <button class="view-btn active" id="btn-cards" title="Card view">⊞</button>
       <button class="view-btn" id="btn-lines" title="List view">☰</button>
     </div>
-    <button id="theme-btn" title="Toggle light/dark mode" style="background:none;border:1px solid var(--border2);border-radius:6px;color:var(--muted);padding:5px 9px;cursor:pointer;font-size:14px;line-height:1;transition:color .15s,border-color .15s;">☀︎</button>
   </div>
 </div>
 
