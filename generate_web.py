@@ -1504,6 +1504,7 @@ body.light .hcall-risk   { color:#991B1B; }
 .dp-mat-track { flex:1; height:6px; background:var(--border); border-radius:3px; overflow:hidden; }
 .dp-mat-fill { height:6px; border-radius:3px; }
 .dp-mat-pct { font-size:10px; color:var(--muted); width:28px; text-align:right; flex-shrink:0; }
+.dp-mat-uom { font-size:10px; color:var(--muted); white-space:nowrap; flex-shrink:0; border-left:1px solid var(--border); padding-left:8px; margin-left:2px; }
 
 /* ── Account snapshot summary in modal ── */
 .acct-snap  { background:rgba(255,255,255,.03); border:1px solid var(--border2); border-radius:8px; padding:10px 13px; }
@@ -1762,9 +1763,21 @@ function dispatchPanel(co) {
     const lbl = (!skipLabel || i % 2 === 0) ? `<div class="dp-bar-mon">${DISPATCH_MONTHS[i]}</div>` : `<div class="dp-bar-mon"> </div>`;
     return `<div class="dp-bar-col"><div class="dp-bar${partial}" style="height:${bh}px;background:linear-gradient(0deg,#2563EB,#60ABDE)"></div>${lbl}</div>`;
   }).join('');
-  const matRows = (d.materials || []).map(([name, pct]) =>
-    `<div class="dp-mat-row"><div class="dp-mat-name">${name}</div><div class="dp-mat-track"><div class="dp-mat-fill" style="width:${pct}%;background:${matColor(name)}"></div></div><div class="dp-mat-pct">${pct}%</div></div>`
-  ).join('');
+  const matRows = (d.materials || []).map(m => {
+    const name = Array.isArray(m) ? m[0] : m.name;
+    const pct  = Array.isArray(m) ? m[1] : m.pct;
+    const uom  = Array.isArray(m) ? (m[2] || null) : (m.uom || null);
+    const avg  = Array.isArray(m) ? (m[3] || null) : (m.avg || null);
+    const uomTag = (uom || avg)
+      ? `<span class="dp-mat-uom">${[uom, avg != null ? `avg ${(+avg).toLocaleString(undefined,{maximumFractionDigits:1})}` : null].filter(Boolean).join(' · ')}</span>`
+      : '';
+    return `<div class="dp-mat-row">
+      <div class="dp-mat-name">${esc(name)}</div>
+      <div class="dp-mat-track"><div class="dp-mat-fill" style="width:${pct}%;background:${matColor(name)}"></div></div>
+      <div class="dp-mat-pct">${pct}%</div>
+      ${uomTag}
+    </div>`;
+  }).join('');
   return `<div class="dispatch-panel">
     <div class="dp-header"><span class="dp-big-num">${fmtLoads(co.dispatch_loads)}</span><span class="dp-sub">loads · last 90 days · 12-month trend below</span></div>
     <div class="dp-bar-chart" style="margin-top:8px">${bars}</div>
