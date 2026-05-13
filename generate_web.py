@@ -1442,7 +1442,7 @@ select option { background:var(--surf2); }
     <button class="tab-btn" id="toggle-senti">Sentiment</button>
   </nav>
   <div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;">
-    <span style="font-size:11px;color:var(--muted);">Updated BUILD_DATE_PLACEHOLDER · refreshes daily</span>
+    <span style="font-size:11px;color:var(--muted);">Updated BUILD_DATE_PLACEHOLDER · refreshes hourly</span>
   </div>
 </div>
 
