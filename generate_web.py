@@ -858,7 +858,7 @@ body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var
 }
 .header-logo { display:flex; align-items:center; gap:10px; flex-shrink:0; }
 .header-logo img { height:26px; }
-.header-title { font-size:17px; font-weight:800; color:var(--yellow); letter-spacing:-.2px; margin-left:10px; }
+.header-title { font-size:17px; font-weight:800; color:var(--yellow); letter-spacing:.8px; margin-left:10px; }
 #tab-nav { display:flex; align-items:stretch; }
 .tab-btn {
   padding:0 20px; background:transparent; color:var(--muted);
@@ -949,8 +949,23 @@ select option { background:var(--surf2); }
 #grid.list-view {
   display:block; padding:8px 24px;
 }
-/* ── Group-by ── */
-.grp-section { grid-column:1/-1; }
+#grid.kanban-mode {
+  display:block; padding:16px 24px; overflow-x:auto;
+}
+/* ── Kanban board ── */
+.kanban-board { display:flex; gap:14px; align-items:flex-start; min-width:max-content; }
+.kanban-col   { flex:0 0 300px; display:flex; flex-direction:column; background:var(--surf); border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.kanban-col-hdr {
+  display:flex; align-items:center; gap:8px;
+  padding:11px 14px 10px; border-bottom:1px solid var(--border);
+  background:var(--surf2); position:sticky; top:0;
+}
+.kanban-col-label { font-size:11px; font-weight:700; color:var(--text); text-transform:uppercase; letter-spacing:.07em; flex:1; }
+.kanban-col-count { font-size:11px; color:var(--muted); background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:1px 9px; }
+.kanban-col-body  { display:flex; flex-direction:column; gap:8px; padding:10px; }
+.kanban-col-body .card { margin:0; }
+/* ── Group-by (list view only) ── */
+.grp-section { }
 .grp-hdr {
   display:flex; align-items:center; gap:10px;
   padding:10px 6px 8px; margin-bottom:4px;
@@ -969,13 +984,9 @@ select option { background:var(--surf2); }
 .grp-hdr.collapsed .grp-chevron { transform:rotate(-90deg); }
 .grp-body { }
 .grp-body.grp-hidden { display:none; }
-/* card view: nested grid inside group */
-.grp-cards {
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-  gap:12px; padding-bottom:8px;
-}
-/* list view: no extra wrapper needed */
 .grp-lines { }
+body.light .kanban-col { background:var(--surf); border-color:var(--border); }
+body.light .kanban-col-hdr { background:var(--surf2); }
 .view-toggle {
   display:flex; border:1px solid var(--border2); border-radius:6px; overflow:hidden;
 }
@@ -1934,7 +1945,10 @@ function renderGrid() {
   else if (srt === 'arr-lh') filtered.sort((a,b) => parseArr(CUSTOMERS[a].arr) - parseArr(CUSTOMERS[b].arr));
   const grid = document.getElementById('grid');
   const grp  = document.getElementById('f-group').value;
-  grid.classList.toggle('list-view', _viewMode === 'lines');
+  const isKanban = grp && _viewMode !== 'lines';
+  grid.classList.toggle('list-view',  _viewMode === 'lines' && !grp);
+  grid.classList.toggle('kanban-mode', isKanban);
+  if (_viewMode === 'lines' && grp) grid.classList.remove('list-view');
   if (filtered.length === 0) {
     grid.innerHTML = '<div class="no-results">No customers match the current filters.</div>';
   } else if (grp) {
@@ -1960,29 +1974,45 @@ function renderGrid() {
     const getKey = GRP_KEY[grp] || (co => '—');
     const order  = GRP_ORDER[grp] || [];
     const labelMap = GRP_LABEL[grp] || {};
-    // bucket
     const buckets = {};
     filtered.forEach(i => { const k=getKey(CUSTOMERS[i]); (buckets[k]=buckets[k]||[]).push(i); });
     const keys = [...order.filter(k=>buckets[k]), ...Object.keys(buckets).filter(k=>!order.includes(k)).sort()];
-    const linehdr = `<div class="line-hdr"><div></div><div>Customer</div><div>ARR</div><div>Trucks</div><div>CSM</div><div>Location</div><div style="text-align:right">90d</div></div>`;
-    grid.innerHTML = keys.map(k => {
-      const items = buckets[k];
-      const label = labelMap[k] || k || '—';
-      const dotCls = grp==='health' ? `grp-dot ${k}` : 'grp-dot gray';
-      const innerCls = _viewMode==='lines' ? 'grp-lines' : 'grp-cards';
-      const innerHtml = _viewMode==='lines'
-        ? linehdr + items.map(i=>renderLine(CUSTOMERS[i],i)).join('')
-        : items.map(i=>renderCard(CUSTOMERS[i],i)).join('');
-      return `<div class="grp-section">
-        <div class="grp-hdr" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('grp-hidden')">
-          <span class="${dotCls}"></span>
-          <span class="grp-label">${esc(label)}</span>
-          <span class="grp-count">${items.length}</span>
-          <span class="grp-chevron">▾</span>
-        </div>
-        <div class="grp-body ${innerCls}">${innerHtml}</div>
-      </div>`;
-    }).join('');
+    if (isKanban) {
+      // ── Kanban columns ──
+      const colsHtml = keys.map(k => {
+        const items = buckets[k];
+        const label = labelMap[k] || k || '—';
+        const dotCls = grp==='health' ? `grp-dot ${k}` : 'grp-dot gray';
+        const cardsHtml = items.map(i => renderCard(CUSTOMERS[i], i)).join('');
+        return `<div class="kanban-col">
+          <div class="kanban-col-hdr">
+            <span class="${dotCls}"></span>
+            <span class="kanban-col-label">${esc(label)}</span>
+            <span class="kanban-col-count">${items.length}</span>
+          </div>
+          <div class="kanban-col-body">${cardsHtml}</div>
+        </div>`;
+      }).join('');
+      grid.innerHTML = `<div class="kanban-board">${colsHtml}</div>`;
+    } else {
+      // ── Lines view: collapsible groups ──
+      const linehdr = `<div class="line-hdr"><div></div><div>Customer</div><div>ARR</div><div>Trucks</div><div>CSM</div><div>Location</div><div style="text-align:right">90d</div></div>`;
+      grid.innerHTML = keys.map(k => {
+        const items = buckets[k];
+        const label = labelMap[k] || k || '—';
+        const dotCls = grp==='health' ? `grp-dot ${k}` : 'grp-dot gray';
+        const innerHtml = linehdr + items.map(i=>renderLine(CUSTOMERS[i],i)).join('');
+        return `<div class="grp-section">
+          <div class="grp-hdr" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('grp-hidden')">
+            <span class="${dotCls}"></span>
+            <span class="grp-label">${esc(label)}</span>
+            <span class="grp-count">${items.length}</span>
+            <span class="grp-chevron">▾</span>
+          </div>
+          <div class="grp-body grp-lines">${innerHtml}</div>
+        </div>`;
+      }).join('');
+    }
   } else if (_viewMode === 'lines') {
     const hdr = `<div class="line-hdr">
       <div></div><div>Customer</div><div>ARR</div><div>Trucks</div>
