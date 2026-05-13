@@ -201,6 +201,33 @@ select option { background:var(--surf2); }
 #grid.list-view {
   display:block; padding:8px 24px;
 }
+/* ── Group-by ── */
+.grp-section { grid-column:1/-1; }
+.grp-hdr {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 6px 8px; margin-bottom:4px;
+  border-bottom:2px solid var(--border);
+  cursor:pointer; user-select:none;
+}
+.grp-hdr:hover { border-bottom-color:var(--border2); }
+.grp-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.grp-dot.green  { background:var(--green); box-shadow:0 0 5px var(--green); }
+.grp-dot.yellow { background:var(--amber); box-shadow:0 0 5px var(--amber); }
+.grp-dot.red    { background:var(--red);   box-shadow:0 0 5px var(--red); }
+.grp-dot.gray   { background:var(--gray); }
+.grp-label { font-size:12px; font-weight:700; color:var(--text); text-transform:uppercase; letter-spacing:.07em; }
+.grp-count { font-size:11px; color:var(--muted); background:var(--surf2); border:1px solid var(--border); border-radius:10px; padding:1px 9px; }
+.grp-chevron { font-size:11px; color:var(--muted); margin-left:auto; transition:transform .18s; display:inline-block; }
+.grp-hdr.collapsed .grp-chevron { transform:rotate(-90deg); }
+.grp-body { }
+.grp-body.grp-hidden { display:none; }
+/* card view: nested grid inside group */
+.grp-cards {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
+  gap:12px; padding-bottom:8px;
+}
+/* list view: no extra wrapper needed */
+.grp-lines { }
 .view-toggle {
   display:flex; border:1px solid var(--border2); border-radius:6px; overflow:hidden;
 }
@@ -813,6 +840,15 @@ body.light .hcall-risk   { color:#991B1B; }
       <option value="arr-hl" selected>ARR: High → Low</option>
       <option value="arr-lh">ARR: Low → High</option>
     </select>
+    <select id="f-group">
+      <option value="">No Grouping</option>
+      <option value="health">Group by Health</option>
+      <option value="seg">Group by Segment</option>
+      <option value="type">Group by Type</option>
+      <option value="usage">Group by Status</option>
+      <option value="csm">Group by CSM</option>
+      <option value="tenure">Group by Tenure</option>
+    </select>
     <div class="view-toggle">
       <button class="view-btn active" id="btn-cards" title="Card view">⊞</button>
       <button class="view-btn" id="btn-lines" title="List view">☰</button>
@@ -1132,9 +1168,56 @@ function renderGrid() {
   else if (srt === 'arr-hl') filtered.sort((a,b) => parseArr(CUSTOMERS[b].arr) - parseArr(CUSTOMERS[a].arr));
   else if (srt === 'arr-lh') filtered.sort((a,b) => parseArr(CUSTOMERS[a].arr) - parseArr(CUSTOMERS[b].arr));
   const grid = document.getElementById('grid');
+  const grp  = document.getElementById('f-group').value;
   grid.classList.toggle('list-view', _viewMode === 'lines');
   if (filtered.length === 0) {
     grid.innerHTML = '<div class="no-results">No customers match the current filters.</div>';
+  } else if (grp) {
+    const GRP_KEY = {
+      health: co => co.health || 'gray',
+      seg:    co => co.segment || '—',
+      type:   co => co.type || '—',
+      csm:    co => co.csm || 'unassigned',
+      tenure: co => co.tenure_group || '—',
+      usage:  co => co.usage_status || '—',
+    };
+    const GRP_ORDER = {
+      health: ['red','yellow','gray','green'],
+      seg:    ['Enterprise','Mid-Market'],
+      type:   ['Hauler','Producer','Construction','Agriculture','Mixed'],
+      csm:    ['Latefa Redjouh','unassigned'],
+      tenure: ['New','~1 Year','~2 Years','3+ Years'],
+      usage:  ['Onboarding','Primary system','Sporadic','Disengaged'],
+    };
+    const GRP_LABEL = {
+      health: {red:'At Risk', yellow:'Needs Attention', gray:'Inactive', green:'Healthy'},
+    };
+    const getKey = GRP_KEY[grp] || (co => '—');
+    const order  = GRP_ORDER[grp] || [];
+    const labelMap = GRP_LABEL[grp] || {};
+    // bucket
+    const buckets = {};
+    filtered.forEach(i => { const k=getKey(CUSTOMERS[i]); (buckets[k]=buckets[k]||[]).push(i); });
+    const keys = [...order.filter(k=>buckets[k]), ...Object.keys(buckets).filter(k=>!order.includes(k)).sort()];
+    const linehdr = `<div class="line-hdr"><div></div><div>Customer</div><div>ARR</div><div>Trucks</div><div>CSM</div><div>Location</div><div style="text-align:right">90d</div></div>`;
+    grid.innerHTML = keys.map(k => {
+      const items = buckets[k];
+      const label = labelMap[k] || k || '—';
+      const dotCls = grp==='health' ? `grp-dot ${k}` : 'grp-dot gray';
+      const innerCls = _viewMode==='lines' ? 'grp-lines' : 'grp-cards';
+      const innerHtml = _viewMode==='lines'
+        ? linehdr + items.map(i=>renderLine(CUSTOMERS[i],i)).join('')
+        : items.map(i=>renderCard(CUSTOMERS[i],i)).join('');
+      return `<div class="grp-section">
+        <div class="grp-hdr" onclick="this.classList.toggle('collapsed');this.nextElementSibling.classList.toggle('grp-hidden')">
+          <span class="${dotCls}"></span>
+          <span class="grp-label">${esc(label)}</span>
+          <span class="grp-count">${items.length}</span>
+          <span class="grp-chevron">▾</span>
+        </div>
+        <div class="grp-body ${innerCls}">${innerHtml}</div>
+      </div>`;
+    }).join('');
   } else if (_viewMode === 'lines') {
     const hdr = `<div class="line-hdr">
       <div></div><div>Customer</div><div>ARR</div><div>Trucks</div>
@@ -1147,7 +1230,7 @@ function renderGrid() {
   document.getElementById('result-count').textContent =
     `${filtered.length} of ${CUSTOMERS.length} customers`;
 }
-['search','f-health','f-seg','f-type','f-csm','f-tenure','f-usage','f-sort'].forEach(id =>
+['search','f-health','f-seg','f-type','f-csm','f-tenure','f-usage','f-sort','f-group'].forEach(id =>
   document.getElementById(id).addEventListener('input', renderGrid));
 document.getElementById('btn-cards').addEventListener('click', () => {
   _viewMode = 'cards';
