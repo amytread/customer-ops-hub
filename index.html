@@ -1201,9 +1201,8 @@ function renderGrid() {
   const grid = document.getElementById('grid');
   const grp  = document.getElementById('f-group').value;
   const isKanban = grp && _viewMode !== 'lines';
-  grid.classList.toggle('list-view',  _viewMode === 'lines' && !grp);
+  grid.classList.toggle('list-view',  _viewMode === 'lines');
   grid.classList.toggle('kanban-mode', isKanban);
-  if (_viewMode === 'lines' && grp) grid.classList.remove('list-view');
   if (filtered.length === 0) {
     grid.innerHTML = '<div class="no-results">No customers match the current filters.</div>';
   } else if (grp) {
