@@ -347,6 +347,11 @@ try:
 except ImportError:
     HEYSAM_CALLS = {}
 
+try:
+    from quo_calls import QUO_CALLS
+except ImportError:
+    QUO_CALLS = {}
+
 # Dispatch load counts per customer — last 90 days (from Omni Horizon RDS, 2026-05-11)
 DISPATCH_LOADS = {
     # Enterprise
@@ -730,6 +735,7 @@ def to_json(co, seg):
         'linear_project':      LINEAR_PROJECT_ISSUES.get(n, []),
         'linear_project_meta': LINEAR_PROJECT_META.get(n, {}),
         'heysam': HEYSAM_CALLS.get(n, None),
+        'quo_calls': QUO_CALLS.get(n, []),
         'dispatch_loads': DISPATCH_LOADS.get(n, 0),
         'dispatch_detail': DISPATCH_DETAIL.get(n, None),
         'logo': _logo_b64(n),
@@ -1505,6 +1511,19 @@ body.light .hcall-risk   { color:#991B1B; }
 .hcall-date      { font-size:11px; color:var(--muted); white-space:nowrap; }
 .hcall-topics    { font-size:12px; color:var(--text2); line-height:1.5; margin-bottom:4px; }
 .hcall-risk      { font-size:11px; color:#FCA5A5; margin-top:4px; }
+/* ── Quo phone calls ── */
+.quo-calls-list   { display:flex; flex-direction:column; gap:8px; }
+.quo-call-item    { border:1px solid rgba(96,171,222,.18); border-radius:7px; padding:9px 11px; background:rgba(96,171,222,.04); }
+.quo-call-hdr     { display:flex; align-items:center; gap:8px; margin-bottom:5px; }
+.quo-dir          { font-size:13px; }
+.quo-contact      { font-size:12px; font-weight:600; color:var(--text1); flex:1; }
+.quo-dur          { font-size:11px; color:var(--muted); }
+.quo-date         { font-size:11px; color:#60ABDE; text-decoration:none; white-space:nowrap; }
+.quo-date:hover   { text-decoration:underline; }
+.quo-summary      { font-size:12px; color:var(--text2); line-height:1.5; }
+.quo-next         { font-size:11px; color:var(--muted); margin-top:4px; line-height:1.4; }
+body.light .quo-call-item { border-color:rgba(96,171,222,.3); background:rgba(96,171,222,.06); }
+body.light .quo-date      { color:#1A6FA8; }
 
 /* ── Volume view ── */
 </style>
@@ -1859,6 +1878,10 @@ function renderLine(co, idx) {
     const h=co.heysam, oc=h.overall==='positive'?'#4ADE80':h.overall==='neutral'?'#FCD34D':'#FCA5A5';
     subParts.push(`<span class="line-call"><span class="call-dot" style="background:${oc}"></span><span>${esc(h.date)}</span><span style="color:var(--text2)">${esc(h.title)}</span></span>`);
   }
+  if (co.quo_calls && co.quo_calls.length) {
+    const latest=co.quo_calls[0];
+    subParts.push(`<span class="line-call"><span style="font-size:11px">${latest.direction==='inbound'?'📞':'📲'}</span><span>${esc(latest.date)}</span><span style="color:var(--text2)">${esc(latest.contact)} (${co.quo_calls.length} call${co.quo_calls.length>1?'s':''})</span></span>`);
+  }
   // counters
   if (tix>0) subParts.push(`<span class="counter tickets" style="font-size:10px">${tix} ticket${tix>1?'s':''}</span>`);
   if (sup>0) subParts.push(`<span class="counter support" style="font-size:10px">${sup} support</span>`);
@@ -2129,7 +2152,7 @@ function _buildContent(idx) {
   if (co.heysam) {
     const h = co.heysam;
     const oc = h.overall==='positive' ? '#4ADE80' : h.overall==='neutral' ? '#FCD34D' : '#FCA5A5';
-    right += section('Recent Call',
+    right += section('Last Meeting (HeySam)',
       `<div class="heysam-call">
         <div class="hcall-title-row">
           <span class="hcall-dot" style="background:${oc}"></span>
@@ -2139,6 +2162,29 @@ function _buildContent(idx) {
         <div class="hcall-topics">${esc(h.key_topics)}</div>
         ${h.challenges ? `<div class="hcall-risk">⚠ ${esc(h.challenges)}</div>` : ''}
       </div>`);
+  }
+
+  // ── Phone calls (Quo via HubSpot) ──────────────────────────────────────────
+  if (co.quo_calls && co.quo_calls.length) {
+    const quoCalls = co.quo_calls;
+    const quoHtml = quoCalls.map(q => {
+      const dirIcon = q.direction === 'inbound' ? '📞' : '📲';
+      const durStr  = q.duration_sec >= 60
+        ? Math.floor(q.duration_sec/60) + 'm ' + (q.duration_sec%60) + 's'
+        : q.duration_sec + 's';
+      const nsHtml  = q.next_steps ? `<div class="quo-next">→ ${esc(q.next_steps)}</div>` : '';
+      return `<div class="quo-call-item">
+        <div class="quo-call-hdr">
+          <span class="quo-dir">${dirIcon}</span>
+          <span class="quo-contact">${esc(q.contact)}</span>
+          <span class="quo-dur">${durStr}</span>
+          <a class="quo-date" href="${esc(q.quo_url)}" target="_blank">${esc(q.date)}</a>
+        </div>
+        <div class="quo-summary">${esc(q.summary)}</div>
+        ${nsHtml}
+      </div>`;
+    }).join('');
+    right += section(`Phone Calls — Quo (${quoCalls.length})`, `<div class="quo-calls-list">${quoHtml}</div>`);
   }
 
   // ── Intercom — Last 90 Days ─────────────────────────────────────────────────
