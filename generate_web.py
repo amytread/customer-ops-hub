@@ -332,8 +332,15 @@ for _company, _convs in INTERCOM_90D.items():
 
 try:
     from linear_project_issues import LINEAR_PROJECT_ISSUES, LINEAR_PROJECT_META
+    # New format: flat list of all in-progress issues, not per-company
+    if isinstance(LINEAR_PROJECT_ISSUES, list):
+        _LINEAR_PROJECT_LIST = LINEAR_PROJECT_ISSUES
+        LINEAR_PROJECT_ISSUES = {}   # per-company lookup stays empty
+    else:
+        _LINEAR_PROJECT_LIST = []
 except ImportError:
     LINEAR_PROJECT_ISSUES = LINEAR_PROJECT_META = {}
+    _LINEAR_PROJECT_LIST = []
 
 try:
     from heysam_data import HEYSAM_CALLS
