@@ -791,8 +791,9 @@ body.light {
 }
 /* ── Light mode element overrides ── */
 body.light .tab-btn:hover { background:rgba(0,0,0,.05); }
-/* Card meta strip: use page bg instead of dark overlay */
-body.light .card-meta { background:var(--surf2); }
+/* Remove dark overlays on card sections */
+body.light .card-meta   { background:transparent; }
+body.light .card-footer { background:rgba(0,0,0,.04); }
 /* Tread logo: invert white SVG to dark */
 body.light .header-logo img { filter:brightness(0) opacity(.75); }
 /* Logo badge: add border so it's visible on white card */
@@ -805,10 +806,10 @@ body.light .chip.gray   { color:#374151; border-color:rgba(100,116,139,.5); }
 /* Tags */
 body.light .tag.type       { background:rgba(0,0,0,.06); }
 body.light .tag.tenure     { background:rgba(0,0,0,.05); }
-body.light .tag.tenure.New      { color:#9A3412; }
-body.light .tag.tenure\.\\~1Year  { color:#78350F; }
-body.light .tag.tenure\.\\~2Years { color:#14532D; }
-body.light .tag.tenure\.3pYears   { color:#1E3A8A; }
+body.light .tag.tenure.New       { color:#9A3412; }
+body.light .tag.tenure.\\~1Year  { color:#78350F; }
+body.light .tag.tenure.\\~2Years { color:#14532D; }
+body.light .tag.tenure.3pYears   { color:#1E3A8A; }
 body.light .tag.mid-market  { color:#1A6FA8; border-color:rgba(96,171,222,.45); }
 body.light .tag.enterprise  { color:#92400E; border-color:rgba(217,119,6,.35); }
 body.light .tag.status      { background:rgba(0,0,0,.06); }
