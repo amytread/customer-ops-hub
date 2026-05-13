@@ -54,6 +54,38 @@ body.light {
   --muted:   #6B8A9E;
   --link:    #1A6FA8;
 }
+/* ── Light mode element overrides ── */
+body.light .tab-btn:hover { background:rgba(0,0,0,.05); }
+body.light .card-meta { background:rgba(0,0,0,.04); }
+/* Health chips */
+body.light .chip.green  { color:#166534; border-color:rgba(34,197,94,.5); }
+body.light .chip.yellow { color:#7C4A00; border-color:rgba(245,158,11,.5); }
+body.light .chip.red    { color:#991B1B; border-color:rgba(239,68,68,.5); }
+body.light .chip.gray   { color:#374151; border-color:rgba(100,116,139,.5); }
+/* Tags */
+body.light .tag.type       { background:rgba(0,0,0,.06); }
+body.light .tag.tenure     { background:rgba(0,0,0,.05); }
+body.light .tag.tenure.New      { color:#9A3412; }
+body.light .tag.tenure\.\~1Year  { color:#78350F; }
+body.light .tag.tenure\.\~2Years { color:#14532D; }
+body.light .tag.tenure\.3pYears   { color:#1E3A8A; }
+body.light .tag.mid-market  { color:#1A6FA8; border-color:rgba(96,171,222,.45); }
+body.light .tag.enterprise  { color:#92400E; border-color:rgba(217,119,6,.35); }
+body.light .tag.status      { background:rgba(0,0,0,.06); }
+body.light .tag.status.Primary-system { color:#166534; }
+body.light .tag.status.Onboarding     { color:#1A6FA8; }
+body.light .tag.status.Sporadic       { color:#7C4A00; }
+body.light .tag.status.Disengaged     { color:#991B1B; }
+/* Counters */
+body.light .counter.tickets { color:#991B1B; border-color:rgba(239,68,68,.3); }
+body.light .counter.support  { color:#1A6FA8; border-color:rgba(96,171,222,.4); }
+body.light .counter.risks    { color:#7C4A00; border-color:rgba(245,158,11,.4); }
+body.light .counter.none     { background:rgba(0,0,0,.06); }
+/* Modal */
+body.light .m-badge,
+body.light .m-badge-pill { background:rgba(0,0,0,.07); border-color:rgba(0,0,0,.13); color:var(--text2); }
+body.light #modal-close  { background:rgba(0,0,0,.12); border-color:rgba(0,0,0,.2); color:var(--text2); }
+body.light #modal-close:hover { background:rgba(0,0,0,.2); }
 * { box-sizing:border-box; margin:0; padding:0; }
 body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
 
@@ -1328,8 +1360,8 @@ function toggleLineExpand(idx, rowEl) {
     const { co, stripHtml, left, right, foot, hasRisk } = _buildContent(idx);
     expandEl.innerHTML =
       `<div class="le-strip">${stripHtml}</div>` +
-      `<div class="le-body"><div class="le-col">${left}</div><div class="le-col">${right}</div></div>` +
-      (foot ? `<div class="le-foot ${hasRisk?'m-foot':'m-foot no-risk'}">${foot}</div>` : '');
+      (hasRisk && foot ? `<div class="le-foot m-foot">${foot}</div>` : '') +
+      `<div class="le-body"><div class="le-col">${left}</div><div class="le-col">${right}</div></div>`;
     expandEl.dataset.built = '1';
   }
   expandEl.classList.add('open');
