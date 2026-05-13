@@ -1441,7 +1441,9 @@ select option { background:var(--surf2); }
     <button class="tab-btn" id="toggle-dash">Insights</button>
     <button class="tab-btn" id="toggle-senti">Sentiment</button>
   </nav>
-  <div></div>
+  <div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;">
+    <span style="font-size:11px;color:var(--muted);">Updated BUILD_DATE_PLACEHOLDER · refreshes daily</span>
+  </div>
 </div>
 
 <div id="controls">
@@ -3252,6 +3254,7 @@ data_blob = (
     .replace('ALL_INTERCOM_PLACEHOLDER', json.dumps(ALL_INTERCOM, ensure_ascii=False))
     .replace('ALL_LINEAR_PLACEHOLDER',   json.dumps(ALL_LINEAR,   ensure_ascii=False))
     .replace('REGISTRATIONS_PLACEHOLDER', json.dumps(REGISTRATION_REQUESTS, ensure_ascii=False))
+    .replace('BUILD_DATE_PLACEHOLDER',   datetime.datetime.now().strftime('%-m/%-d/%Y'))
 )
 
 out = os.path.expanduser('~/Desktop/tread_customers.html')
