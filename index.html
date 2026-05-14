@@ -540,7 +540,8 @@ body.light .hcall-risk   { color:#991B1B; }
 .tenure-bar-track { flex:1; background:var(--border); border-radius:3px; height:7px; overflow:hidden; }
 .tenure-bar-fill { height:7px; border-radius:3px; transition:width .4s; }
 .tenure-bar-count { font-size:11px; color:var(--muted); width:24px; text-align:right; flex-shrink:0; }
-/* Sentiment — merged into Insights */
+/* Sentiment view */
+#senti-wrap { padding:24px; display:none; }
 .senti-title { font-size:18px; font-weight:700; color:var(--text); margin-bottom:6px; }
 .senti-sub { font-size:13px; color:var(--muted); margin-bottom:20px; }
 .senti-layout { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
@@ -597,19 +598,8 @@ body.light .hcall-risk   { color:#991B1B; }
 .m-engage { font-size:12px; color:var(--muted); font-style:italic; }
 .no-results { grid-column:1/-1; text-align:center; padding:80px 20px; color:var(--muted); font-size:15px; }
 
-/* ── Dashboard / Insights ── */
+/* ── Dashboard ── */
 #dash-wrap { padding:24px; display:none; }
-.ch-stat-bar { display:flex; align-items:stretch; background:var(--surf); border:1px solid var(--border); border-radius:10px; margin-bottom:20px; overflow:hidden; }
-.ch-stat { display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; padding:16px 12px; gap:4px; }
-.ch-stat-n { font-size:30px; font-weight:800; color:var(--text); line-height:1; }
-.ch-stat-label { font-size:11px; color:var(--muted); }
-.ch-stat-sub { font-size:10px; color:var(--border2,rgba(255,255,255,.2)); }
-.ch-stat-div { width:1px; background:var(--border); flex-shrink:0; }
-.quo-co-tag { font-size:10px; color:var(--muted); background:var(--surf2); border:1px solid var(--border); border-radius:4px; padding:1px 6px; flex-shrink:0; white-space:nowrap; }
-.ins-section-hdr { font-size:11px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.07em; margin:24px 0 10px; }
-.tax-wrap { margin-top:24px; }
-.tax-layout { display:grid; grid-template-columns:220px 1fr; gap:16px; margin-top:12px; }
-@media(max-width:900px) { .tax-layout { grid-template-columns:1fr; } }
 .dash-title { font-size:18px; font-weight:700; color:var(--text); margin-bottom:6px; }
 .dash-sub { font-size:13px; color:var(--muted); margin-bottom:20px; }
 .dash-layout { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
@@ -814,6 +804,7 @@ body.light .quo-date      { color:#1A6FA8; }
     <button class="tab-btn active" id="toggle-grid">Customers</button>
     <button class="tab-btn" id="toggle-map">Map</button>
     <button class="tab-btn" id="toggle-dash">Insights</button>
+    <button class="tab-btn" id="toggle-senti">Sentiment</button>
   </nav>
   <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px;">
     <span style="font-size:11px;color:var(--muted);">Updated 5/13/2026 · refreshes hourly</span>
@@ -902,6 +893,7 @@ body.light .quo-date      { color:#1A6FA8; }
 </div>
 <div id="grid"></div>
 <div id="dash-wrap"></div>
+<div id="senti-wrap"></div>
 
 <div id="modal-bg">
   <div id="modal">
@@ -1618,20 +1610,23 @@ document.getElementById('modal-bg').addEventListener('click', e => {
 document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
 
 // ── View toggles ──────────────────────────────────────────────────────────────
-let mapInited = false, dashInited = false;
+let mapInited = false, dashInited = false, sentiInited = false;
 function setView(view) {
-  document.getElementById('map-wrap').style.display    = view==='map'  ? 'block' : 'none';
-  document.getElementById('grid').style.display        = view==='grid' ? ''      : 'none';
-  document.getElementById('dash-wrap').style.display   = view==='dash' ? 'block' : 'none';
-  ['grid','map','dash'].forEach(v =>
+  document.getElementById('map-wrap').style.display    = view==='map'    ? 'block' : 'none';
+  document.getElementById('grid').style.display        = view==='grid'   ? ''      : 'none';
+  document.getElementById('dash-wrap').style.display   = view==='dash'   ? 'block' : 'none';
+  document.getElementById('senti-wrap').style.display  = view==='senti'  ? 'block' : 'none';
+  ['grid','map','dash','senti'].forEach(v =>
     document.getElementById('toggle-'+v).classList.toggle('active', v===view)
   );
-  document.getElementById('ctrl-filters').style.display = view === 'grid' ? '' : 'none';
-  if (view==='map'  && !mapInited)  initMap();
-  if (view==='dash' && !dashInited) initDash();
+  const isGrid = view === 'grid';
+  document.getElementById('ctrl-filters').style.display = isGrid ? '' : 'none';
+  if (view==='map'   && !mapInited)   initMap();
+  if (view==='dash'  && !dashInited)  initDash();
+  if (view==='senti' && !sentiInited) initSenti();
 }
 let currentView = 'grid';
-['grid','map','dash'].forEach(v => {
+['grid','map','dash','senti'].forEach(v => {
   document.getElementById('toggle-'+v).addEventListener('click', () => {
     currentView = v;
     setView(v);
@@ -2126,6 +2121,69 @@ function renderTaxonomy(items) {
 }
 
 
+function initSenti() {
+  sentiInited = true;
+  const stats = buildCustomerStats().filter(s => s.total > 0);
+  const allItems = [];
+  CUSTOMERS.forEach(co => {
+    (co.intercom_90d||[]).forEach(it => allItems.push({...it, _co: co.name, _src:'Intercom'}));
+    if (co.heysam) {
+      const h = co.heysam;
+      if (h.key_topics) allItems.push({subject: h.key_topics, _src:'HeySam', _co: co.name, category:'', state:'', date: h.date, url: h.url});
+      if (h.challenges) allItems.push({subject: h.challenges, _src:'HeySam', _co: co.name, category:'', state:'', date: h.date, url: h.url});
+    }
+  });
+
+  const wrap = document.getElementById('senti-wrap');
+  wrap.innerHTML = `
+    <div class="senti-title">Feedback Taxonomy</div>
+    <div class="senti-sub">Language patterns across ${allItems.length} support interactions · last 90 days · <span style="color:#86EFAC">green = positive signal</span> · <span style="color:#FCA5A5">red = friction signal</span></div>
+    <div class="senti-layout">
+      <div class="dash-panel" style="min-width:0">
+        <div class="dash-panel-head">
+          <span class="dash-panel-title">Filter by Customer</span>
+          <span class="dash-panel-sub">click to drill in</span>
+        </div>
+        <div class="senti-list" id="senti-list"></div>
+      </div>
+      <div class="dash-panel" id="senti-right" style="min-width:0;overflow-y:auto;max-height:680px">
+        <div class="dash-panel-head">
+          <span class="dash-panel-title" id="senti-right-hd">All Customers</span>
+          <span class="dash-panel-sub" id="senti-right-ct">${allItems.length} interactions</span>
+        </div>
+        <div id="senti-right-body">${renderTaxonomy(allItems)}</div>
+      </div>
+    </div>`;
+
+  const listEl = document.getElementById('senti-list');
+  const allRow = document.createElement('div');
+  allRow.className = 'senti-row selected';
+  allRow.innerHTML = `<span class="senti-name" style="color:var(--yellow)">All Customers</span><span class="senti-co-count">${allItems.length}</span>`;
+  allRow.addEventListener('click', () => {
+    document.querySelectorAll('#senti-list .senti-row').forEach(r=>r.classList.remove('selected'));
+    allRow.classList.add('selected');
+    document.getElementById('senti-right-hd').textContent = 'All Customers';
+    document.getElementById('senti-right-ct').textContent = allItems.length+' interactions';
+    document.getElementById('senti-right-body').innerHTML = renderTaxonomy(allItems);
+  });
+  listEl.appendChild(allRow);
+
+  stats.forEach(s => {
+    const coItems = allItems.filter(it => it._co === s.name);
+    const row = document.createElement('div');
+    row.className = 'senti-row';
+    row.innerHTML = `<span class="senti-name">${esc(s.name)}</span><span class="senti-co-count">${coItems.length}</span>`;
+    row.addEventListener('click', () => {
+      document.querySelectorAll('#senti-list .senti-row').forEach(r=>r.classList.remove('selected'));
+      row.classList.add('selected');
+      document.getElementById('senti-right-hd').textContent = s.name;
+      document.getElementById('senti-right-ct').textContent = coItems.length+' interaction'+(coItems.length!==1?'s':'');
+      document.getElementById('senti-right-body').innerHTML = renderTaxonomy(coItems);
+    });
+    listEl.appendChild(row);
+  });
+}
+
 function renderCatBreakdown(cats, title, items, catByCustomer) {
   const total = Object.values(cats).reduce((s,n)=>s+n,0);
   const maxVal = Math.max(...Object.values(cats), 1);
@@ -2285,8 +2343,7 @@ function refreshDash() {
                   : 'All Time';
   const stateLabel = _dashState === 'open' ? 'open ' : _dashState === 'closed' ? 'closed ' : '';
   document.getElementById('dash-title-el').textContent = `Support Contacts — ${daysLabel}`;
-  const _quoTotal = CUSTOMERS.reduce((s,co)=>s+(co.quo_calls||[]).length,0);
-  document.getElementById('dash-sub-el').textContent   = `${totalInteractions} ${stateLabel}Intercom conversations · ${_quoTotal} Quo calls · ${ALL_LINEAR.length} Linear tickets`;
+  document.getElementById('dash-sub-el').textContent   = `${totalInteractions} ${stateLabel}Intercom conversations across ${stats.filter(s => s.total > 0).length} customers · ${ALL_LINEAR.length} Linear tickets tracked separately`;
 
   document.getElementById('dash-right-sub').textContent   = `${totalInteractions} Intercom conversations`;
   document.getElementById('dash-right-body').innerHTML    = renderCatBreakdown(overall, null, null, catByCo);
@@ -2296,121 +2353,16 @@ function refreshDash() {
   document.getElementById('dash-open-convs').innerHTML  = buildOpenConvsPanel(stats, _dashState);
 }
 
-function buildQuoCallsPanel() {
-  const calls = [];
-  CUSTOMERS.forEach(co => {
-    (co.quo_calls||[]).forEach(c => calls.push({...c, company: co.name}));
-  });
-  if (!calls.length) return '';
-  calls.sort((a,b) => b.date.localeCompare(a.date));
-  const rows = calls.map(c => {
-    const dir = c.direction === 'inbound' ? '📞' : '📲';
-    const secs = c.duration_sec || 0;
-    const dur = secs < 60 ? `${secs}s` : `${Math.floor(secs/60)}m ${secs%60}s`;
-    const dateEl = c.quo_url
-      ? `<a href="${esc(c.quo_url)}" target="_blank" class="quo-date">${esc(c.date)}</a>`
-      : `<span style="font-size:11px;color:var(--muted)">${esc(c.date)}</span>`;
-    return `<div class="quo-call-item">
-      <div class="quo-call-hdr">
-        <span class="quo-dir">${dir}</span>
-        <span class="quo-contact">${esc(c.contact)}</span>
-        <span class="quo-co-tag">${esc(c.company)}</span>
-        <span class="quo-dur">${dur}</span>
-        ${dateEl}
-      </div>
-      <div class="quo-summary">${esc(c.summary)}</div>
-      ${c.next_steps ? `<div class="quo-next">Next steps: ${esc(c.next_steps)}</div>` : ''}
-    </div>`;
-  }).join('');
-  return `<div class="dash-panel" style="margin-top:0">
-    <div class="dash-panel-head">
-      <span class="dash-panel-title">Quo Phone Calls</span>
-      <span class="dash-panel-sub">${calls.length} calls via HubSpot · last 30 days</span>
-    </div>
-    <div class="quo-calls-list" style="padding:12px 16px 16px;max-height:520px;overflow-y:auto">${rows}</div>
-  </div>`;
-}
-
-function buildTaxonomySection() {
-  const allItems = [];
-  CUSTOMERS.forEach(co => {
-    (co.intercom_90d||[]).forEach(it => allItems.push({...it, _co: co.name, _src:'Intercom'}));
-    (co.quo_calls||[]).forEach(c => {
-      if (c.summary) allItems.push({subject: c.summary, _co: co.name, _src:'Quo', date: c.date, category:'', state:'', url: c.quo_url||''});
-    });
-  });
-  if (!allItems.length) return '';
-  const stats = buildCustomerStats().filter(s => s.total > 0);
-
-  const listRows = [
-    `<div class="senti-row selected" id="tax-all-row">
-      <span class="senti-name" style="color:var(--yellow)">All Customers</span>
-      <span class="senti-co-count">${allItems.length}</span>
-    </div>`
-  ];
-  stats.forEach(s => {
-    const n = allItems.filter(it => it._co === s.name).length;
-    if (!n) return;
-    listRows.push(`<div class="senti-row" data-co="${esc(s.name)}">
-      <span class="senti-name">${esc(s.name)}</span>
-      <span class="senti-co-count">${n}</span>
-    </div>`);
-  });
-
-  return `<div class="tax-wrap">
-    <div class="ins-section-hdr">Feedback Taxonomy</div>
-    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Language patterns across ${allItems.length} Intercom + Quo interactions · <span style="color:#86EFAC">green = positive signal</span> · <span style="color:#FCA5A5">red = friction signal</span></div>
-    <div class="tax-layout">
-      <div class="dash-panel" style="min-width:0">
-        <div class="dash-panel-head">
-          <span class="dash-panel-title">Filter by Customer</span>
-          <span class="dash-panel-sub">click to drill in</span>
-        </div>
-        <div class="senti-list" id="tax-list">${listRows.join('')}</div>
-      </div>
-      <div class="dash-panel" id="tax-right" style="min-width:0;overflow-y:auto;max-height:620px">
-        <div class="dash-panel-head">
-          <span class="dash-panel-title" id="tax-right-hd">All Customers</span>
-          <span class="dash-panel-sub" id="tax-right-ct">${allItems.length} interactions</span>
-        </div>
-        <div id="tax-right-body">${renderTaxonomy(allItems)}</div>
-      </div>
-    </div>
-  </div>`;
-}
-
 function initDash() {
   dashInited = true;
   _baseStats = buildCustomerStats();
 
+  // Build static registration panel HTML
   const regHtml = buildRegWeeklyChart();
-  const quoHtml = buildQuoCallsPanel();
-  const taxHtml = buildTaxonomySection();
 
-  // Channel volume counts (static at init time)
-  const icTotal = _baseStats.reduce((s,r)=>s+r.icCount,0);
-  const quoTotal = CUSTOMERS.reduce((s,co)=>s+(co.quo_calls||[]).length,0);
-  const liTotal = ALL_LINEAR.length;
-  const chHtml = `<div class="ch-stat-bar">
-    <div class="ch-stat">
-      <span class="ch-stat-n">${icTotal.toLocaleString()}</span>
-      <span class="ch-stat-label">Intercom contacts</span>
-    </div>
-    <div class="ch-stat-div"></div>
-    <div class="ch-stat">
-      <span class="ch-stat-n">${quoTotal}</span>
-      <span class="ch-stat-label">Quo phone calls</span>
-    </div>
-    <div class="ch-stat-div"></div>
-    <div class="ch-stat">
-      <span class="ch-stat-n">${liTotal}</span>
-      <span class="ch-stat-label">Linear tickets</span>
-    </div>
-  </div>`;
-
+  // Set all HTML in one shot — avoids innerHTML += destroying listeners
   const wrap = document.getElementById('dash-wrap');
   wrap.innerHTML = `
-    ${chHtml}
     <div class="dash-filter-bar">
       <span class="dash-filter-label">Status</span>
       <div class="dash-toggle-group" id="dash-state-group">
@@ -2437,7 +2389,6 @@ function initDash() {
       <div id="dash-right-body"></div>
     </div>
     <div id="dash-open-convs"></div>
-    ${quoHtml ? `<div class="ins-section-hdr">Quo Calls via HubSpot</div>${quoHtml}` : ''}
     <div style="margin-top:20px">
       <div class="dash-src-bar">
         <span style="font-size:12px;font-weight:600;color:var(--muted)">Data source</span>
@@ -2448,38 +2399,14 @@ function initDash() {
       </div>
       <div class="dash-layout" id="dash-bottom-row" style="grid-template-columns:repeat(4,1fr)"></div>
     </div>
-    ${regHtml}
-    ${taxHtml}`;
+    ${regHtml}`;
 
-  // Populate Intercom data panels
+  // Populate data panels via refreshDash (uses _baseStats + current filter state)
   refreshDash();
 
-  // Taxonomy drill-down — event delegation
-  const taxList = document.getElementById('tax-list');
-  if (taxList) {
-    const allItems2 = [];
-    CUSTOMERS.forEach(co => {
-      (co.intercom_90d||[]).forEach(it => allItems2.push({...it, _co: co.name, _src:'Intercom'}));
-      (co.quo_calls||[]).forEach(c => {
-        if (c.summary) allItems2.push({subject: c.summary, _co: co.name, _src:'Quo', date: c.date, category:'', state:'', url: c.quo_url||''});
-      });
-    });
-    taxList.addEventListener('click', e => {
-      const row = e.target.closest('.senti-row');
-      if (!row) return;
-      taxList.querySelectorAll('.senti-row').forEach(r => r.classList.remove('selected'));
-      row.classList.add('selected');
-      const co = row.dataset.co;
-      const items = co ? allItems2.filter(it => it._co === co) : allItems2;
-      const label = co || 'All Customers';
-      document.getElementById('tax-right-hd').textContent = label;
-      document.getElementById('tax-right-ct').textContent = items.length + ' interaction' + (items.length!==1?'s':'');
-      document.getElementById('tax-right-body').innerHTML = renderTaxonomy(items);
-    });
-  }
-
-  // Event delegation on wrap — survives child innerHTML changes
+  // Event delegation on wrap — survives any child innerHTML changes
   wrap.addEventListener('click', e => {
+    // Filter toggle: state
     const stBtn = e.target.closest('.dash-toggle[data-state]');
     if (stBtn) {
       document.querySelectorAll('#dash-state-group .dash-toggle').forEach(b => b.classList.remove('active'));
@@ -2488,6 +2415,7 @@ function initDash() {
       refreshDash();
       return;
     }
+    // Filter toggle: days
     const dayBtn = e.target.closest('.dash-toggle[data-days]');
     if (dayBtn) {
       document.querySelectorAll('#dash-days-group .dash-toggle').forEach(b => b.classList.remove('active'));
