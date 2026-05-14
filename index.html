@@ -190,6 +190,10 @@ select option { background:var(--surf2); }
 .map-tooltip.leaflet-tooltip::before { display:none; }
 .map-tip.leaflet-tooltip { background:#0F2435; border:1px solid #2E4A5C; border-radius:7px; padding:7px 11px; box-shadow:0 4px 16px rgba(0,0,0,.5); pointer-events:none; }
 .map-tip.leaflet-tooltip::before { border-top-color:#2E4A5C; }
+body.light .leaflet-popup-content-wrapper { background:#fff; color:#0F172A; border-color:#CBD5E1; }
+body.light .leaflet-popup-tip { background:#fff; }
+body.light .map-tooltip.leaflet-tooltip { background:rgba(255,255,255,.95); border-color:#CBD5E1; color:#334155; }
+body.light .map-tip.leaflet-tooltip { background:#fff; border-color:#CBD5E1; box-shadow:0 4px 16px rgba(0,0,0,.15); }
 .map-tip-name { font-family:'Inter',sans-serif; font-size:12px; font-weight:600; color:#F0F6FA; white-space:nowrap; margin-bottom:2px; }
 .map-tip-loc  { font-family:'Inter',sans-serif; font-size:11px; color:#B8D0DF; white-space:nowrap; margin-bottom:2px; }
 .map-tip-sub  { font-family:'Inter',sans-serif; font-size:11px; color:#6D93A8; white-space:nowrap; }
@@ -1307,6 +1311,7 @@ document.getElementById('btn-lines').addEventListener('click', () => {
     const isLight = document.body.classList.toggle('light');
     btn.textContent = isLight ? '☾' : '☀︎';
     localStorage.setItem('cp-theme', isLight ? 'light' : 'dark');
+    if (window._mapSwapTile) window._mapSwapTile(isLight);
   });
 })();
 
@@ -1667,8 +1672,14 @@ function initMap() {
   }
 
   const map = L.map('map', { zoomControl: true }).setView([40, -96], 4);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png',
-    { attribution:'© CartoDB © OpenStreetMap contributors', maxZoom:19 }).addTo(map);
+  const _tileOpts = { attribution:'© CartoDB © OpenStreetMap contributors', maxZoom:19 };
+  const _darkTile  = 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png';
+  const _lightTile = 'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png';
+  let _tileLayer = L.tileLayer(document.body.classList.contains('light') ? _lightTile : _darkTile, _tileOpts).addTo(map);
+  window._mapSwapTile = (isLight) => {
+    _tileLayer.remove();
+    _tileLayer = L.tileLayer(isLight ? _lightTile : _darkTile, _tileOpts).addTo(map);
+  };
 
   // Ensure customer markers always render above the GeoJSON choropleth layers
   map.createPane('customerMarkers');
