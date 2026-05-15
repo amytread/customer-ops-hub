@@ -152,6 +152,7 @@ def refresh_intercom(days=90):
         f"INTERCOM_90D = {json.dumps(out, indent=4, ensure_ascii=False)}",
         "",
         "LINEAR_90D = {}",
+        "ALL_INTERCOM = []",
         "ALL_LINEAR = []",
     ]
     path = "/tmp/support_data.py"
