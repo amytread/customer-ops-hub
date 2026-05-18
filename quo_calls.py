@@ -157,7 +157,7 @@ QUO_CALLS = {
             "quo_url": "https://my.quo.com/inbox/PN3x1rCudr/c/CNedcff20661984d13971f041783c66dc4",
         },
     ],
-    "RONIX TRANSPORTATION LOGISTICS": [
+    "RONYX LOGISTICS LLC": [
         {
             "id": "369545468606",
             "date": "2026-05-14",
@@ -713,7 +713,7 @@ QUO_CALLS = {
             "quo_url": "https://my.quo.com/inbox/PN3x1rCudr/c/CN3fa7a36d78f44d40b4de2c349ed14159",
         },
     ],
-    "VOLKER": [
+    "VOLKER STEVIN CONTRACTING": [
         {
             "id": "369546409673",
             "date": "2026-05-14",
@@ -735,6 +735,18 @@ QUO_CALLS = {
             "summary": "Jill from Tread contacted Antoinette Wells regarding a driver named Curtis Hill. Curtis Hill registered under the incorrect company name, T Wells Trucking LLC. Antoinette confirmed that the correct company name is White River Hauling. Jill will update the records to reflect the correct company name for Curtis Hill",
             "next_steps": "Update Curtis Hill's registration to White River Hauling in the Tread system.. Confirm the update with Antoinette Wells once completed",
             "quo_url": "https://my.quo.com/inbox/PNkaCo2IXj/c/CN68fb48c77d0842cf9da27e91d7a79133",
+        },
+    ],
+    "MMC MATERIALS INC": [
+        {
+            "id": "369717758695",
+            "date": "2026-05-15",
+            "direction": "inbound",
+            "duration_sec": 154,
+            "contact": "Michael Weldon",
+            "summary": "Marco Alvarez called Michael from MMC regarding project setup. Marco confirmed he sent an email prior to the call for context. Michael asked about customer usage of specific products for projects. Marco offered to share his screen and sent a Google Meet link to discuss further.",
+            "next_steps": "Marco to prepare documents/visuals for the meeting. Both to join Google Meet for detailed project setup discussion",
+            "quo_url": "https://my.quo.com/inbox/PN3x1rCudr/c/CN8b65fd63584640d29912073d103fe2d8",
         },
     ],
 }
