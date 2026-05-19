@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amy's CS Tools Hub</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 56px 40px 40px;
+      border-bottom: 1px solid #1e2533;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      margin-top: 8px;
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      padding: 48px 40px;
+      max-width: 1100px;
+    }
+
+    .card {
+      background: #161b27;
+      border: 1px solid #1e2533;
+      border-radius: 12px;
+      padding: 28px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+      display: block;
+    }
+
+    .card:hover {
+      border-color: #3b82f6;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(59, 130, 246, 0.12);
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 18px;
+    }
+
+    .pulse .card-icon   { background: rgba(59,130,246,0.15); }
+    .training .card-icon { background: rgba(16,185,129,0.15); }
+    .priority .card-icon { background: rgba(245,158,11,0.15); }
+    .support .card-icon  { background: rgba(168,85,247,0.15); }
+
+    .card h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 0.875rem;
+      color: #64748b;
+      line-height: 1.5;
+    }
+
+    .card .tag {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .pulse .tag   { background: rgba(59,130,246,0.15);  color: #60a5fa; }
+    .training .tag { background: rgba(16,185,129,0.15); color: #34d399; }
+    .priority .tag { background: rgba(245,158,11,0.15); color: #fbbf24; }
+    .support .tag  { background: rgba(168,85,247,0.15); color: #c084fc; }
+
+    footer {
+      padding: 32px 40px;
+      border-top: 1px solid #1e2533;
+      color: #334155;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>CS Tools Hub</h1>
+    <p>Customer Success projects and analysis by Amy Griffith</p>
+  </header>
+
+  <div class="grid">
+
+    <a href="customer-pulse/" class="card pulse">
+      <div class="card-icon">📊</div>
+      <h2>Customer Pulse</h2>
+      <p>Live customer health dashboard — call summaries, sentiment trends, and account signals from across the book.</p>
+      <span class="tag">Live</span>
+    </a>
+
+    <a href="industry-training/" class="card training">
+      <div class="card-icon">🏗️</div>
+      <h2>Industry Training</h2>
+      <p>Construction industry education hub — terminology, workflows, and product context for the CS team.</p>
+      <span class="tag">In Progress</span>
+    </a>
+
+    <a href="cus-priority/" class="card priority">
+      <div class="card-icon">🎯</div>
+      <h2>CUS Priority Analysis</h2>
+      <p>Feature request and issue prioritization matrix for the Customer Success team's Linear queue.</p>
+      <span class="tag">In Progress</span>
+    </a>
+
+    <a href="support-intelligence/" class="card support">
+      <div class="card-icon">🧠</div>
+      <h2>Support Intelligence</h2>
+      <p>Ticket and support trend analysis — surfacing patterns in inbound requests to drive proactive CS motions.</p>
+      <span class="tag">In Progress</span>
+    </a>
+
+  </div>
+
+  <footer>
+    Updated automatically on push &middot; amytread.github.io/cs-hub
+  </footer>
+
+</body>
+</html>
