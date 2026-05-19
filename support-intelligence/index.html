@@ -1,32 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Support Intelligence — CS Hub</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Support Intelligence — Tread Customer Ops Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0f1117; color: #e2e8f0; min-height: 100vh; display: flex; flex-direction: column; }
-    nav { padding: 20px 40px; border-bottom: 1px solid #1e2533; }
-    nav a { color: #64748b; text-decoration: none; font-size: 0.875rem; }
-    nav a:hover { color: #fff; }
-    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 60px 40px; }
-    .center { text-align: center; max-width: 480px; }
-    .icon { font-size: 56px; margin-bottom: 24px; }
-    h1 { font-size: 1.75rem; font-weight: 700; color: #fff; margin-bottom: 12px; }
-    p { color: #64748b; line-height: 1.6; margin-bottom: 28px; }
-    .badge { display: inline-block; padding: 6px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; background: #a855f722; color: #a855f7; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --dark: #0A1820; --bg: #F7FAFC; --border: #D6DDE1;
+      --muted: #6B828C; --amber: #FFAA13; --yellow: #FFE500;
+      --shadow: 0px 8px 32px 0px rgba(51,71,82,0.25);
+    }
+    body { font-family: "Golos Text", system-ui, sans-serif; background: var(--bg); color: var(--dark); min-height: 100vh; display: flex; flex-direction: column; }
+    nav {
+      background: var(--dark); padding: 0 48px; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.2); }
+    .nav-title { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.6); letter-spacing: 0.04em; text-transform: uppercase; }
+    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 80px 48px; }
+    .center { max-width: 540px; width: 100%; }
+    .back { 
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--muted); text-decoration: none; font-size: 0.875rem;
+      margin-bottom: 40px; transition: color 0.15s;
+    }
+    .back:hover { color: var(--dark); }
+    .icon-wrap {
+      width: 72px; height: 72px; border-radius: 18px;
+      background: #fff; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; margin-bottom: 24px;
+      box-shadow: 0px 2px 8px rgba(51,71,82,0.08);
+    }
+    h1 { font-size: 1.75rem; font-weight: 800; color: var(--dark); margin-bottom: 12px; letter-spacing: -0.3px; }
+    .desc { color: var(--muted); line-height: 1.6; font-size: 0.95rem; margin-bottom: 28px; }
+    .status-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      box-shadow: 0px 2px 8px rgba(51,71,82,0.06);
+    }
+    .status-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; }
+    .status-note { font-size: 0.875rem; color: var(--dark); line-height: 1.5; }
+    .badge-wip {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin-top: 20px; padding: 5px 12px; border-radius: 100px;
+      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.03em;
+      background: #EEF2F5; color: var(--muted); border: 1px solid var(--border);
+    }
+    footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; }
   </style>
 </head>
 <body>
-  <nav><a href="../">← Back to Hub</a></nav>
+  <nav>
+    <a class="nav-logo" href="https://www.tread.io" target="_blank" rel="noopener">
+      <svg xmlns="http://www.w3.org/2000/svg" width="120" height="24" viewBox="0 0 150 30" fill="none">
+  <path d="M59.0903 4.36316H73.9359V8.54708H68.92V25.2795H64.1078V8.54547H59.0903V4.36316Z" fill="white"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M90.856 10.5747C90.856 6.46764 87.8866 4.36292 83.9704 4.36292H76.4194V25.2793H81.2317V17.0138L87.6813 25.2777H93.8L86.5308 16.6346C89.1151 15.823 90.856 13.7182 90.856 10.5747ZM85.7863 10.9077C85.7863 13.5198 83.611 13.6463 81.7937 13.6463H81.2304V8.16905H81.7937C83.611 8.16905 85.7863 8.29559 85.7863 10.9077Z" fill="white"/>
+  <path d="M107.853 8.54522H100.582V12.7067H107.544V16.8906H100.582V21.0954H107.851V25.2793H95.7695V4.36292H107.851L107.853 8.54522Z" fill="white"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M126.155 25.2794H131.325L122.803 4.36145H118.348L109.823 25.2794H114.995L116.556 21.0955H124.592L126.155 25.2794ZM120.548 10.8281H120.599L122.954 16.9103H118.192L120.548 10.8281Z" fill="white"/>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M150 14.8082C150 8.72445 145.137 4.36292 139.352 4.36292H133.235V25.2793H139.352C145.162 25.2793 150 20.9192 150 14.8082ZM144.803 14.8335C144.777 18.3324 142.346 21.0198 138.788 21.0198H138.046V8.62164H138.788C142.371 8.62164 144.803 11.3347 144.803 14.8335Z" fill="white"/>
+  <path d="M38.4037 15.2638L28.8771 5.73713L19.3504 15.2638L16.7622 12.6756L28.8771 0.561646L40.991 12.6756L38.4037 15.2638Z" fill="white"/>
+  <path d="M38.4037 21.8914L28.8771 12.3647L19.3504 21.8914L16.7622 19.3032L28.8771 7.18921L40.991 19.3032L38.4037 21.8914Z" fill="white"/>
+  <path d="M40.991 25.9307L40.2975 26.6241L35.7826 25.8968L28.8771 18.9913L21.9715 25.8968L17.4566 26.6241L16.7622 25.9307L28.8771 13.8158L40.991 25.9307Z" fill="white"/>
+  <path d="M34.0509 25.6177L28.8772 24.7833L23.7026 25.6177L28.8772 20.4431L34.0509 25.6177Z" fill="white"/>
+  <path d="M16.0143 13.423L13.4272 16.01L15.9936 18.5763L18.5806 15.9893L16.0143 13.423Z" fill="white"/>
+  <path d="M12.7003 16.7372L10.1133 19.3242L15.9931 25.2041L18.5802 22.617L12.7003 16.7372Z" fill="white"/>
+  <path d="M16.1692 26.8316L11.7128 27.5498L6.80078 22.6378L9.38898 20.0505L16.1692 26.8316Z" fill="white"/>
+  <path d="M10.4626 27.752L0 29.4382L6.07481 23.3643L10.4626 27.752Z" fill="white"/>
+  <path d="M41.7406 13.4231L39.1738 15.989L41.7611 18.5771L44.3278 16.0113L41.7406 13.4231Z" fill="white"/>
+  <path d="M45.0522 16.7337L39.1724 22.6135L41.76 25.2012L47.6399 19.3214L45.0522 16.7337Z" fill="white"/>
+  <path d="M50.9548 22.6387L46.0428 27.5498L41.5854 26.8316L48.3665 20.0505L50.9548 22.6387Z" fill="white"/>
+  <path d="M57.7542 29.4382L47.2925 27.752L51.6803 23.3643L57.7542 29.4382Z" fill="white"/>
+</svg>
+      <div class="nav-divider"></div>
+      <span class="nav-title">Customer Ops Hub</span>
+    </a>
+  </nav>
   <main>
     <div class="center">
-      <div class="icon">🧠</div>
+      <a href="../" class="back">← Back to Hub</a>
+      <div class="icon-wrap">🧠</div>
       <h1>Support Intelligence</h1>
-      <p>Ticket and support trend analysis — surfacing patterns in inbound requests to drive proactive CS motions.</p>
-      <span class="badge">Coming Soon</span>
+      <p class="desc">Ticket and support trend analysis — identifying patterns in inbound requests to surface proactive CS motions and reduce time-to-resolution.</p>
+      <div class="status-card">
+        <div class="status-label">Status</div>
+        <div class="status-note">Data pipeline is being built. This page will include trend charts, top issue categories, and recommended CS plays based on support volume.</div>
+        <span class="badge-wip">In Progress</span>
+      </div>
     </div>
   </main>
+  <footer>Tread Customer Ops Hub &middot; Internal use only</footer>
 </body>
 </html>
