@@ -737,6 +737,40 @@ QUO_CALLS = {
             "quo_url": "https://my.quo.com/inbox/PNkaCo2IXj/c/CN68fb48c77d0842cf9da27e91d7a79133",
         },
     ],
+    "GULFSHORE TRUCKING LLC": [
+        {
+            "id": "370044182217",
+            "date": "2026-05-18",
+            "direction": "outbound",
+            "duration_sec": 215,
+            "contact": "Diana",
+            "summary": "Marco called Diana from Gulf Shore Trucking to clarify a customer charge issue. Diana explained the problem was due to a customer name not recognized at the order level. Marco identified that the charge needed to be updated at the project level, not the order level. Diana confirmed she would inform Alfred to update the project with the correct customer name (Welch Tennis). Charge successfully updated.",
+            "next_steps": "Alfred to update the project with the correct customer name. Verify updates are reflected in future orders.",
+            "quo_url": "https://my.quo.com/inbox/PN3x1rCudr/c/CNf0239fb606484376bd03d03bc29ffc69",
+        },
+    ],
+    "ROCK ON TRUCKS": [
+        {
+            "id": "370169488093",
+            "date": "2026-05-19",
+            "direction": "outbound",
+            "duration_sec": 527,
+            "contact": "Krystal Quade",
+            "summary": "Marco returned Crystal's urgent call about fuel surcharge update errors. Crystal is having trouble submitting changes in the project management system. Marco clarified business hours, offered to help, and sent Crystal an email with a screen sharing link to troubleshoot the submission issue together.",
+            "next_steps": "Crystal to check email for screen sharing link from Marco. Crystal and Marco to conduct a screen share session to diagnose fuel surcharge submission errors.",
+            "quo_url": "https://my.quo.com/inbox/PNYHFsiYxL/c/CN6c6b6ade05e94d128140c20a41c24118",
+        },
+        {
+            "id": "370134297321",
+            "date": "2026-05-19",
+            "direction": "outbound",
+            "duration_sec": 2055,
+            "contact": "Krystal Quade",
+            "summary": "Extended screen share troubleshooting with Crystal. Crystal has 144 jobs requiring fuel surcharge and internal note changes but is hitting submission errors. Team identified that a recent system update is causing duplicate add-on issues. Engineering fix expected soon. Marco advised Crystal to either wait for the release (reload when prompted) or create new add-ons as a temporary workaround.",
+            "next_steps": "Monitor for engineering fix release and reload system when prompted. If fix doesn't resolve, create new add-ons for fuel surcharges as workaround. Continue making changes while tracking errors.",
+            "quo_url": "https://my.quo.com/inbox/PNYHFsiYxL/c/CN6c6b6ade05e94d128140c20a41c24118",
+        },
+    ],
     "MMC MATERIALS INC": [
         {
             "id": "369717758695",

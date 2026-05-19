@@ -1,4 +1,4 @@
-# HeySam call data — auto-refreshed 2026-05-17
+# HeySam call data — auto-refreshed 2026-05-19
 # Most recent meeting per customer (fetched via HeySam MCP)
 
 HEYSAM_CALLS = {
@@ -21,13 +21,13 @@ HEYSAM_CALLS = {
         "url": "https://app.heysam.ai/calls/1a111719-028e-4a4c-936b-76aa4e492f2f",
     },
     "DUFFERIN AGGREGATES (CRH)": {
-        "bot_id": "93669de8-f09d-44c9-970c-5c097a3a2aeb",
-        "date": "May 15",
-        "title": "Dufferin - Vendor Day Content",
+        "bot_id": "ae22ed42-028d-48a6-9d08-779fed56f3c2",
+        "date": "May 18",
+        "title": "Kyle Gear <> Tim (Tread)",
         "overall": "positive",
-        "key_topics": "In-person vendor event prep next week — Crystal presents (5-10 min vendor performance), then Sameer demos driver-facing app enhancements. Cancellation notification bug acknowledged (vendors not notified when orders cancelled after driver accepts). Amy (new VP Customer Success) will attend event. Punjabi language feature discussed.",
-        "challenges": "Cancellation notifications not reaching vendors when dispatched directly to drivers — generating negative vendor feedback. OPP officer speaker (Carrie) may be unavailable. Punjabi feature limited by literacy gap.",
-        "url": "https://app.heysam.ai/calls/93669de8-f09d-44c9-970c-5c097a3a2aeb",
+        "key_topics": "Live platform demo for Kyle Gear (VP/GM, CRH) using PJ Keating and Tilcon accounts — Kyle acknowledged significant product improvement since 1-2 years ago. Potential pilot: inbound ag hauls or plant-to-plant moves (~10 trucks, 1 job). Carrier rate cards and vendor-specific pricing confirmed. Driver pay Vista integration already live at Tilcon/PJ Keating. FleetWatcher gap: 65-70% CRH volume is brokered with no driver-level visibility. Craig (VPGM Concrete West, Lutz) identified as key internal champion.",
+        "challenges": "Hauler/app fatigue — CRH haulers frustrated by multiple RFP and app adoption requests. Kevin Price's stance: pilot with someone else before replacing FleetWatcher. Kyle needs to socialize internally before formal pilot. Marine terminal congestion reducing Tampa loads (~5/day → ~2/day).",
+        "url": "https://app.heysam.ai/calls/ae22ed42-028d-48a6-9d08-779fed56f3c2",
     },
     "R.W. DUNTEMAN CO.": {
         "bot_id": "83a7e050-af7b-4466-b487-f0f41fd96614",
@@ -163,6 +163,24 @@ HEYSAM_CALLS = {
         "key_topics": "Onboarding session — Sullivan project setup. Vendor setup (5-6 vendors, already on board). Dispatch workflow, copy-and-edit for multiple pickup sites. Geofence set to 1,500 ft. Scale ticket approvals replacing manual spreadsheet. Fuel surcharge configuration (trucking + materials) deferred to follow-up. ~100 trucks daily across multiple sites.",
         "challenges": "Fuel surcharge complexity (fluctuation-based for both trucking + materials — follow-up needed). Quad equipment type not natively in system. Vendor training on mobile ticket submission over 2-3 weeks. Beth and Sam (approvers) not yet onboarded.",
         "url": "https://app.heysam.ai/calls/f2b8e120-0397-4a7b-9b79-65d487b7ea27",
+    },
+    "PRIME AGGREGATE TRANSPORTATION": {
+        "bot_id": "f9af8bf6-c848-40e9-b701-3c00d3b7d213",
+        "date": "May 18",
+        "title": "Prime Aggregates <> Tread Training - Q&A",
+        "overall": "positive",
+        "key_topics": "Hands-on onboarding session with Adam Holst (owner), Rosa (dispatcher), Lindsay (billing). Vendor/driver type setup: owner operators, multi-truck OOs, brokers — Legacy Haulers and Victor Gonzalez set up as live test accounts. Test order dispatched to Victor during call. ~203 vendors to bulk import once clean list provided. HaulWare integration discussed (CSV export option, decision pending on ticket vs. AP voucher level). Commission/add-on pay rate setup covered.",
+        "challenges": "Driver list previously sent was incomplete and unclean — delaying bulk import. Implementation bottleneck on Adam (limited bandwidth); intern now hired to assist. HaulWare import level decision still pending. Victor Gonzalez hasn't installed Tread driver app yet. Multi-truck broker dispatch method needs decision before setup.",
+        "url": "https://app.heysam.ai/calls/f9af8bf6-c848-40e9-b701-3c00d3b7d213",
+    },
+    "CANTON CONCRETE (DUPLICATE)": {
+        "bot_id": "6354c438-da88-4d88-8c81-1793b3c11daf",
+        "date": "May 18",
+        "title": "Canton Concrete <> Tread Billing Questions",
+        "overall": "positive",
+        "key_topics": "Lucretia (ops/office manager) walkthrough of invoice-to-settlement workflow by driver/truck and date range — replacing manual paper logs and calculator. Driver setup confusion resolved (owner-operator vs. company driver — same functionality). 87% driver acceptance rate. Monthly fuel surcharge editing confirmed in-platform. QuickBooks Desktop (Enterprise) integration interest noted. New general billing report (payables + receivables) in development.",
+        "challenges": "QuickBooks Desktop integration not yet available — no timeline confirmed, slowing full workflow replacement. New billing report still in development. One driver has location permissions permanently denied. Older drivers slower to adopt platform.",
+        "url": "https://app.heysam.ai/calls/6354c438-da88-4d88-8c81-1793b3c11daf",
     },
     "N.S. TRUCKING INC.": {
         "bot_id": "9cb4ceb5-6e81-4403-982c-b2a9e94c881c",
