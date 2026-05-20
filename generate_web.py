@@ -331,7 +331,8 @@ for _company, _convs in INTERCOM_90D.items():
         _conv['category'] = _recat(_conv.get('subject', ''), _conv.get('category', 'Other'))
 
 try:
-    from linear_project_issues import LINEAR_PROJECT_ISSUES, LINEAR_PROJECT_META
+    from linear_project_issues import LINEAR_PROJECT_ISSUES
+    LINEAR_PROJECT_META = {}
     # New format: flat list of all in-progress issues, not per-company
     if isinstance(LINEAR_PROJECT_ISSUES, list):
         _LINEAR_PROJECT_LIST = LINEAR_PROJECT_ISSUES
@@ -3602,7 +3603,11 @@ data_blob = (
     .replace('BUILD_DATE_PLACEHOLDER',   datetime.datetime.now().strftime('%-m/%-d/%Y'))
 )
 
-out = os.path.expanduser('~/Desktop/tread_customers.html')
+import argparse as _ap
+_p = _ap.ArgumentParser()
+_p.add_argument('--out', default=os.path.expanduser('~/Desktop/tread_customers.html'))
+_args, _ = _p.parse_known_args()
+out = _args.out
 with open(out, 'w') as f:
     f.write(data_blob)
 print(f"Written {len(data_blob):,} bytes → {out}")
