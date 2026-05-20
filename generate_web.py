@@ -1685,6 +1685,19 @@ const REGISTRATIONS = REGISTRATIONS_PLACEHOLDER;
 // ── Helpers ──────────────────────────────────────────────────────────────────
 const HC = {green:'#22C55E',yellow:'#F59E0B',red:'#EF4444',gray:'#64748B'};
 const TC = {Hauler:'#3B82F6',Producer:'#22C55E',Construction:'#F97316',Agriculture:'#A3E635',Mixed:'#A78BFA'};
+// Success@ email thread counts per customer (from support audit, May 2026)
+const EMAIL_COUNTS = {
+  'TOMLINSON':              195,
+  'WHITAKER TRANSPORTATION': 143,
+  'DIAMOND MATERIALS':      130,
+  'STATEWIDE MATERIALS':     96,
+  'TILCON CT INC':           94,
+  'ROCK ON TRUCKS':          77,
+  'CEMEX USA':               46,
+  'GULFSHORE TRUCKING LLC':  45,
+  'AHS':                     44,
+  'TRANS-PHOS INC.':         42,
+};
 const CAT_COLORS = {
   'Login & Account Access':        '#FBBF24',
   'App / Mobile Issues':           '#A78BFA',
@@ -2682,16 +2695,30 @@ function _bottomBar(label, n, maxBar, col, labelStyle) {
   </div>`;
 }
 
+function _srcCount(co, s, src) {
+  if (src === 'calls') return (co.quo_calls||[]).length;
+  if (src === 'email') return EMAIL_COUNTS[co.name] || 0;
+  if (!s) return 0;
+  return src === 'ic' ? s.icCount : s.liCount;
+}
+
 function renderTenureChart(stats, src) {
   const GROUPS = ['New','~1 Year','~2 Years','3+ Years'];
   const by = {}; GROUPS.forEach(g => { by[g] = 0; });
-  stats.forEach(s => {
-    const co = CUSTOMERS.find(c => c.name === s.name);
-    if (!co || !by.hasOwnProperty(co.tenure_group)) return;
-    by[co.tenure_group] += src === 'ic' ? s.icCount : s.liCount;
-  });
+  if (src === 'calls' || src === 'email') {
+    CUSTOMERS.forEach(co => {
+      if (!by.hasOwnProperty(co.tenure_group)) return;
+      by[co.tenure_group] += _srcCount(co, null, src);
+    });
+  } else {
+    stats.forEach(s => {
+      const co = CUSTOMERS.find(c => c.name === s.name);
+      if (!co || !by.hasOwnProperty(co.tenure_group)) return;
+      by[co.tenure_group] += _srcCount(co, s, src);
+    });
+  }
   const maxBar = Math.max(...Object.values(by), 1);
-  const col = src === 'ic' ? '#60ABDE' : '#FCD34D';
+  const col = src === 'ic' ? '#60ABDE' : src === 'calls' ? '#34D399' : src === 'email' ? '#F472B6' : '#FCD34D';
   let html = '<div class="tenure-chart">';
   GROUPS.forEach(g => { if (by[g]) html += _bottomBar(g, by[g], maxBar, col, null); });
   html += '</div>';
@@ -2707,8 +2734,9 @@ function renderArrBandChart(stats, src) {
     { label:'No ARR',    min:-1,     max:-1       },
   ];
   const by = {}; BANDS.forEach(b => { by[b.label] = 0; });
-  stats.forEach(s => {
-    const co = CUSTOMERS.find(c => c.name === s.name);
+  const source = src === 'calls' || src === 'email' ? CUSTOMERS : stats.map(s => ({...s, co: CUSTOMERS.find(c => c.name === s.name)})).filter(s => s.co);
+  (src === 'calls' || src === 'email' ? CUSTOMERS : stats).forEach(item => {
+    const co = (src === 'calls' || src === 'email') ? item : CUSTOMERS.find(c => c.name === item.name);
     if (!co) return;
     const v = parseArr(co.arr);
     let band = 'No ARR';
@@ -2717,10 +2745,10 @@ function renderArrBandChart(stats, src) {
         if (v >= b.min && v < b.max) { band = b.label; break; }
       }
     }
-    by[band] += src === 'ic' ? s.icCount : s.liCount;
+    by[band] += _srcCount(co, (src === 'calls' || src === 'email') ? null : item, src);
   });
   const maxBar = Math.max(...Object.values(by), 1);
-  const col = src === 'ic' ? '#60ABDE' : '#FCD34D';
+  const col = src === 'ic' ? '#60ABDE' : src === 'calls' ? '#34D399' : src === 'email' ? '#F472B6' : '#FCD34D';
   let html = '<div class="tenure-chart">';
   BANDS.forEach(b => { if (by[b.label]) html += _bottomBar(b.label, by[b.label], maxBar, col, null); });
   html += '</div>';
@@ -2731,10 +2759,15 @@ function renderSegmentChart(stats, src) {
   const SEGS = ['Enterprise','Mid-Market'];
   const SEG_COLORS = { Enterprise:'#FFE500', 'Mid-Market':'#60ABDE' };
   const by = {}; SEGS.forEach(seg => { by[seg] = 0; });
-  stats.forEach(s => {
-    if (by.hasOwnProperty(s.segment))
-      by[s.segment] += src === 'ic' ? s.icCount : s.liCount;
-  });
+  if (src === 'calls' || src === 'email') {
+    CUSTOMERS.forEach(co => {
+      if (by.hasOwnProperty(co.segment)) by[co.segment] += _srcCount(co, null, src);
+    });
+  } else {
+    stats.forEach(s => {
+      if (by.hasOwnProperty(s.segment)) by[s.segment] += _srcCount(null, s, src);
+    });
+  }
   const maxBar = Math.max(...Object.values(by), 1);
   let html = '<div class="tenure-chart">';
   SEGS.forEach(seg => {
@@ -2746,11 +2779,12 @@ function renderSegmentChart(stats, src) {
 
 function renderTypeChart(stats, src) {
   const by = {};
-  stats.forEach(s => {
-    const co = CUSTOMERS.find(c => c.name === s.name);
+  const items = (src === 'calls' || src === 'email') ? CUSTOMERS : stats.map(s => ({...s, _co: CUSTOMERS.find(c => c.name === s.name)})).filter(s => s._co);
+  (src === 'calls' || src === 'email' ? CUSTOMERS : items).forEach(item => {
+    const co = (src === 'calls' || src === 'email') ? item : item._co;
     if (!co) return;
     const t = co.type || 'Other';
-    by[t] = (by[t] || 0) + (src === 'ic' ? s.icCount : s.liCount);
+    by[t] = (by[t] || 0) + _srcCount(co, (src === 'calls' || src === 'email') ? null : item, src);
   });
   const sorted = Object.entries(by).filter(([,n])=>n>0).sort((a,b)=>b[1]-a[1]);
   const maxBar = Math.max(...sorted.map(([,n])=>n), 1);
@@ -2764,7 +2798,7 @@ function renderTypeChart(stats, src) {
 }
 
 function renderBottomPanels(stats, src) {
-  const label = src === 'ic' ? 'Intercom contacts' : 'Linear tickets';
+  const label = src === 'ic' ? 'Intercom contacts' : src === 'calls' ? 'Phone calls' : src === 'email' ? 'Success@ emails' : 'Linear tickets';
   return `
     <div class="dash-panel">
       <div class="dash-panel-head">
@@ -3149,6 +3183,8 @@ function initDash() {
         <span style="font-size:12px;font-weight:600;color:var(--muted)">Data source</span>
         <select id="dash-src-select" class="dash-src-select">
           <option value="ic">Intercom — support contacts</option>
+          <option value="calls">Phone calls (Quo)</option>
+          <option value="email">Success@ emails</option>
           <option value="li">Linear — internal tickets</option>
         </select>
       </div>
