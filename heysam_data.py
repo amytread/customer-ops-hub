@@ -191,4 +191,22 @@ HEYSAM_CALLS = {
         "challenges": "Dispatch (Josh) incorrectly assigning truck numbers / sending jobs to vendor not driver — creates systematic settlement errors. Truck 690 (Ernesto) 3-week activity gap indicates inconsistent platform usage. Settlement corrections are time-consuming.",
         "url": "https://app.heysam.ai/calls/9cb4ceb5-6e81-4403-982c-b2a9e94c881c",
     },
+    "IMPACT SAND & GRAVEL": {
+        "bot_id": "d11d95ec-f8f3-4b68-b5c4-5e7e43a5a591",
+        "date": "May 15",
+        "title": "Contract review - Impact Sand and Gravel",
+        "overall": "positive",
+        "key_topics": "1-year contract agreed — monthly billing, $3,750 implementation fee. Owner Bill Wadley on 10-day vacation; operations contact Ning Xiang delegated to proceed. Fastway integration gap discussed (not yet supported). Pricing complexity and beta concerns addressed. Sales rep Tutt led call.",
+        "challenges": "Fastway integration not yet available — potential friction at go-live. Bill Wadley (owner/signatory) unavailable for 10 days. Beta concerns raised. Pricing structure complexity acknowledged.",
+        "url": "https://app.heysam.ai/calls/d11d95ec-f8f3-4b68-b5c4-5e7e43a5a591",
+    },
+    "LEAH TRUCKING": {
+        "bot_id": "a3afbff1-5b1a-4e6d-a8c4-7f2b9d3e1c04",
+        "date": "May 14",
+        "title": "Leah Trucking | Tread Demonstration",
+        "overall": "positive",
+        "key_topics": "~90 trucks daily, 70+ sub-haulers in Orange, TX. Dispatch manager (Uni Trucking LLC, replaced Veronica Oct 2025) attended demo with Will Amen (sales). AI ticket scanning and Axon accounting integration both high interest. Sub-hauler management workflow reviewed.",
+        "challenges": "Owner Mr. George not yet engaged — deal not closed. Owner buy-in required before contract. Axon accounting integration availability unclear.",
+        "url": "https://app.heysam.ai/calls/a3afbff1-5b1a-4e6d-a8c4-7f2b9d3e1c04",
+    },
 }
