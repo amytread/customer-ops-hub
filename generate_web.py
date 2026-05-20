@@ -358,6 +358,27 @@ try:
             'WERDCO':                         'WERDCO BC INC.',
             'TOMLINSON':                      'TOMLINSON',
         }
+        # Fallback: customer field (title-cased from refresh_data.py's _infer_customer)
+        _LI_CUST_MAP = {
+            'Amrize':    'AMRIZE: SASK + WINNIPEG',
+            'Cemex':     'CEMEX USA',
+            'Dufferin':  'DUFFERIN AGGREGATES (CRH)',
+            'Gulfshore': 'GULFSHORE TRUCKING LLC',
+            'Igel':      'GEORGE J. IGEL & CO.',
+            'Jw Golding':'JW GOLDING',
+            'Pineridge': 'PINERIDGE FARMS INC.',
+            'Rock On':   'ROCK ON TRUCKS',
+            'Rpmx':      'RPM xCONSTRUCTION',
+            'Statewide': 'STATEWIDE MATERIALS',
+            'Tapani':    'TAPANI INC',
+            'Tilcon':    'TILCON CT INC',
+            'Tomlinson': 'TOMLINSON',
+            'Trans-Phos':'TRANS-PHOS INC.',
+            'Us Lime':   'UNITED STATES LIME & MINERALS',
+            'Werdco':    'WERDCO BC INC.',
+            'Western':   'WESTERN STATES CONTRACTING',
+            'Whitaker':  'WHITAKER TRANSPORTATION',
+        }
         def _li_proj_to_co(project):
             if not project: return None
             pu = project.upper().strip()
@@ -365,10 +386,10 @@ try:
             for k, v in _LI_PROJ_MAP.items():
                 if pu.startswith(k) or k in pu: return v
             return None
-        # Build per-company dict
+        # Build per-company dict; fall back to customer field if project doesn't match
         _li_by_co = {}
         for _iss in _LINEAR_PROJECT_LIST:
-            _co = _li_proj_to_co(_iss.get('project', ''))
+            _co = _li_proj_to_co(_iss.get('project', '')) or _LI_CUST_MAP.get(_iss.get('customer', ''))
             if _co:
                 _li_by_co.setdefault(_co, []).append(_iss)
         LINEAR_PROJECT_ISSUES = _li_by_co
