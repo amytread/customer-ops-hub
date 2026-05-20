@@ -47,11 +47,18 @@ def http_get(url, headers):
         return json.loads(r.read())
 
 
-def http_post(url, headers, body):
+def http_post(url, headers, body, _retries=2):
     data = json.dumps(body).encode()
     req = urllib.request.Request(url, data=data, headers={**headers, "Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.loads(r.read())
+    for attempt in range(_retries + 1):
+        try:
+            with urllib.request.urlopen(req, timeout=60) as r:
+                return json.loads(r.read())
+        except (urllib.error.URLError, OSError) as e:
+            if attempt < _retries:
+                time.sleep(2 ** attempt)
+                continue
+            raise
 
 
 def strip_html(text):
@@ -76,21 +83,79 @@ def _categorize_intercom(conv):
     return "Other"
 
 
-def _fetch_intercom_companies(headers):
-    """Return list of {id, name} for all Intercom companies."""
-    companies = []
-    url = "https://api.intercom.io/companies?per_page=150"
-    while url:
+# Maps email domain → dashboard company name (must match create_deck_v3.py exactly).
+# Verified via Intercom MCP email_domain lookups on 2026-05-20.
+DOMAIN_TO_COMPANY = {
+    "tomlinsongroup.com":    "TOMLINSON",
+    "statewidematerials.com": "STATEWIDE MATERIALS",
+    "whitcon.com":           "WHITAKER TRANSPORTATION",
+    "diamondmaterials.com":  "DIAMOND MATERIALS",
+    "cemex.com":             "CEMEX USA",
+    "gulfshoretrucking.com": "GULFSHORE TRUCKING LLC",
+    "jwgolding.com":         "JW GOLDING",
+    "transphos.com":         "TRANS-PHOS INC.",
+    "rockontrucks.com":      "ROCK ON TRUCKS",
+    "amrize.com":            "AMRIZE: SASK + WINNIPEG",
+    "tapani.com":            "TAPANI INC",
+    "rpmxconstruction.com":  "RPM xCONSTRUCTION",
+    "pjkeating.com":         "PJ KEATING CO",
+    "holcim.com":            "HOLCIM - NORTH CENTRAL (FARGO)",
+    "buesingcorp.com":       "BUESING CORP",
+    "uslm.com":              "UNITED STATES LIME & MINERALS",
+    "volkerstevin.ca":       "VOLKER STEVIN CONTRACTING",
+}
+
+
+def _fetch_convs_for_domain(headers, since, domain, canonical_name, by_company):
+    """Search conversations where the source author email contains the domain."""
+    seen_ids = set()
+    starting_after = None
+    while True:
+        payload = {
+            "query": {
+                "operator": "AND",
+                "value": [
+                    {"field": "created_at", "operator": ">", "value": since},
+                    {"field": "source.author.email", "operator": "~", "value": f"@{domain}"},
+                ],
+            },
+            "pagination": {"per_page": 50},
+        }
+        if starting_after:
+            payload["pagination"]["starting_after"] = starting_after
         try:
-            data = http_get(url, headers)
-        except urllib.error.HTTPError as e:
-            print(f"    Intercom companies HTTP {e.code}: {e.read().decode()[:200]}")
+            data = http_post("https://api.intercom.io/conversations/search", headers, payload)
+        except (urllib.error.HTTPError, urllib.error.URLError, OSError):
             break
-        for c in data.get("data", []):
-            companies.append({"id": c.get("id"), "name": c.get("name", "")})
+        convs = data.get("conversations", [])
+        if not convs:
+            break
+        for conv in convs:
+            conv_id = conv.get("id", "")
+            if conv_id in seen_ids:
+                continue
+            seen_ids.add(conv_id)
+            subject = strip_html(
+                conv.get("source", {}).get("subject") or
+                conv.get("source", {}).get("body") or ""
+            )[:120]
+            created = datetime.datetime.fromtimestamp(
+                conv.get("created_at", 0)
+            ).date().isoformat()
+            by_company.setdefault(canonical_name, []).append({
+                "id": conv_id,
+                "date": created,
+                "state": conv.get("state", ""),
+                "subject": subject,
+                "category": _categorize_intercom(conv),
+                "url": f"https://app.intercom.com/a/apps/m48souwv/conversations/{conv_id}",
+            })
         pages = data.get("pages", {})
-        url = pages.get("next") if isinstance(pages.get("next"), str) else None
-    return companies
+        next_cursor = pages.get("next", {})
+        starting_after = next_cursor.get("starting_after") if isinstance(next_cursor, dict) else None
+        if not starting_after:
+            break
+        time.sleep(0.15)
 
 
 def refresh_intercom(days=90):
@@ -102,81 +167,24 @@ def refresh_intercom(days=90):
         "Intercom-Version": "2.11",
     }
 
-    # Step 1: get all companies so we can search per company
-    all_companies = _fetch_intercom_companies(headers)
-    print(f"    {len(all_companies)} Intercom companies found")
-
     by_company = {}
-
-    def _fetch_convs_for_company(company_id, company_name):
-        """Fetch last-90-day conversations for one company and add to by_company."""
-        starting_after = None
-        page_num = 0
-        while True:
-            payload = {
-                "query": {
-                    "operator": "AND",
-                    "value": [
-                        {"field": "created_at", "operator": ">", "value": since},
-                        {"field": "company_id", "operator": "=", "value": company_id},
-                    ],
-                },
-                "pagination": {"per_page": 150},
-            }
-            if starting_after:
-                payload["pagination"]["starting_after"] = starting_after
-            try:
-                data = http_post("https://api.intercom.io/conversations/search", headers, payload)
-            except urllib.error.HTTPError as e:
-                print(f"    Intercom HTTP {e.code} for {company_name}: {e.read().decode()[:120]}")
-                break
-            convs = data.get("conversations", [])
-            if not convs:
-                break
-            page_num += 1
-            for conv in convs:
-                subject = strip_html(conv.get("source", {}).get("subject") or conv.get("source", {}).get("body") or "")[:120]
-                conv_id = conv.get("id", "")
-                created = datetime.datetime.fromtimestamp(conv.get("created_at", 0)).date().isoformat()
-                url_link = f"https://app.intercom.com/a/apps/m48souwv/conversations/{conv_id}"
-                entry = {
-                    "id": conv_id,
-                    "date": created,
-                    "state": conv.get("state", ""),
-                    "subject": subject,
-                    "category": _categorize_intercom(conv),
-                    "url": url_link,
-                }
-                by_company.setdefault(company_name, []).append(entry)
-            pages = data.get("pages", {})
-            total_pages = pages.get("total_pages", 1)
-            next_cursor = pages.get("next", {})
-            if isinstance(next_cursor, dict):
-                starting_after = next_cursor.get("starting_after")
-            else:
-                starting_after = None
-            if not starting_after or page_num >= total_pages:
-                break
-            time.sleep(0.1)
-
-    total_convs = 0
-    for idx, co in enumerate(all_companies):
-        _fetch_convs_for_company(co["id"], co["name"])
-        if (idx + 1) % 20 == 0:
-            print(f"    {idx + 1}/{len(all_companies)} companies fetched…")
-        time.sleep(0.1)
-    for v in by_company.values():
-        total_convs += len(v)
-    print(f"    → {len(by_company)} companies with conversations, {total_convs} total")
+    total = len(DOMAIN_TO_COMPANY)
+    for idx, (domain, canonical_name) in enumerate(DOMAIN_TO_COMPANY.items()):
+        print(f"    [{idx+1}/{total}] {canonical_name}…", end=" ", flush=True)
+        _fetch_convs_for_domain(headers, since, domain, canonical_name, by_company)
+        n_convs = len(by_company.get(canonical_name, []))
+        print(f"{n_convs} convs")
+        time.sleep(0.15)
 
     # Sort companies alphabetically, conversations newest-first
     out = {}
     for k in sorted(by_company):
         out[k] = sorted(by_company[k], key=lambda x: x["date"], reverse=True)
+    total_convs = sum(len(v) for v in out.values())
 
     lines = [
         f"# Auto-generated support data — refreshed {TODAY}",
-        "# Source: Intercom conversations (last 90 days, fetched per company)",
+        "# Source: Intercom conversations (last 90 days, matched via email domain → contacts)",
         "",
         f"INTERCOM_90D = {json.dumps(out, indent=4, ensure_ascii=False)}",
         "",
