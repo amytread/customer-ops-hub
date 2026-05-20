@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generate ~/Desktop/tread_customers.html — run: python3 /tmp/generate_web.py"""
-import sys, types, json, os, datetime
+import sys, types, json, os, datetime, re
 
 # ── Stub out pptx / Google deps ───────────────────────────────────────────────
 class _Fake:
@@ -379,6 +379,33 @@ try:
             'Western':   'WESTERN STATES CONTRACTING',
             'Whitaker':  'WHITAKER TRANSPORTATION',
         }
+        # Fallback 2: scan ticket title for customer name keywords
+        _LI_TITLE_PATTERNS = [
+            (r'diamond materials',               'DIAMOND MATERIALS'),
+            (r'\bahs\b',                         'AHS'),
+            (r'rhino trucking|rhino excavating', 'RHINO TRUCKING INC.'),
+            (r'quality trucking',                'QUALITY TRUCKING'),
+            (r'4m trucking|\b4m\b',              '4M TRUCKING'),
+            (r'r\s*&\s*r trucking|r\s*&\s*r billing|r\s*&\s*r ', 'R&R TRUCKING, INC.'),
+            (r'\bdaniela\b',                     'DANIELA TRUCKING & GRADING'),
+            (r'prince george ag',                'PRINCE GEORGE AG'),
+            (r'\bcerutti\b',                     'CERUTTI & SONS TRANSPORTATION'),
+            (r'\bwhitaker\b',                    'WHITAKER TRANSPORTATION'),
+            (r'carter trucking',                 'CHARLES H CARTER & SON'),
+            (r'williams trucking',               'WILLIAMS TRUCKING CO.'),
+            (r'terry equipment',                 'TERRY EQUIPMENT COMPANY'),
+            (r'\bholcim\b',                      'HOLCIM - NORTH CENTRAL (FARGO)'),
+            (r'\bbuesing\b',                     'BUESING CORP'),
+            (r'arizona aggregate',               'ARIZONA AGGREGATE SOLUTIONS'),
+            (r'national lime',                   'NATIONAL LIME AND STONE'),
+            (r'\bgernatt\b',                     'GERNATT ASPHALT PRODUCTS'),
+            (r'granite construction',            'GRANITE CONSTRUCTION (SOCAL)'),
+            (r'\bsilverking\b',                  'SILVERKING TRUCKING'),
+            (r'd\.? *crupi',                     'D CRUPI & SONS, INC.'),
+            (r'\bmansteel\b',                    'MANSTEEL REBAR LTD.'),
+            (r'\bmarex\b',                       'MAREX'),
+        ]
+        _li_title_rx = [(re.compile(p, re.I), v) for p, v in _LI_TITLE_PATTERNS]
         def _li_proj_to_co(project):
             if not project: return None
             pu = project.upper().strip()
@@ -386,10 +413,17 @@ try:
             for k, v in _LI_PROJ_MAP.items():
                 if pu.startswith(k) or k in pu: return v
             return None
-        # Build per-company dict; fall back to customer field if project doesn't match
+        def _li_title_to_co(title):
+            if not title: return None
+            for rx, co in _li_title_rx:
+                if rx.search(title): return co
+            return None
+        # Build per-company dict: project → customer field → title scan
         _li_by_co = {}
         for _iss in _LINEAR_PROJECT_LIST:
-            _co = _li_proj_to_co(_iss.get('project', '')) or _LI_CUST_MAP.get(_iss.get('customer', ''))
+            _co = (_li_proj_to_co(_iss.get('project', ''))
+                   or _LI_CUST_MAP.get(_iss.get('customer', ''))
+                   or _li_title_to_co(_iss.get('title', '')))
             if _co:
                 _li_by_co.setdefault(_co, []).append(_iss)
         LINEAR_PROJECT_ISSUES = _li_by_co
