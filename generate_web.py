@@ -335,7 +335,42 @@ try:
     # New format: flat list of all in-progress issues, not per-company
     if isinstance(LINEAR_PROJECT_ISSUES, list):
         _LINEAR_PROJECT_LIST = LINEAR_PROJECT_ISSUES
-        LINEAR_PROJECT_ISSUES = {}   # per-company lookup stays empty
+        # Map project names → canonical customer names
+        _LI_PROJ_MAP = {
+            'CRH DUFFERIN':                   'DUFFERIN AGGREGATES (CRH)',
+            'CEMEX':                          'CEMEX USA',
+            'JW GOLDING':                     'JW GOLDING',
+            'NS TRUCKING':                    'N.S. TRUCKING INC.',
+            'NS TRUCKING LLC':                'N.S. TRUCKING INC.',
+            'ROCK ON TRUCKS':                 'ROCK ON TRUCKS',
+            'STATEWIDE':                      'STATEWIDE MATERIALS',
+            'TAPANI TRUCKING':                'TAPANI INC',
+            'TILCON':                         'TILCON CT INC',
+            'TRANS PHOS':                     'TRANS-PHOS INC.',
+            'TRANS-PHOS':                     'TRANS-PHOS INC.',
+            'VOLKER-STEVIN':                  'VOLKER STEVIN CONTRACTING',
+            'VOLKERWESSEL':                   'VOLKER STEVIN CONTRACTING',
+            'WHITAKER':                       'WHITAKER TRANSPORTATION',
+            'TERRY EQUIPMENT':                'TERRY EQUIPMENT COMPANY',
+            'RPMX':                           'RPM xCONSTRUCTION',
+            'RPM XCONSTRUCTION':              'RPM xCONSTRUCTION',
+            'WERDCO':                         'WERDCO BC INC.',
+            'TOMLINSON':                      'TOMLINSON',
+        }
+        def _li_proj_to_co(project):
+            if not project: return None
+            pu = project.upper().strip()
+            if pu in _LI_PROJ_MAP: return _LI_PROJ_MAP[pu]
+            for k, v in _LI_PROJ_MAP.items():
+                if pu.startswith(k) or k in pu: return v
+            return None
+        # Build per-company dict
+        _li_by_co = {}
+        for _iss in _LINEAR_PROJECT_LIST:
+            _co = _li_proj_to_co(_iss.get('project', ''))
+            if _co:
+                _li_by_co.setdefault(_co, []).append(_iss)
+        LINEAR_PROJECT_ISSUES = _li_by_co
     else:
         _LINEAR_PROJECT_LIST = []
 except ImportError:
@@ -2567,11 +2602,9 @@ const CO_PALETTE = ['#3B82F6','#F59E0B','#8B5CF6','#EC4899','#10B981','#F97316',
 function buildCustomerStats() {
   return CUSTOMERS.map(co => {
     const ic = co.intercom_90d || [];
-    const li = co.linear_90d  || [];
+    const li = [...(co.linear_90d || []), ...(co.linear_project || [])];
     const icItems = ic.map(i=>({...i,_src:'Intercom'}));
     const liItems = li.map(i=>({...i,_src:'Linear'}));
-    // total + cats = Intercom only (actual support contacts); stubs excluded from baseline
-    // Linear tickets are downstream artifacts, not support volume
     const icReal = icItems.filter(i=>!i._stub);
     const cats = {};
     icReal.forEach(i => { const c=i.category||'Other'; cats[c]=(cats[c]||0)+1; });

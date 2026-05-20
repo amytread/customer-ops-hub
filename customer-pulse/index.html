@@ -1819,11 +1819,9 @@ const CO_PALETTE = ['#3B82F6','#F59E0B','#8B5CF6','#EC4899','#10B981','#F97316',
 function buildCustomerStats() {
   return CUSTOMERS.map(co => {
     const ic = co.intercom_90d || [];
-    const li = co.linear_90d  || [];
+    const li = [...(co.linear_90d || []), ...(co.linear_project || [])];
     const icItems = ic.map(i=>({...i,_src:'Intercom'}));
     const liItems = li.map(i=>({...i,_src:'Linear'}));
-    // total + cats = Intercom only (actual support contacts); stubs excluded from baseline
-    // Linear tickets are downstream artifacts, not support volume
     const icReal = icItems.filter(i=>!i._stub);
     const cats = {};
     icReal.forEach(i => { const c=i.category||'Other'; cats[c]=(cats[c]||0)+1; });
