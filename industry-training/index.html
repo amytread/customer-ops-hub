@@ -1272,8 +1272,8 @@ section { position: relative; overflow: hidden; }
       <div class="journey-stop">
         <span class="j-icon">🏗️</span>
         <div class="j-text">
-          <div class="j-name">Job Site</div>
-          <div class="j-desc">Contractor uses it here</div>
+          <div class="j-name">Foreman / Job Site</div>
+          <div class="j-desc">Receives trucks, signs tickets</div>
         </div>
       </div>
       <span class="journey-arrow">→</span>
@@ -1356,12 +1356,40 @@ section { position: relative; overflow: hidden; }
           <div class="player-pays" style="background:rgba(103,80,164,.1);color:#7c5cbf">
             <span class="pays-icon">💵</span> Paid by the hauler per load, ton, or hour
           </div>
+          <div class="player-pays" style="background:rgba(103,80,164,.1);color:#7c5cbf;margin-top:8px">
+            <span class="pays-icon">📱</span> Works primarily from the Tread mobile app
+          </div>
+        </div>
+      </div>
+      <div class="player-card reveal reveal-delay-4" style="grid-column:span 2;box-shadow:0 0 0 2px var(--amber-dark),0 8px 32px rgba(204,154,0,.15)">
+        <div class="player-header" style="background:rgba(255,229,0,.05)">
+          <span class="player-icon">🪖</span>
+          <h3 style="color:var(--amber-dark)">The Foreman</h3>
+          <h2>The Contractor's Eyes on Site</h2>
+        </div>
+        <div class="player-body" style="display:flex;flex-wrap:wrap;gap:24px">
+          <div style="flex:1;min-width:260px">
+            <p>Works for the contractor. Manages the physical job site day-to-day — directing workers, coordinating material arrival, and telling trucks exactly where to dump. The foreman is not party to the contract or the billing; they're the person who makes the job actually happen on the ground.</p>
+            <p style="margin-top:12px">They report to the contractor but operate independently on site. On smaller jobs the contractor and foreman are the same person; on larger ones they're distinct.</p>
+          </div>
+          <div style="flex:1;min-width:260px">
+            <p>When a truck pulls in, the foreman is the point of contact — not the dispatcher, not the contractor. They inspect the load, decide if it's right, and sign the ticket. They're also the first to know when something goes wrong: short load, wrong material, truck that never arrived.</p>
+            <p style="margin-top:12px">Historically their tool was a clipboard and a stack of paper tickets. Disputes happened long after the moment had passed.</p>
+          </div>
+        </div>
+        <div class="player-footer" style="display:flex;flex-wrap:wrap;gap:8px">
+          <div class="player-pays" style="background:rgba(255,229,0,.12);color:var(--amber-dark);flex:1;min-width:220px">
+            <span class="pays-icon">🏗️</span> Reports to the contractor; runs the job site
+          </div>
+          <div class="player-pays" style="background:rgba(255,229,0,.12);color:var(--amber-dark);flex:1;min-width:220px">
+            <span class="pays-icon">📱</span> Works primarily from the Tread mobile app
+          </div>
         </div>
       </div>
     </div>
 
     <p class="players-note reveal">
-      Tread connects all four — the hauler dispatches trucks, the driver logs the delivery, the contractor gets billed, and the producer's tickets confirm the tonnage.
+      Tread connects all five — the hauler dispatches trucks, the driver logs the delivery, the foreman signs off at the site, the contractor gets billed, and the producer's tickets confirm the tonnage.
     </p>
     <div class="docs-callout on-light reveal">
       <div class="dc-icon">📚</div>
@@ -1849,6 +1877,7 @@ section { position: relative; overflow: hidden; }
             <span class="value">actual material</span>
           </div>
         </div>
+        <p style="margin-top:16px;font-size:14px;color:var(--gray-4)">At the job site, the foreman receives each truck and signs off on the ticket — verifying what arrived matches what was ordered. This is the start of every downstream billing and settlement chain.</p>
       </div>
 
       <div class="loads-card reveal" style="border-top-color:var(--orange)">
@@ -2094,7 +2123,7 @@ section { position: relative; overflow: hidden; }
     <div class="tread-footer reveal">
       <p>
         Tread powers quoting, dispatch, ticket capture, and billing —<br>
-        connecting contractors, haulers, and drivers in one platform.
+        connecting contractors, haulers, foremen, and drivers in one platform.
       </p>
     </div>
     <div class="docs-callout on-light reveal">
