@@ -419,7 +419,7 @@ section { position: relative; overflow: hidden; }
 .journey-arrow { font-size: 20px; color: rgba(255,255,255,.25); flex-shrink: 0; }
 
 .players-grid {
-  display: grid; grid-template-columns: repeat(6, 1fr);
+  display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
 
@@ -1287,21 +1287,15 @@ section { position: relative; overflow: hidden; }
     </div>
 
     <div class="players-grid">
-      <div class="player-card reveal" style="grid-column:span 6;box-shadow:0 0 0 2px var(--green),0 8px 32px rgba(52,168,83,.15)">
+      <div class="player-card reveal" style="box-shadow:0 0 0 2px var(--green),0 8px 32px rgba(52,168,83,.15)">
         <div class="player-header" style="background:rgba(52,168,83,.05)">
           <span class="player-icon">👷</span>
           <h3 style="color:var(--green)">The Contractor</h3>
           <h2>The Hub of Everything</h2>
         </div>
-        <div class="player-body" style="display:flex;flex-wrap:wrap;gap:24px">
-          <div style="flex:1;min-width:260px">
-            <p>Won the bid. Manages the whole job. Orders material from the producer <em>and</em> hires the hauler to move it. Every dollar flows through them.</p>
-            <p style="margin-top:12px">They're the one with the deadline and the budget. Everyone else on the job — the hauler, the foreman, the driver — exists to serve their project.</p>
-          </div>
-          <div style="flex:1;min-width:260px">
-            <p>The contractor is often a GC (general contractor) who won a public or private bid. They may run a single crew or manage dozens across multiple job sites simultaneously.</p>
-            <p style="margin-top:12px">On site, the foreman is their representative. For trucking and materials, the hauler is their vendor. The contractor orchestrates both.</p>
-          </div>
+        <div class="player-body">
+          <p>Won the bid. Manages the whole job. Orders material from the producer <em>and</em> hires the hauler to move it. Every dollar flows through them.</p>
+          <p style="margin-top:12px">Often a GC who won a public or private bid. On site, the foreman is their representative; for trucking and materials, the hauler is their vendor. The contractor orchestrates both.</p>
         </div>
         <div class="player-footer">
           <div class="player-pays" style="background:rgba(52,168,83,.1);color:var(--green)">
@@ -1310,7 +1304,7 @@ section { position: relative; overflow: hidden; }
         </div>
       </div>
 
-      <div class="player-card reveal reveal-delay-1" style="grid-column:span 2">
+      <div class="player-card reveal reveal-delay-1">
         <div class="player-header" style="background:rgba(0,140,186,.05)">
           <span class="player-icon">🏭</span>
           <h3 style="color:var(--teal)">The Producer</h3>
@@ -1327,7 +1321,7 @@ section { position: relative; overflow: hidden; }
         </div>
       </div>
 
-      <div class="player-card reveal reveal-delay-2" style="grid-column:span 2">
+      <div class="player-card reveal reveal-delay-2">
         <div class="player-header" style="background:rgba(204,88,0,.05)">
           <span class="player-icon">🚛</span>
           <h3 style="color:var(--orange)">The Hauler</h3>
@@ -1365,7 +1359,7 @@ section { position: relative; overflow: hidden; }
         </div>
       </div>
 
-      <div class="player-card reveal reveal-delay-4" style="grid-column:span 3">
+      <div class="player-card reveal reveal-delay-4">
         <div class="player-header" style="background:rgba(103,80,164,.05)">
           <span class="player-icon">👤</span>
           <h3 style="color:#7c5cbf">The Driver</h3>
@@ -1384,7 +1378,7 @@ section { position: relative; overflow: hidden; }
           </div>
         </div>
       </div>
-      <div class="player-card reveal reveal-delay-4" style="grid-column:span 3;box-shadow:0 0 0 2px var(--amber-dark),0 8px 32px rgba(204,154,0,.15)">
+      <div class="player-card reveal reveal-delay-4" style="box-shadow:0 0 0 2px var(--amber-dark),0 8px 32px rgba(204,154,0,.15)">
         <div class="player-header" style="background:rgba(255,229,0,.05)">
           <span class="player-icon">🪖</span>
           <h3 style="color:var(--amber-dark)">The Foreman</h3>
