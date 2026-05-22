@@ -419,7 +419,7 @@ section { position: relative; overflow: hidden; }
 .journey-arrow { font-size: 20px; color: rgba(255,255,255,.25); flex-shrink: 0; }
 
 .players-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr);
+  display: grid; grid-template-columns: repeat(6, 1fr);
   gap: 24px;
 }
 
@@ -1287,7 +1287,7 @@ section { position: relative; overflow: hidden; }
     </div>
 
     <div class="players-grid">
-      <div class="player-card reveal" style="grid-column:span 2;box-shadow:0 0 0 2px var(--green),0 8px 32px rgba(52,168,83,.15)">
+      <div class="player-card reveal" style="grid-column:span 6;box-shadow:0 0 0 2px var(--green),0 8px 32px rgba(52,168,83,.15)">
         <div class="player-header" style="background:rgba(52,168,83,.05)">
           <span class="player-icon">👷</span>
           <h3 style="color:var(--green)">The Contractor</h3>
@@ -1310,7 +1310,7 @@ section { position: relative; overflow: hidden; }
         </div>
       </div>
 
-      <div class="player-card reveal reveal-delay-1">
+      <div class="player-card reveal reveal-delay-1" style="grid-column:span 2">
         <div class="player-header" style="background:rgba(0,140,186,.05)">
           <span class="player-icon">🏭</span>
           <h3 style="color:var(--teal)">The Producer</h3>
@@ -1327,7 +1327,7 @@ section { position: relative; overflow: hidden; }
         </div>
       </div>
 
-      <div class="player-card reveal reveal-delay-2">
+      <div class="player-card reveal reveal-delay-2" style="grid-column:span 2">
         <div class="player-header" style="background:rgba(204,88,0,.05)">
           <span class="player-icon">🚛</span>
           <h3 style="color:var(--orange)">The Hauler</h3>
@@ -1348,7 +1348,24 @@ section { position: relative; overflow: hidden; }
         </div>
       </div>
 
-      <div class="player-card reveal reveal-delay-3">
+      <div class="player-card reveal reveal-delay-3" style="grid-column:span 2;box-shadow:0 0 0 2px var(--red),0 8px 32px rgba(210,48,37,.15)">
+        <div class="player-header" style="background:rgba(210,48,37,.05)">
+          <span class="player-icon">📡</span>
+          <h3 style="color:var(--red)">The Dispatcher</h3>
+          <h2>Real-Time Operations</h2>
+        </div>
+        <div class="player-body">
+          <p>Assigns trucks to jobs in real time. Not exclusive to the hauler — any org that manages a fleet has one. A large producer dispatching its own trucks, a contractor that self-performs hauling, or a dedicated trucking company can all employ dispatchers.</p>
+          <p style="margin-top:12px">High-tempo, decision-dense role. Which truck goes to which job, how to handle a no-show, when to pull a driver from one job to cover another. They track the fleet live throughout the day.</p>
+        </div>
+        <div class="player-footer">
+          <div class="player-pays" style="background:rgba(210,48,37,.1);color:var(--red)">
+            <span class="pays-icon">🎯</span> Found inside any org that manages a fleet
+          </div>
+        </div>
+      </div>
+
+      <div class="player-card reveal reveal-delay-4" style="grid-column:span 3">
         <div class="player-header" style="background:rgba(103,80,164,.05)">
           <span class="player-icon">👤</span>
           <h3 style="color:#7c5cbf">The Driver</h3>
@@ -1367,7 +1384,7 @@ section { position: relative; overflow: hidden; }
           </div>
         </div>
       </div>
-      <div class="player-card reveal reveal-delay-4" style="box-shadow:0 0 0 2px var(--amber-dark),0 8px 32px rgba(204,154,0,.15)">
+      <div class="player-card reveal reveal-delay-4" style="grid-column:span 3;box-shadow:0 0 0 2px var(--amber-dark),0 8px 32px rgba(204,154,0,.15)">
         <div class="player-header" style="background:rgba(255,229,0,.05)">
           <span class="player-icon">🪖</span>
           <h3 style="color:var(--amber-dark)">The Foreman</h3>
@@ -1389,7 +1406,7 @@ section { position: relative; overflow: hidden; }
     </div>
 
     <p class="players-note reveal">
-      Tread connects all five — the hauler dispatches trucks, the driver logs the delivery, the foreman signs off at the site, the contractor gets billed, and the producer's tickets confirm the tonnage.
+      Tread connects all six — the contractor funds the job, the producer supplies the material, the dispatcher assigns the trucks, the driver makes the run, the foreman signs off at the site, and the hauler bills the margin.
     </p>
     <div class="docs-callout on-light reveal">
       <div class="dc-icon">📚</div>
