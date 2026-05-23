@@ -18,7 +18,8 @@
 body { font-family: 'Golos Text', system-ui, sans-serif; background: #ECEEF2; color: var(--dark); min-height: 100vh; }
 
 /* ── NAV ── */
-nav { background: var(--dark); padding: 0 48px; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+nav { background: var(--dark); padding: 0; height: 64px; position: sticky; top: 0; z-index: 100; }
+.nav-inner { max-width: 1200px; margin: 0 auto; padding: 0 48px; height: 64px; display: flex; align-items: center; justify-content: space-between; }
 .nav-left { display: flex; align-items: center; gap: 16px; }
 .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .nav-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.2); }
@@ -27,7 +28,8 @@ nav { background: var(--dark); padding: 0 48px; height: 64px; display: flex; ali
 .back-link:hover { color: rgba(255,255,255,0.8); }
 
 /* ── HERO ── */
-.hero { background: var(--dark); padding: 40px 48px 36px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.hero { background: var(--dark); padding: 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.hero-inner { max-width: 1200px; margin: 0 auto; padding: 40px 48px 36px; }
 .hero h1 { font-size: 1.75rem; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
 .hero .sub { color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-top: 4px; }
 .stat-pills { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
@@ -201,10 +203,11 @@ td { padding: 9px 10px; vertical-align: top; }
 .acct-detail-inner tbody tr { border-bottom: 1px solid #f4f6f8; }
 .acct-detail-inner tbody tr:last-child { border-bottom: none; }
 
-footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; }
+footer { padding: 0; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; }
+.footer-inner { max-width: 1200px; margin: 0 auto; padding: 28px 48px; }
 
 @media (max-width: 768px) {
-  nav, .hero, .page-body, footer { padding-left: 20px; padding-right: 20px; }
+  .nav-inner, .hero-inner, .page-body, .footer-inner { padding-left: 20px; padding-right: 20px; }
   .two-col { grid-template-columns: 1fr; }
   .cluster-grid { grid-template-columns: 1fr; }
 }
@@ -213,6 +216,7 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
 <body>
 
 <nav>
+<div class="nav-inner">
   <div class="nav-left">
     <a class="nav-logo" href="/">
       <svg xmlns="http://www.w3.org/2000/svg" width="120" height="24" viewBox="0 0 150 30" fill="none">
@@ -239,17 +243,20 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
     </a>
     <a class="back-link" href="../">← Hub</a>
   </div>
+</div>
 </nav>
 
 <div class="hero">
-  <h1>CUS Ops Tracker</h1>
-  <div class="sub">Bug · Feature · Risk analysis — Priority matrix &amp; workflow impact map · May 22, 2026</div>
-  <div class="stat-pills">
-    <div class="stat-pill red"><div class="sp-val">17</div><div class="sp-label">Open Bugs</div></div>
-    <div class="stat-pill blue"><div class="sp-val">26</div><div class="sp-label">Features</div></div>
-    <div class="stat-pill amber"><div class="sp-val">6</div><div class="sp-label">Clusters</div></div>
-    <div class="stat-pill orange"><div class="sp-val">12</div><div class="sp-label">At-Risk Customers</div></div>
-    <div class="stat-pill red"><div class="sp-val">4</div><div class="sp-label">Critical / Red</div></div>
+  <div class="hero-inner">
+    <h1>CUS Ops Tracker</h1>
+    <div class="sub">Bug · Feature · Risk analysis — Priority matrix &amp; workflow impact map · May 22, 2026</div>
+    <div class="stat-pills">
+      <div class="stat-pill red"><div class="sp-val">17</div><div class="sp-label">Open Bugs</div></div>
+      <div class="stat-pill blue"><div class="sp-val">26</div><div class="sp-label">Features</div></div>
+      <div class="stat-pill amber"><div class="sp-val">6</div><div class="sp-label">Clusters</div></div>
+      <div class="stat-pill orange"><div class="sp-val">12</div><div class="sp-label">At-Risk Customers</div></div>
+      <div class="stat-pill red"><div class="sp-val">4</div><div class="sp-label">Critical / Red</div></div>
+    </div>
   </div>
 </div>
 
@@ -688,7 +695,7 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
 
 </div><!-- /page-body -->
 
-<footer>Customer Ops Hub · Internal use only · Data from CUS Tracker spreadsheet, May 22 2026</footer>
+<footer><div class="footer-inner">Customer Ops Hub · Internal use only · Data from CUS Tracker spreadsheet, May 22 2026</div></footer>
 
 <div id="tooltip" class="tooltip"></div>
 
