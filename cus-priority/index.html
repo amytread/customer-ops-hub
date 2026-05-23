@@ -15,7 +15,7 @@
   --c1: #F6AD55; --c2: #68D391; --c3: #63B3ED;
   --c4: #B794F4; --c5: #FC8181; --c6: #D4A017;
 }
-body { font-family: 'Golos Text', system-ui, sans-serif; background: var(--bg); color: var(--dark); min-height: 100vh; }
+body { font-family: 'Golos Text', system-ui, sans-serif; background: #ECEEF2; color: var(--dark); min-height: 100vh; }
 
 /* ── NAV ── */
 nav { background: var(--dark); padding: 0 48px; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
@@ -43,14 +43,16 @@ nav { background: var(--dark); padding: 0 48px; height: 64px; display: flex; ali
 .page-body { max-width: 1200px; margin: 0 auto; padding: 40px 48px 60px; display: flex; flex-direction: column; gap: 16px; }
 
 /* ── COLLAPSIBLE PANELS ── */
-.panel { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.panel { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; border-left: 3px solid transparent; transition: border-left-color 0.2s; }
+.panel:hover { border-left-color: rgba(255,170,19,0.4); }
+.panel.open { border-left-color: var(--amber); }
 .panel-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 20px 28px; background: var(--card); border: none; cursor: pointer; font-family: inherit; text-align: left; transition: background 0.15s; }
 .panel-header:hover { background: #FFFCF4; }
 .ph-left { display: flex; align-items: center; gap: 12px; }
 .ph-title { font-size: 1rem; font-weight: 700; color: var(--dark); }
-.ph-count { background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; font-size: 0.75rem; color: var(--muted); font-weight: 600; }
+.ph-count { background: var(--dark); color: rgba(255,255,255,0.85); border-radius: 20px; padding: 2px 10px; font-size: 0.72rem; font-weight: 600; }
 .ph-meta { font-size: 0.8rem; color: var(--muted); }
-.chevron { color: var(--muted); transition: transform 0.25s; font-size: 1.1rem; line-height: 1; }
+.chevron { color: var(--amber); transition: transform 0.25s; font-size: 1.1rem; line-height: 1; }
 .panel.open .chevron { transform: rotate(180deg); }
 .panel-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
 .panel-inner { padding: 0 28px 28px; }
@@ -302,6 +304,7 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
         <tr class="acct-detail" id="detail-healthy" style="display:none">
           <td colspan="3">
             <div class="acct-detail-inner">
+              <p style="font-size:0.75rem;color:var(--muted);margin-bottom:8px;">1 tracked issue — these accounts are stable with minimal open items.</p>
               <table><thead><tr><th>Ticket</th><th>Customer</th><th>Summary</th><th>Type</th><th>Priority</th></tr></thead><tbody>
                 <tr><td class="tid">REP-309</td><td>RW Dunteman</td><td>Vista ready reports</td><td><span class="chip chip-type-feat">Feature</span></td><td><span class="chip chip-high">High</span></td></tr>
               </tbody></table>
@@ -316,6 +319,7 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
         <tr class="acct-detail" id="detail-onboarding" style="display:none">
           <td colspan="3">
             <div class="acct-detail-inner">
+              <p style="font-size:0.75rem;color:var(--muted);margin-bottom:8px;">1 tracked issue — Statewide and Amrize SW have open items tracked in Linear projects rather than individual CUS tickets.</p>
               <table><thead><tr><th>Ticket</th><th>Customer</th><th>Summary</th><th>Type</th><th>Priority</th></tr></thead><tbody>
                 <tr><td class="tid">PRO-1641</td><td>Prime Aggregates</td><td>Commissioned vendor rate shows full rate in testing</td><td><span class="chip chip-type-bug">Bug</span></td><td><span class="chip chip-urgent">Urgent</span></td></tr>
               </tbody></table>
