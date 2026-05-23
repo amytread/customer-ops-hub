@@ -322,7 +322,7 @@ def main():
 
     if args.deploy:
         import subprocess
-        out = os.path.join(REPO_DIR, "index.html")
+        out = os.path.join(REPO_DIR, "customer-pulse", "index.html")
         print(f"\n  Regenerating {out}…")
         result = subprocess.run(
             [sys.executable, GEN_SCRIPT, "--out", out],
@@ -333,7 +333,7 @@ def main():
             sys.exit(1)
         print(" ", result.stdout.strip())
         print("  Committing and pushing…")
-        subprocess.run(["git", "-C", REPO_DIR, "add", "index.html"], check=True)
+        subprocess.run(["git", "-C", REPO_DIR, "add", "customer-pulse/index.html"], check=True)
         subprocess.run([
             "git", "-C", REPO_DIR, "commit", "-m",
             f"Auto-refresh data {TODAY}"
