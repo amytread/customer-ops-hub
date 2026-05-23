@@ -36,7 +36,7 @@ nav { background: var(--dark); padding: 0 48px; height: 64px; display: flex; ali
 .stat-pill .sp-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(255,255,255,0.4); margin-top: 4px; }
 .stat-pill.amber  .sp-val { color: var(--amber); }
 .stat-pill.red    .sp-val { color: #fc8181; }
-.stat-pill.blue   .sp-val { color: #63b3ed; }
+.stat-pill.blue   .sp-val { color: #D4860A; }
 .stat-pill.orange .sp-val { color: #f6ad55; }
 
 /* ── BODY ── */
@@ -45,7 +45,7 @@ nav { background: var(--dark); padding: 0 48px; height: 64px; display: flex; ali
 /* ── COLLAPSIBLE PANELS ── */
 .panel { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
 .panel-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 20px 28px; background: var(--card); border: none; cursor: pointer; font-family: inherit; text-align: left; transition: background 0.15s; }
-.panel-header:hover { background: #f7fafc; }
+.panel-header:hover { background: #FFFCF4; }
 .ph-left { display: flex; align-items: center; gap: 12px; }
 .ph-title { font-size: 1rem; font-weight: 700; color: var(--dark); }
 .ph-count { background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; font-size: 0.75rem; color: var(--muted); font-weight: 600; }
@@ -65,7 +65,7 @@ nav { background: var(--dark); padding: 0 48px; height: 64px; display: flex; ali
   margin-bottom: -2px; border-bottom: 2px solid transparent;
 }
 .issue-tab:hover { color: var(--dark); }
-.issue-tab.active { color: var(--dark); border-bottom-color: var(--dark); }
+.issue-tab.active { color: var(--dark); border-bottom-color: var(--amber); }
 
 /* ── SHARED SECTION STYLES ── */
 .card-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 14px; }
@@ -115,7 +115,7 @@ td { padding: 9px 10px; vertical-align: top; }
 .chip-prog    { background: #ebf8ff; color: #2b6cb0; }
 .chip-pend    { background: #fffff0; color: #b7791f; }
 .chip-type-bug  { background: #fff5f5; color: #c53030; }
-.chip-type-feat { background: #ebf8ff; color: #2b6cb0; }
+.chip-type-feat { background: #FFF8E6; color: #8A5A00; }
 
 /* ── RISK CARDS ── */
 .risk-group { margin-bottom: 20px; }
@@ -178,15 +178,26 @@ td { padding: 9px 10px; vertical-align: top; }
 .acct-summary { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
 .acct-summary table { width: 100%; border-collapse: collapse; }
 .acct-summary thead th { padding: 11px 20px; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 2px solid var(--border); text-align: left; white-space: nowrap; }
-.acct-summary tbody tr { border-bottom: 1px solid #f0f4f8; }
-.acct-summary tbody tr:last-child { border-bottom: none; }
+.acct-summary tbody tr.acct-row { border-bottom: 1px solid #f0f4f8; cursor: pointer; transition: background 0.12s; }
+.acct-summary tbody tr.acct-row:hover { background: #FFFCF4; }
+.acct-summary tbody tr.acct-row.expanded { background: #FFFCF4; border-bottom: none; }
+.acct-summary tbody tr.acct-detail { border-bottom: 1px solid #f0f4f8; background: #FAFBFC; }
+.acct-summary tbody tr.acct-detail:last-child { border-bottom: none; }
 .acct-summary td { padding: 13px 20px; vertical-align: middle; font-size: 0.82rem; }
 .ast-label { display: flex; align-items: center; gap: 8px; font-weight: 700; white-space: nowrap; }
 .ast-count { font-size: 1.5rem; font-weight: 800; white-space: nowrap; width: 64px; }
 .ast-count.red   { color: #fc8181; }
 .ast-count.green { color: #68d391; }
-.ast-count.blue  { color: #63b3ed; }
+.ast-count.blue  { color: #0891B2; }
 .ast-names { color: var(--muted); line-height: 1.65; }
+.ast-chevron { margin-left: 8px; font-size: 0.9rem; color: var(--muted); transition: transform 0.2s; display: inline-block; }
+.acct-row.expanded .ast-chevron { transform: rotate(180deg); }
+.acct-detail-inner { padding: 4px 20px 16px; }
+.acct-detail-inner table { font-size: 0.75rem; }
+.acct-detail-inner thead th { font-size: 0.62rem; padding: 5px 8px; border-bottom: 1px solid var(--border); }
+.acct-detail-inner tbody td { padding: 6px 8px; }
+.acct-detail-inner tbody tr { border-bottom: 1px solid #f4f6f8; }
+.acct-detail-inner tbody tr:last-child { border-bottom: none; }
 
 footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; }
 
@@ -253,20 +264,63 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><div class="ast-label"><span class="ri ri-red"></span>At Risk</div></td>
+        <tr class="acct-row" id="summary-risk" onclick="toggleAccountDetail('risk')">
+          <td><div class="ast-label"><span class="ri ri-red"></span>At Risk<span class="ast-chevron">▾</span></div></td>
           <td class="ast-count red">7</td>
           <td class="ast-names">Daniela Trucking · 4M Trucking · Trans Phos · RPMx · Terry Equipment · D. Crupi &amp; Sons · AHS</td>
         </tr>
-        <tr>
-          <td><div class="ast-label"><span class="ri ri-green"></span>Healthy</div></td>
+        <tr class="acct-detail" id="detail-risk" style="display:none">
+          <td colspan="3">
+            <div class="acct-detail-inner">
+              <table><thead><tr><th>Ticket</th><th>Customer</th><th>Summary</th><th>Type</th><th>Priority</th></tr></thead><tbody>
+                <tr><td class="tid">REP-13</td><td>Daniela Trucking</td><td>Driver Performance Report</td><td><span class="chip chip-type-feat">Feature</span></td><td><span class="chip chip-urgent">Urgent</span></td></tr>
+                <tr><td class="tid">TRE-14014</td><td>Daniela Trucking</td><td>Delivered quantity incorrect — impacts invoicing</td><td><span class="chip chip-type-bug">Bug</span></td><td><span class="chip chip-high">High</span></td></tr>
+                <tr><td class="tid">REP-294</td><td>Daniela Trucking</td><td>QB Report to update 06/15</td><td><span class="chip chip-type-feat">Feature</span></td><td><span class="chip chip-high">High</span></td></tr>
+                <tr><td class="tid">MBL-1927</td><td>Daniela Trucking</td><td>Driver tracking gaps — Osvaldo Reyes (past due May 18)</td><td><span class="chip chip-type-bug">Bug</span></td><td><span class="chip chip-none">—</span></td></tr>
+                <tr><td class="tid">PRO-1640</td><td>4M Trucking</td><td>Unexpected rate/type change on ORD-841028</td><td><span class="chip chip-type-bug">Bug</span></td><td><span class="chip chip-high">High</span></td></tr>
+                <tr><td class="tid">OPS-663</td><td>Trans Phos</td><td>Recover deleted digital tickets + warning prompt</td><td><span class="chip chip-type-feat">Feature</span></td><td><span class="chip chip-urgent">Urgent</span></td></tr>
+                <tr><td class="tid">OPS-578</td><td>Trans Phos</td><td>Cannot re-invite driver email tied to deleted company</td><td><span class="chip chip-type-bug">Bug</span></td><td><span class="chip chip-high">High</span></td></tr>
+                <tr><td class="tid">CUS-112</td><td>Trans Phos</td><td>Assign or upload ticket for a final load</td><td><span class="chip chip-type-feat">Feature</span></td><td><span class="chip chip-medium">Medium</span></td></tr>
+                <tr><td class="tid">PRO-1646</td><td>RPMx</td><td>Add contact dropdown functionality</td><td><span class="chip chip-type-feat">Feature</span></td><td><span class="chip chip-high">High</span></td></tr>
+                <tr><td class="tid">PRO-1549</td><td>RPMx</td><td>Dispatch send all limitation</td><td><span class="chip chip-type-feat">Feature</span></td><td><span class="chip chip-high">High</span></td></tr>
+                <tr><td class="tid">PRO-1550</td><td>RPMx</td><td>Duplication of Job Limitation</td><td><span class="chip chip-type-feat">Feature</span></td><td><span class="chip chip-high">High</span></td></tr>
+                <tr><td class="tid">PRO-1547</td><td>RPMx</td><td>Order Cutoff Time — Next-Day vs. Second Business Day</td><td><span class="chip chip-type-feat">Feature</span></td><td><span class="chip chip-high">High</span></td></tr>
+                <tr><td class="tid">CUS-79</td><td>D. Crupi &amp; Sons</td><td>Feature Improvement: Sharing Orders by email</td><td><span class="chip chip-type-feat">Feature</span></td><td><span class="chip chip-high">High</span></td></tr>
+                <tr><td class="tid">REP-302</td><td>AHS</td><td>CSV bug: material sell rate exporting as buy rate</td><td><span class="chip chip-type-bug">Bug</span></td><td><span class="chip chip-high">High</span></td></tr>
+                <tr><td class="tid">CUS-125</td><td>AHS</td><td>Material rate selection not saved on completed orders</td><td><span class="chip chip-type-bug">Bug</span></td><td><span class="chip chip-high">High</span></td></tr>
+                <tr><td class="tid">REP-284</td><td>AHS</td><td>Encoding issue on PROJ-79658 CSV export</td><td><span class="chip chip-type-bug">Bug</span></td><td><span class="chip chip-none">—</span></td></tr>
+                <tr><td class="tid">REP-280</td><td>AHS</td><td>Report update from email</td><td><span class="chip chip-type-feat">Feature</span></td><td><span class="chip chip-none">—</span></td></tr>
+              </tbody></table>
+            </div>
+          </td>
+        </tr>
+        <tr class="acct-row" id="summary-healthy" onclick="toggleAccountDetail('healthy')">
+          <td><div class="ast-label"><span class="ri ri-green"></span>Healthy<span class="ast-chevron">▾</span></div></td>
           <td class="ast-count green">2</td>
           <td class="ast-names">RW Dunteman · Amrize Central Canada</td>
         </tr>
-        <tr>
-          <td><div class="ast-label"><span class="ri" style="background:#63b3ed;"></span>Onboarding</div></td>
+        <tr class="acct-detail" id="detail-healthy" style="display:none">
+          <td colspan="3">
+            <div class="acct-detail-inner">
+              <table><thead><tr><th>Ticket</th><th>Customer</th><th>Summary</th><th>Type</th><th>Priority</th></tr></thead><tbody>
+                <tr><td class="tid">REP-309</td><td>RW Dunteman</td><td>Vista ready reports</td><td><span class="chip chip-type-feat">Feature</span></td><td><span class="chip chip-high">High</span></td></tr>
+              </tbody></table>
+            </div>
+          </td>
+        </tr>
+        <tr class="acct-row" id="summary-onboarding" onclick="toggleAccountDetail('onboarding')">
+          <td><div class="ast-label"><span class="ri" style="background:#0891B2;"></span>Onboarding<span class="ast-chevron">▾</span></div></td>
           <td class="ast-count blue">3</td>
           <td class="ast-names">Statewide · Prime Aggregates · Amrize SW (Ontario)</td>
+        </tr>
+        <tr class="acct-detail" id="detail-onboarding" style="display:none">
+          <td colspan="3">
+            <div class="acct-detail-inner">
+              <table><thead><tr><th>Ticket</th><th>Customer</th><th>Summary</th><th>Type</th><th>Priority</th></tr></thead><tbody>
+                <tr><td class="tid">PRO-1641</td><td>Prime Aggregates</td><td>Commissioned vendor rate shows full rate in testing</td><td><span class="chip chip-type-bug">Bug</span></td><td><span class="chip chip-urgent">Urgent</span></td></tr>
+              </tbody></table>
+            </div>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -354,31 +408,31 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
           <button class="issue-tab"        id="ctab-feat" onclick="filterClusters('feat')">✨ Features</button>
         </div>
         <div class="cluster-grid">
-          <div class="cluster-card" style="border-top-color:#F6AD55;">
-            <div class="cc-header"><span class="cc-label" style="color:#c05621;">C1 — Ship First</span><span class="cc-counts"><span>9 issues</span><span>6 customers</span></span></div>
+          <div class="cluster-card" style="border-top-color:#FFAA13;">
+            <div class="cc-header"><span class="cc-label" style="color:#92600A;">C1 — Ship First</span><span class="cc-counts"><span>9 issues</span><span>6 customers</span></span></div>
             <div class="cc-title">Rates &amp; Invoicing Failures</div>
             <div class="cc-desc">Rate card failures appear across onboarding and live accounts — vendor commissioned rates display incorrectly, fuel surcharges duplicate, and material sell rates export as buy rates. Three customers also need QuickBooks and billing integrations that share the same workflow root.</div>
             <div class="cc-tickets"><span class="ticket-chip bug">PRO-1641</span><span class="ticket-chip bug">CUS-171</span><span class="ticket-chip bug">CUS-149</span><span class="ticket-chip bug">PRO-1640</span><span class="ticket-chip bug">CUS-125</span><span class="ticket-chip bug">CUS-158</span><span class="ticket-chip feat">CUS-51</span><span class="ticket-chip feat">CUS-174</span><span class="ticket-chip feat">PRO-1537</span></div>
           </div>
-          <div class="cluster-card" style="border-top-color:#68D391;">
-            <div class="cc-header"><span class="cc-label" style="color:#276749;">C2 — Ship First</span><span class="cc-counts"><span>11 issues</span><span>6 customers</span></span></div>
+          <div class="cluster-card" style="border-top-color:#0891B2;">
+            <div class="cc-header"><span class="cc-label" style="color:#056D87;">C2 — Ship First</span><span class="cc-counts"><span>11 issues</span><span>6 customers</span></span></div>
             <div class="cc-title">Order &amp; Dispatch Workflow Gaps</div>
             <div class="cc-desc">Dispatch has several friction points: job duplication limits, order cutoff time logic, send-all limitations, and timezone mismatches between SMS and the app. RPMx alone has four open dispatch items. Roster sorting and driver job counts are also missing for dispatchers.</div>
             <div class="cc-tickets"><span class="ticket-chip bug">TRE-13732</span><span class="ticket-chip feat">OPS-663</span><span class="ticket-chip feat">PRO-1549</span><span class="ticket-chip feat">PRO-1550</span><span class="ticket-chip feat">PRO-1547</span><span class="ticket-chip feat">PRO-1551</span><span class="ticket-chip feat">CUS-183</span><span class="ticket-chip feat">CUS-186</span><span class="ticket-chip feat">PRO-1646</span><span class="ticket-chip feat">CUS-182</span><span class="ticket-chip feat">CUS-76</span></div>
           </div>
-          <div class="cluster-card" style="border-top-color:#63B3ED;">
-            <div class="cc-header"><span class="cc-label" style="color:#2b6cb0;">C3 — Scale Wins</span><span class="cc-counts"><span>6 issues</span><span>5 customers</span></span></div>
+          <div class="cluster-card" style="border-top-color:#0E7490;">
+            <div class="cc-header"><span class="cc-label" style="color:#065B75;">C3 — Scale Wins</span><span class="cc-counts"><span>6 issues</span><span>5 customers</span></span></div>
             <div class="cc-title">Reporting &amp; Export Gaps</div>
             <div class="cc-desc">Teams cannot produce reliable reports from Tread — CSV encoding issues, incorrect field exports, and missing report types (driver performance, QB sync, Vista-ready) force manual workarounds. Five customers are impacted, with Daniela Trucking and AHS leading.</div>
             <div class="cc-tickets"><span class="ticket-chip bug">REP-302</span><span class="ticket-chip bug">REP-284</span><span class="ticket-chip feat">REP-13</span><span class="ticket-chip feat">REP-294</span><span class="ticket-chip feat">REP-309</span><span class="ticket-chip feat">REP-280</span></div>
           </div>
-          <div class="cluster-card" style="border-top-color:#B794F4;">
-            <div class="cc-header"><span class="cc-label" style="color:#553c9a;">C4 — Scale Wins</span><span class="cc-counts"><span>7 issues</span><span>6 customers</span></span></div>
+          <div class="cluster-card" style="border-top-color:#1E4D6B;">
+            <div class="cc-header"><span class="cc-label" style="color:#163A52;">C4 — Scale Wins</span><span class="cc-counts"><span>7 issues</span><span>6 customers</span></span></div>
             <div class="cc-title">Permissions &amp; Access Gaps</div>
             <div class="cc-desc">Admin access restrictions block common field actions. 403 errors prevent driver sharing, deleted company emails can't be re-invited, and dispatchers can't create projects or separate truck types. Six customers hit these walls independently — suggesting a product-wide structural gap.</div>
             <div class="cc-tickets"><span class="ticket-chip bug">CUS-136</span><span class="ticket-chip bug">OPS-578</span><span class="ticket-chip bug">CUS-129</span><span class="ticket-chip bug">CUS-195</span><span class="ticket-chip feat">TRE-13207</span><span class="ticket-chip feat">CUS-132</span><span class="ticket-chip feat">CUS-139</span></div>
           </div>
-          <div class="cluster-card" style="border-top-color:#FC8181;">
+          <div class="cluster-card" style="border-top-color:#E53E3E;">
             <div class="cc-header"><span class="cc-label" style="color:#c53030;">C5 — High Value Niche</span><span class="cc-counts"><span>3 issues</span><span>2 customers</span></span></div>
             <div class="cc-title">Driver &amp; Field Operations</div>
             <div class="cc-desc">Delivered quantity mismatches and tracking gaps impact billing accuracy. Two active issues at Daniela Trucking require immediate attention — MBL-1927 is past due (May 18). Assigned markers not showing for some drivers at Tomlinson compounds field visibility problems.</div>
@@ -441,10 +495,10 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
           <div>
             <div class="col-hd">Features by Customer (top)</div>
             <div class="bc">
-              <div class="bc-row"><div class="bc-lbl">RPMx</div><div class="bc-track"><div class="bc-fill" style="width:100%;background:#63b3ed">4</div></div></div>
-              <div class="bc-row"><div class="bc-lbl">Werdco</div><div class="bc-track"><div class="bc-fill" style="width:75%;background:#63b3ed">3</div></div></div>
-              <div class="bc-row"><div class="bc-lbl">Daniela / Trans Phos / MAREX / Whitaker</div><div class="bc-track"><div class="bc-fill" style="width:50%;background:#63b3ed">2 ea</div></div></div>
-              <div class="bc-row"><div class="bc-lbl">12 others</div><div class="bc-track"><div class="bc-fill" style="width:25%;background:#bee3f8;color:#2b6cb0">1 ea</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">RPMx</div><div class="bc-track"><div class="bc-fill" style="width:100%;background:#FFAA13">4</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">Werdco</div><div class="bc-track"><div class="bc-fill" style="width:75%;background:#FFAA13">3</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">Daniela / Trans Phos / MAREX / Whitaker</div><div class="bc-track"><div class="bc-fill" style="width:50%;background:#FFAA13">2 ea</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">12 others</div><div class="bc-track"><div class="bc-fill" style="width:25%;background:#FFE9A0;color:#8A5A00">1 ea</div></div></div>
             </div>
           </div>
         </div>
@@ -541,36 +595,36 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
             <line x1="370" y1="28" x2="370" y2="420" stroke="#D6DDE1" stroke-width="1" stroke-dasharray="5,4"/>
             <line x1="70" y1="224" x2="672" y2="224" stroke="#D6DDE1" stroke-width="1" stroke-dasharray="5,4"/>
             <text x="80" y="46" fill="#276749" font-size="10" font-weight="700" font-family="'Golos Text',system-ui" letter-spacing="0.04em">HIGH VALUE NICHE</text>
-            <text x="380" y="46" fill="#b7791f" font-size="10" font-weight="700" font-family="'Golos Text',system-ui" letter-spacing="0.04em">SHIP FIRST</text>
+            <text x="380" y="46" fill="#92600A" font-size="10" font-weight="700" font-family="'Golos Text',system-ui" letter-spacing="0.04em">SHIP FIRST</text>
             <text x="80" y="242" fill="#6B828C" font-size="10" font-weight="700" font-family="'Golos Text',system-ui" letter-spacing="0.04em">NICE TO HAVE</text>
-            <text x="380" y="242" fill="#2b6cb0" font-size="10" font-weight="700" font-family="'Golos Text',system-ui" letter-spacing="0.04em">SCALE WINS</text>
+            <text x="380" y="242" fill="#065B75" font-size="10" font-weight="700" font-family="'Golos Text',system-ui" letter-spacing="0.04em">SCALE WINS</text>
             <text x="14" y="32" fill="#6B828C" font-size="9" font-family="'Golos Text',system-ui">High</text>
             <text x="14" y="418" fill="#6B828C" font-size="9" font-family="'Golos Text',system-ui">Low</text>
             <text x="75" y="438" fill="#6B828C" font-size="9" font-family="'Golos Text',system-ui">Few</text>
             <text x="645" y="438" fill="#6B828C" font-size="9" font-family="'Golos Text',system-ui">Many</text>
             <text x="371" y="450" fill="#6B828C" font-size="9" font-family="'Golos Text',system-ui" text-anchor="middle">Customer Breadth →</text>
             <g class="bubble" data-tip="C1 – Rates &amp; Invoicing&#10;9 issues · 6 customers&#10;Bugs: PRO-1641, CUS-171, CUS-149, PRO-1640, CUS-125, CUS-158&#10;Features: CUS-51, CUS-174, PRO-1537">
-              <circle cx="478" cy="108" r="26" fill="#F6AD55" opacity="0.85" stroke="#fff" stroke-width="2"/>
+              <circle cx="478" cy="108" r="26" fill="#FFAA13" opacity="0.85" stroke="#fff" stroke-width="2"/>
               <text x="478" y="105" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="'Golos Text',system-ui">C1</text>
               <text x="478" y="117" text-anchor="middle" fill="white" font-size="8" font-family="'Golos Text',system-ui">Rates</text>
             </g>
             <g class="bubble" data-tip="C2 – Order &amp; Dispatch&#10;11 issues · 6 customers&#10;Bug: TRE-13732&#10;Features: OPS-663, PRO-1549, PRO-1550, PRO-1547, PRO-1551, CUS-183, CUS-186, PRO-1646, CUS-182, CUS-76">
-              <circle cx="390" cy="132" r="28" fill="#68D391" opacity="0.85" stroke="#fff" stroke-width="2"/>
+              <circle cx="390" cy="132" r="28" fill="#0891B2" opacity="0.85" stroke="#fff" stroke-width="2"/>
               <text x="390" y="129" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="'Golos Text',system-ui">C2</text>
               <text x="390" y="141" text-anchor="middle" fill="white" font-size="8" font-family="'Golos Text',system-ui">Dispatch</text>
             </g>
             <g class="bubble" data-tip="C3 – Reporting &amp; Export&#10;6 issues · 5 customers&#10;Bugs: REP-302, REP-284&#10;Features: REP-13, REP-294, REP-309, REP-280">
-              <circle cx="400" cy="236" r="21" fill="#63B3ED" opacity="0.85" stroke="#fff" stroke-width="2"/>
+              <circle cx="400" cy="236" r="21" fill="#0E7490" opacity="0.85" stroke="#fff" stroke-width="2"/>
               <text x="400" y="233" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="'Golos Text',system-ui">C3</text>
               <text x="400" y="245" text-anchor="middle" fill="white" font-size="8" font-family="'Golos Text',system-ui">Reports</text>
             </g>
             <g class="bubble" data-tip="C4 – Permissions &amp; Access&#10;7 issues · 6 customers&#10;Bugs: CUS-136, OPS-578, CUS-129, CUS-195&#10;Features: TRE-13207, CUS-132, CUS-139">
-              <circle cx="430" cy="272" r="22" fill="#B794F4" opacity="0.85" stroke="#fff" stroke-width="2"/>
+              <circle cx="430" cy="272" r="22" fill="#1E4D6B" opacity="0.85" stroke="#fff" stroke-width="2"/>
               <text x="430" y="269" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="'Golos Text',system-ui">C4</text>
               <text x="430" y="281" text-anchor="middle" fill="white" font-size="8" font-family="'Golos Text',system-ui">Access</text>
             </g>
             <g class="bubble" data-tip="C5 – Driver &amp; Field Ops&#10;3 issues · 2 customers&#10;Bugs: TRE-14014, MBL-1927, CUS-104">
-              <circle cx="220" cy="207" r="16" fill="#FC8181" opacity="0.85" stroke="#fff" stroke-width="2"/>
+              <circle cx="220" cy="207" r="16" fill="#E53E3E" opacity="0.85" stroke="#fff" stroke-width="2"/>
               <text x="220" y="204" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="'Golos Text',system-ui">C5</text>
               <text x="220" y="215" text-anchor="middle" fill="white" font-size="8" font-family="'Golos Text',system-ui">Driver</text>
             </g>
@@ -586,11 +640,11 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
           </svg>
         </div>
         <div class="legend">
-          <div class="legend-item"><span class="legend-dot" style="background:#F6AD55"></span>C1 – Rates &amp; Invoicing</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#68D391"></span>C2 – Order &amp; Dispatch</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#63B3ED"></span>C3 – Reporting &amp; Export</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#B794F4"></span>C4 – Permissions &amp; Access</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#FC8181"></span>C5 – Driver &amp; Field Ops</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#FFAA13"></span>C1 – Rates &amp; Invoicing</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#0891B2"></span>C2 – Order &amp; Dispatch</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#0E7490"></span>C3 – Reporting &amp; Export</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#1E4D6B"></span>C4 – Permissions &amp; Access</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#E53E3E"></span>C5 – Driver &amp; Field Ops</div>
           <div class="legend-item"><span class="legend-dot" style="background:#D4A017"></span>C6 – Ticket &amp; Order Mgmt</div>
         </div>
       </div>
@@ -615,11 +669,11 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
               </tr>
             </thead>
             <tbody>
-              <tr><td class="row-label"><span class="wf-dot" style="background:#F6AD55"></span>C1 – Rates &amp; Invoicing</td><td class="wf-mark">●</td><td class="wf-mark" style="color:#F6AD55">●</td><td></td><td></td><td class="wf-mark">●</td><td></td></tr>
-              <tr><td class="row-label"><span class="wf-dot" style="background:#68D391"></span>C2 – Order &amp; Dispatch</td><td class="wf-mark" style="color:#68D391">●</td><td></td><td class="wf-mark">●</td><td></td><td></td><td class="wf-mark">●</td></tr>
-              <tr><td class="row-label"><span class="wf-dot" style="background:#63B3ED"></span>C3 – Reporting</td><td></td><td class="wf-mark">●</td><td></td><td></td><td class="wf-mark" style="color:#63B3ED">●</td><td class="wf-mark">●</td></tr>
-              <tr><td class="row-label"><span class="wf-dot" style="background:#B794F4"></span>C4 – Permissions</td><td class="wf-mark">●</td><td></td><td></td><td></td><td></td><td class="wf-mark" style="color:#B794F4">●</td></tr>
-              <tr><td class="row-label"><span class="wf-dot" style="background:#FC8181"></span>C5 – Driver &amp; Field</td><td class="wf-mark">●</td><td class="wf-mark">●</td><td class="wf-mark" style="color:#FC8181">●</td><td></td><td></td><td></td></tr>
+              <tr><td class="row-label"><span class="wf-dot" style="background:#FFAA13"></span>C1 – Rates &amp; Invoicing</td><td class="wf-mark">●</td><td class="wf-mark" style="color:#F6AD55">●</td><td></td><td></td><td class="wf-mark">●</td><td></td></tr>
+              <tr><td class="row-label"><span class="wf-dot" style="background:#0891B2"></span>C2 – Order &amp; Dispatch</td><td class="wf-mark" style="color:#68D391">●</td><td></td><td class="wf-mark">●</td><td></td><td></td><td class="wf-mark">●</td></tr>
+              <tr><td class="row-label"><span class="wf-dot" style="background:#0E7490"></span>C3 – Reporting</td><td></td><td class="wf-mark">●</td><td></td><td></td><td class="wf-mark" style="color:#63B3ED">●</td><td class="wf-mark">●</td></tr>
+              <tr><td class="row-label"><span class="wf-dot" style="background:#1E4D6B"></span>C4 – Permissions</td><td class="wf-mark">●</td><td></td><td></td><td></td><td></td><td class="wf-mark" style="color:#B794F4">●</td></tr>
+              <tr><td class="row-label"><span class="wf-dot" style="background:#E53E3E"></span>C5 – Driver &amp; Field</td><td class="wf-mark">●</td><td class="wf-mark">●</td><td class="wf-mark" style="color:#FC8181">●</td><td></td><td></td><td></td></tr>
               <tr><td class="row-label"><span class="wf-dot" style="background:#D4A017"></span>C6 – Ticket Mgmt</td><td class="wf-mark">●</td><td></td><td></td><td class="wf-mark" style="color:#D4A017">●</td><td></td><td></td></tr>
             </tbody>
           </table>
@@ -650,6 +704,20 @@ function togglePanel(id) {
       if (panel.classList.contains('open')) body.style.maxHeight = 'none';
       body.removeEventListener('transitionend', h);
     });
+  }
+}
+
+function toggleAccountDetail(group) {
+  const row = document.getElementById('summary-' + group);
+  const detail = document.getElementById('detail-' + group);
+  const isOpen = row.classList.contains('expanded');
+  ['risk','healthy','onboarding'].forEach(g => {
+    document.getElementById('summary-' + g).classList.remove('expanded');
+    document.getElementById('detail-' + g).style.display = 'none';
+  });
+  if (!isOpen) {
+    row.classList.add('expanded');
+    detail.style.display = '';
   }
 }
 
