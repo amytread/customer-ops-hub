@@ -36,7 +36,10 @@ nav { background: var(--dark); padding: 0 48px; height: 64px; display: flex; ali
 .stat-pill { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 18px; min-width: 100px; }
 .stat-pill .sp-val { font-size: 1.6rem; font-weight: 800; color: #fff; letter-spacing: -0.02em; line-height: 1; }
 .stat-pill .sp-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(255,255,255,0.4); margin-top: 4px; }
-.stat-pill.amber .sp-val { color: var(--amber); }
+.stat-pill.amber  .sp-val { color: var(--amber); }
+.stat-pill.red    .sp-val { color: #fc8181; }
+.stat-pill.blue   .sp-val { color: #63b3ed; }
+.stat-pill.orange .sp-val { color: #f6ad55; }
 
 /* ── BODY ── */
 .page-body { max-width: 1200px; margin: 0 auto; padding: 40px 48px 60px; display: flex; flex-direction: column; gap: 32px; }
@@ -205,21 +208,26 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
     </div>
   </div>
   <div class="stat-pills">
-    <div class="stat-pill"><div class="sp-val">17</div><div class="sp-label">Open Bugs</div></div>
-    <div class="stat-pill"><div class="sp-val">26</div><div class="sp-label">Features</div></div>
-    <div class="stat-pill"><div class="sp-val">6</div><div class="sp-label">Clusters</div></div>
-    <div class="stat-pill"><div class="sp-val">12</div><div class="sp-label">At-Risk Customers</div></div>
-    <div class="stat-pill amber"><div class="sp-val">4</div><div class="sp-label">Critical / Red</div></div>
+    <div class="stat-pill red"><div class="sp-val">17</div><div class="sp-label">Open Bugs</div></div>
+    <div class="stat-pill blue"><div class="sp-val">26</div><div class="sp-label">Features</div></div>
+    <div class="stat-pill amber"><div class="sp-val">6</div><div class="sp-label">Clusters</div></div>
+    <div class="stat-pill orange"><div class="sp-val">12</div><div class="sp-label">At-Risk Customers</div></div>
+    <div class="stat-pill red"><div class="sp-val">4</div><div class="sp-label">Critical / Red</div></div>
   </div>
 </div>
 
 <div class="page-body">
 
   <!-- ── PRIORITY MATRIX ── -->
-  <div class="card" style="position:relative;">
-    <div class="card-title">Priority Matrix</div>
-    <div class="card-sub">X axis: how many customers are affected · Y axis: daily operational pain · Bubble size: issue count</div>
-    <div class="matrix-svg-wrap">
+  <div class="panel" id="panel-matrix">
+    <button class="panel-header" onclick="togglePanel('panel-matrix')">
+      <div class="ph-left"><span class="ph-title">Priority Matrix</span><span class="ph-count">6 clusters</span></div>
+      <div style="display:flex;align-items:center;gap:14px;"><span class="ph-meta">Customer breadth vs. operational pain</span><span class="chevron">▾</span></div>
+    </button>
+    <div class="panel-body">
+      <div class="panel-inner" style="padding-top:4px;">
+        <div class="card-sub" style="margin-bottom:14px;">X axis: how many customers are affected · Y axis: daily operational pain · Bubble size: issue count</div>
+        <div class="matrix-svg-wrap">
       <svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg" style="display:block;">
         <!-- Quadrant fills -->
         <rect x="70" y="28" width="300" height="196" fill="#f0fff4" opacity="0.7"/>
@@ -304,14 +312,19 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
       <div class="legend-item"><span class="legend-dot" style="background:#FC8181"></span>C5 – Driver &amp; Field Ops</div>
       <div class="legend-item"><span class="legend-dot" style="background:#D4A017"></span>C6 – Ticket &amp; Order Mgmt</div>
     </div>
-    <div id="tooltip" class="tooltip"></div>
+      </div>
+    </div>
   </div>
 
   <!-- ── WORKFLOW IMPACT MAP ── -->
-  <div class="card">
-    <div class="card-title">Workflow Impact Map</div>
-    <div class="card-sub">Which Tread workflow areas are affected by each cluster</div>
-    <div style="overflow-x:auto;">
+  <div class="panel" id="panel-workflow">
+    <button class="panel-header" onclick="togglePanel('panel-workflow')">
+      <div class="ph-left"><span class="ph-title">Workflow Impact Map</span></div>
+      <div style="display:flex;align-items:center;gap:14px;"><span class="ph-meta">Which workflow areas each cluster touches</span><span class="chevron">▾</span></div>
+    </button>
+    <div class="panel-body">
+      <div class="panel-inner" style="padding-top:4px;">
+        <div style="overflow-x:auto;">
       <table class="workflow-table">
         <thead>
           <tr>
@@ -351,13 +364,20 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
           </tr>
         </tbody>
       </table>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- ── CLUSTER CARDS ── -->
-  <div>
-    <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:14px;">Clusters — Grouped by Issue Theme</div>
-    <div class="cluster-grid">
+  <div class="panel" id="panel-clusters">
+    <button class="panel-header" onclick="togglePanel('panel-clusters')">
+      <div class="ph-left"><span class="ph-title">Clusters</span><span class="ph-count">6 groups</span></div>
+      <div style="display:flex;align-items:center;gap:14px;"><span class="ph-meta">Grouped by issue theme</span><span class="chevron">▾</span></div>
+    </button>
+    <div class="panel-body">
+      <div class="panel-inner" style="padding-top:4px;">
+        <div class="cluster-grid">
 
       <div class="cluster-card" style="border-top-color:#F6AD55;">
         <div class="cc-header">
@@ -431,8 +451,10 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
         </div>
       </div>
 
-    </div>
-  </div>
+        </div><!-- /cluster-grid -->
+      </div><!-- /panel-inner -->
+    </div><!-- /panel-body -->
+  </div><!-- /panel-clusters -->
 
   <!-- ── COLLAPSIBLE: BUGS ── -->
   <div class="panel" id="panel-bugs">
