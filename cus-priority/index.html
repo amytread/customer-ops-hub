@@ -340,7 +340,62 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
     </div>
   </div>
 
-  <!-- ── 2. ISSUES (Bugs + Features combined with tabs) ── -->
+  <!-- ── 2. CLUSTERS ── -->
+  <div class="panel" id="panel-clusters">
+    <button class="panel-header" onclick="togglePanel('panel-clusters')">
+      <div class="ph-left"><span class="ph-title">Clusters</span><span class="ph-count">6 groups</span></div>
+      <div style="display:flex;align-items:center;gap:14px;"><span class="ph-meta">Grouped by issue theme · bugs + features combined</span><span class="chevron">▾</span></div>
+    </button>
+    <div class="panel-body">
+      <div class="panel-inner">
+        <div class="issue-tabs">
+          <button class="issue-tab active" id="ctab-all"  onclick="filterClusters('all')">All</button>
+          <button class="issue-tab"        id="ctab-bug"  onclick="filterClusters('bug')">🐛 Bugs</button>
+          <button class="issue-tab"        id="ctab-feat" onclick="filterClusters('feat')">✨ Features</button>
+        </div>
+        <div class="cluster-grid">
+          <div class="cluster-card" style="border-top-color:#F6AD55;">
+            <div class="cc-header"><span class="cc-label" style="color:#c05621;">C1 — Ship First</span><span class="cc-counts"><span>9 issues</span><span>6 customers</span></span></div>
+            <div class="cc-title">Rates &amp; Invoicing Failures</div>
+            <div class="cc-desc">Rate card failures appear across onboarding and live accounts — vendor commissioned rates display incorrectly, fuel surcharges duplicate, and material sell rates export as buy rates. Three customers also need QuickBooks and billing integrations that share the same workflow root.</div>
+            <div class="cc-tickets"><span class="ticket-chip bug">PRO-1641</span><span class="ticket-chip bug">CUS-171</span><span class="ticket-chip bug">CUS-149</span><span class="ticket-chip bug">PRO-1640</span><span class="ticket-chip bug">CUS-125</span><span class="ticket-chip bug">CUS-158</span><span class="ticket-chip feat">CUS-51</span><span class="ticket-chip feat">CUS-174</span><span class="ticket-chip feat">PRO-1537</span></div>
+          </div>
+          <div class="cluster-card" style="border-top-color:#68D391;">
+            <div class="cc-header"><span class="cc-label" style="color:#276749;">C2 — Ship First</span><span class="cc-counts"><span>11 issues</span><span>6 customers</span></span></div>
+            <div class="cc-title">Order &amp; Dispatch Workflow Gaps</div>
+            <div class="cc-desc">Dispatch has several friction points: job duplication limits, order cutoff time logic, send-all limitations, and timezone mismatches between SMS and the app. RPMx alone has four open dispatch items. Roster sorting and driver job counts are also missing for dispatchers.</div>
+            <div class="cc-tickets"><span class="ticket-chip bug">TRE-13732</span><span class="ticket-chip feat">OPS-663</span><span class="ticket-chip feat">PRO-1549</span><span class="ticket-chip feat">PRO-1550</span><span class="ticket-chip feat">PRO-1547</span><span class="ticket-chip feat">PRO-1551</span><span class="ticket-chip feat">CUS-183</span><span class="ticket-chip feat">CUS-186</span><span class="ticket-chip feat">PRO-1646</span><span class="ticket-chip feat">CUS-182</span><span class="ticket-chip feat">CUS-76</span></div>
+          </div>
+          <div class="cluster-card" style="border-top-color:#63B3ED;">
+            <div class="cc-header"><span class="cc-label" style="color:#2b6cb0;">C3 — Scale Wins</span><span class="cc-counts"><span>6 issues</span><span>5 customers</span></span></div>
+            <div class="cc-title">Reporting &amp; Export Gaps</div>
+            <div class="cc-desc">Teams cannot produce reliable reports from Tread — CSV encoding issues, incorrect field exports, and missing report types (driver performance, QB sync, Vista-ready) force manual workarounds. Five customers are impacted, with Daniela Trucking and AHS leading.</div>
+            <div class="cc-tickets"><span class="ticket-chip bug">REP-302</span><span class="ticket-chip bug">REP-284</span><span class="ticket-chip feat">REP-13</span><span class="ticket-chip feat">REP-294</span><span class="ticket-chip feat">REP-309</span><span class="ticket-chip feat">REP-280</span></div>
+          </div>
+          <div class="cluster-card" style="border-top-color:#B794F4;">
+            <div class="cc-header"><span class="cc-label" style="color:#553c9a;">C4 — Scale Wins</span><span class="cc-counts"><span>7 issues</span><span>6 customers</span></span></div>
+            <div class="cc-title">Permissions &amp; Access Gaps</div>
+            <div class="cc-desc">Admin access restrictions block common field actions. 403 errors prevent driver sharing, deleted company emails can't be re-invited, and dispatchers can't create projects or separate truck types. Six customers hit these walls independently — suggesting a product-wide structural gap.</div>
+            <div class="cc-tickets"><span class="ticket-chip bug">CUS-136</span><span class="ticket-chip bug">OPS-578</span><span class="ticket-chip bug">CUS-129</span><span class="ticket-chip bug">CUS-195</span><span class="ticket-chip feat">TRE-13207</span><span class="ticket-chip feat">CUS-132</span><span class="ticket-chip feat">CUS-139</span></div>
+          </div>
+          <div class="cluster-card" style="border-top-color:#FC8181;">
+            <div class="cc-header"><span class="cc-label" style="color:#c53030;">C5 — High Value Niche</span><span class="cc-counts"><span>3 issues</span><span>2 customers</span></span></div>
+            <div class="cc-title">Driver &amp; Field Operations</div>
+            <div class="cc-desc">Delivered quantity mismatches and tracking gaps impact billing accuracy. Two active issues at Daniela Trucking require immediate attention — MBL-1927 is past due (May 18). Assigned markers not showing for some drivers at Tomlinson compounds field visibility problems.</div>
+            <div class="cc-tickets"><span class="ticket-chip bug">TRE-14014</span><span class="ticket-chip bug">MBL-1927</span><span class="ticket-chip bug">CUS-104</span></div>
+          </div>
+          <div class="cluster-card" style="border-top-color:#D4A017;">
+            <div class="cc-header"><span class="cc-label" style="color:#744210;">C6 — Nice to Have</span><span class="cc-counts"><span>6 issues</span><span>5 customers</span></span></div>
+            <div class="cc-title">Ticket &amp; Order Management</div>
+            <div class="cc-desc">Customers need more control over how tickets and orders are structured — excluding APEX-uploaded tickets from totals, uploading final load tickets, duplicating orders across days, hiding canceled jobs. Lower urgency but affects 5 customers who've been waiting.</div>
+            <div class="cc-tickets"><span class="ticket-chip feat">CUS-160</span><span class="ticket-chip feat">CUS-112</span><span class="ticket-chip feat">CUS-138</span><span class="ticket-chip feat">CUS-172</span><span class="ticket-chip feat">CUS-176</span><span class="ticket-chip feat">CUS-79</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3. ISSUES (Bugs + Features combined with tabs) ── -->
   <div class="panel" id="panel-issues">
     <button class="panel-header" onclick="togglePanel('panel-issues')">
       <div class="ph-left">
@@ -462,61 +517,6 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
           </tbody>
         </table>
 
-      </div>
-    </div>
-  </div>
-
-  <!-- ── 3. CLUSTERS ── -->
-  <div class="panel" id="panel-clusters">
-    <button class="panel-header" onclick="togglePanel('panel-clusters')">
-      <div class="ph-left"><span class="ph-title">Clusters</span><span class="ph-count">6 groups</span></div>
-      <div style="display:flex;align-items:center;gap:14px;"><span class="ph-meta">Grouped by issue theme · bugs + features combined</span><span class="chevron">▾</span></div>
-    </button>
-    <div class="panel-body">
-      <div class="panel-inner">
-        <div class="issue-tabs">
-          <button class="issue-tab active" id="ctab-all"  onclick="filterClusters('all')">All</button>
-          <button class="issue-tab"        id="ctab-bug"  onclick="filterClusters('bug')">🐛 Bugs</button>
-          <button class="issue-tab"        id="ctab-feat" onclick="filterClusters('feat')">✨ Features</button>
-        </div>
-        <div class="cluster-grid">
-          <div class="cluster-card" style="border-top-color:#F6AD55;">
-            <div class="cc-header"><span class="cc-label" style="color:#c05621;">C1 — Ship First</span><span class="cc-counts"><span>9 issues</span><span>6 customers</span></span></div>
-            <div class="cc-title">Rates &amp; Invoicing Failures</div>
-            <div class="cc-desc">Rate card failures appear across onboarding and live accounts — vendor commissioned rates display incorrectly, fuel surcharges duplicate, and material sell rates export as buy rates. Three customers also need QuickBooks and billing integrations that share the same workflow root.</div>
-            <div class="cc-tickets"><span class="ticket-chip bug">PRO-1641</span><span class="ticket-chip bug">CUS-171</span><span class="ticket-chip bug">CUS-149</span><span class="ticket-chip bug">PRO-1640</span><span class="ticket-chip bug">CUS-125</span><span class="ticket-chip bug">CUS-158</span><span class="ticket-chip feat">CUS-51</span><span class="ticket-chip feat">CUS-174</span><span class="ticket-chip feat">PRO-1537</span></div>
-          </div>
-          <div class="cluster-card" style="border-top-color:#68D391;">
-            <div class="cc-header"><span class="cc-label" style="color:#276749;">C2 — Ship First</span><span class="cc-counts"><span>11 issues</span><span>6 customers</span></span></div>
-            <div class="cc-title">Order &amp; Dispatch Workflow Gaps</div>
-            <div class="cc-desc">Dispatch has several friction points: job duplication limits, order cutoff time logic, send-all limitations, and timezone mismatches between SMS and the app. RPMx alone has four open dispatch items. Roster sorting and driver job counts are also missing for dispatchers.</div>
-            <div class="cc-tickets"><span class="ticket-chip bug">TRE-13732</span><span class="ticket-chip feat">OPS-663</span><span class="ticket-chip feat">PRO-1549</span><span class="ticket-chip feat">PRO-1550</span><span class="ticket-chip feat">PRO-1547</span><span class="ticket-chip feat">PRO-1551</span><span class="ticket-chip feat">CUS-183</span><span class="ticket-chip feat">CUS-186</span><span class="ticket-chip feat">PRO-1646</span><span class="ticket-chip feat">CUS-182</span><span class="ticket-chip feat">CUS-76</span></div>
-          </div>
-          <div class="cluster-card" style="border-top-color:#63B3ED;">
-            <div class="cc-header"><span class="cc-label" style="color:#2b6cb0;">C3 — Scale Wins</span><span class="cc-counts"><span>6 issues</span><span>5 customers</span></span></div>
-            <div class="cc-title">Reporting &amp; Export Gaps</div>
-            <div class="cc-desc">Teams cannot produce reliable reports from Tread — CSV encoding issues, incorrect field exports, and missing report types (driver performance, QB sync, Vista-ready) force manual workarounds. Five customers are impacted, with Daniela Trucking and AHS leading.</div>
-            <div class="cc-tickets"><span class="ticket-chip bug">REP-302</span><span class="ticket-chip bug">REP-284</span><span class="ticket-chip feat">REP-13</span><span class="ticket-chip feat">REP-294</span><span class="ticket-chip feat">REP-309</span><span class="ticket-chip feat">REP-280</span></div>
-          </div>
-          <div class="cluster-card" style="border-top-color:#B794F4;">
-            <div class="cc-header"><span class="cc-label" style="color:#553c9a;">C4 — Scale Wins</span><span class="cc-counts"><span>7 issues</span><span>6 customers</span></span></div>
-            <div class="cc-title">Permissions &amp; Access Gaps</div>
-            <div class="cc-desc">Admin access restrictions block common field actions. 403 errors prevent driver sharing, deleted company emails can't be re-invited, and dispatchers can't create projects or separate truck types. Six customers hit these walls independently — suggesting a product-wide structural gap.</div>
-            <div class="cc-tickets"><span class="ticket-chip bug">CUS-136</span><span class="ticket-chip bug">OPS-578</span><span class="ticket-chip bug">CUS-129</span><span class="ticket-chip bug">CUS-195</span><span class="ticket-chip feat">TRE-13207</span><span class="ticket-chip feat">CUS-132</span><span class="ticket-chip feat">CUS-139</span></div>
-          </div>
-          <div class="cluster-card" style="border-top-color:#FC8181;">
-            <div class="cc-header"><span class="cc-label" style="color:#c53030;">C5 — High Value Niche</span><span class="cc-counts"><span>3 issues</span><span>2 customers</span></span></div>
-            <div class="cc-title">Driver &amp; Field Operations</div>
-            <div class="cc-desc">Delivered quantity mismatches and tracking gaps impact billing accuracy. Two active issues at Daniela Trucking require immediate attention — MBL-1927 is past due (May 18). Assigned markers not showing for some drivers at Tomlinson compounds field visibility problems.</div>
-            <div class="cc-tickets"><span class="ticket-chip bug">TRE-14014</span><span class="ticket-chip bug">MBL-1927</span><span class="ticket-chip bug">CUS-104</span></div>
-          </div>
-          <div class="cluster-card" style="border-top-color:#D4A017;">
-            <div class="cc-header"><span class="cc-label" style="color:#744210;">C6 — Nice to Have</span><span class="cc-counts"><span>6 issues</span><span>5 customers</span></span></div>
-            <div class="cc-title">Ticket &amp; Order Management</div>
-            <div class="cc-desc">Customers need more control over how tickets and orders are structured — excluding APEX-uploaded tickets from totals, uploading final load tickets, duplicating orders across days, hiding canceled jobs. Lower urgency but affects 5 customers who've been waiting.</div>
-            <div class="cc-tickets"><span class="ticket-chip feat">CUS-160</span><span class="ticket-chip feat">CUS-112</span><span class="ticket-chip feat">CUS-138</span><span class="ticket-chip feat">CUS-172</span><span class="ticket-chip feat">CUS-176</span><span class="ticket-chip feat">CUS-79</span></div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
