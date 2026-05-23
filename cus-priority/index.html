@@ -1,100 +1,716 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CUS Priority Analysis — Tread Customer Ops Hub</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2060%2060%22%3E%0A%20%20%3Crect%20width%3D%2260%22%20height%3D%2260%22%20fill%3D%22%230A1820%22%20rx%3D%2212%22%2F%3E%0A%20%20%3Cg%20transform%3D%22translate%281%2C%2015%29%20scale%280.966%29%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M38.4037%2015.2638L28.8771%205.73713L19.3504%2015.2638L16.7622%2012.6756L28.8771%200.561646L40.991%2012.6756L38.4037%2015.2638Z%22%20fill%3D%22%23FFAA13%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M38.4037%2021.8914L28.8771%2012.3647L19.3504%2021.8914L16.7622%2019.3032L28.8771%207.18921L40.991%2019.3032L38.4037%2021.8914Z%22%20fill%3D%22%23FFAA13%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M40.991%2025.9307L40.2975%2026.6241L35.7826%2025.8968L28.8771%2018.9913L21.9715%2025.8968L17.4566%2026.6241L16.7622%2025.9307L28.8771%2013.8158L40.991%2025.9307Z%22%20fill%3D%22%23FFE500%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M34.0509%2025.6177L28.8772%2024.7833L23.7026%2025.6177L28.8772%2020.4431L34.0509%2025.6177Z%22%20fill%3D%22%23FFE500%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16.0143%2013.423L13.4272%2016.01L15.9936%2018.5763L18.5806%2015.9893L16.0143%2013.423Z%22%20fill%3D%22%23FFAA13%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12.7003%2016.7372L10.1133%2019.3242L15.9931%2025.2041L18.5802%2022.617L12.7003%2016.7372Z%22%20fill%3D%22%23FFAA13%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16.1692%2026.8316L11.7128%2027.5498L6.80078%2022.6378L9.38898%2020.0505L16.1692%2026.8316Z%22%20fill%3D%22%23FFE500%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10.4626%2027.752L0%2029.4382L6.07481%2023.3643L10.4626%2027.752Z%22%20fill%3D%22%23FFE500%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M41.7406%2013.4231L39.1738%2015.989L41.7611%2018.5771L44.3278%2016.0113L41.7406%2013.4231Z%22%20fill%3D%22%23FFAA13%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M45.0522%2016.7337L39.1724%2022.6135L41.76%2025.2012L47.6399%2019.3214L45.0522%2016.7337Z%22%20fill%3D%22%23FFAA13%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M50.9548%2022.6387L46.0428%2027.5498L41.5854%2026.8316L48.3665%2020.0505L50.9548%2022.6387Z%22%20fill%3D%22%23FFE500%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M57.7542%2029.4382L47.2925%2027.752L51.6803%2023.3643L57.7542%2029.4382Z%22%20fill%3D%22%23FFE500%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E"/>
-  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --dark: #0A1820; --bg: #F7FAFC; --border: #D6DDE1;
-      --muted: #6B828C; --amber: #FFAA13; --yellow: #FFE500;
-      --shadow: 0px 8px 32px 0px rgba(51,71,82,0.25);
-    }
-    body { font-family: "Golos Text", system-ui, sans-serif; background: var(--bg); color: var(--dark); min-height: 100vh; display: flex; flex-direction: column; }
-    nav {
-      background: var(--dark); padding: 0 48px; height: 64px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
-    .nav-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.2); }
-    .nav-title { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.6); letter-spacing: 0.04em; text-transform: uppercase; }
-    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 80px 48px; }
-    .center { max-width: 540px; width: 100%; }
-    .back { 
-      display: inline-flex; align-items: center; gap: 6px;
-      color: var(--muted); text-decoration: none; font-size: 0.875rem;
-      margin-bottom: 40px; transition: color 0.15s;
-    }
-    .back:hover { color: var(--dark); }
-    .icon-wrap {
-      width: 72px; height: 72px; border-radius: 18px;
-      background: #fff; border: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 32px; margin-bottom: 24px;
-      box-shadow: 0px 2px 8px rgba(51,71,82,0.08);
-    }
-    h1 { font-size: 1.75rem; font-weight: 800; color: var(--dark); margin-bottom: 12px; letter-spacing: -0.3px; }
-    .desc { color: var(--muted); line-height: 1.6; font-size: 0.95rem; margin-bottom: 28px; }
-    .status-card {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px 24px;
-      box-shadow: 0px 2px 8px rgba(51,71,82,0.06);
-    }
-    .status-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 6px; }
-    .status-note { font-size: 0.875rem; color: var(--dark); line-height: 1.5; }
-    .badge-wip {
-      display: inline-flex; align-items: center; gap: 5px;
-      margin-top: 20px; padding: 5px 12px; border-radius: 100px;
-      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.03em;
-      background: #EEF2F5; color: var(--muted); border: 1px solid var(--border);
-    }
-    footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CUS Ops Tracker — Tread Customer Ops Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2060%2060%22%3E%3Crect%20width%3D%2260%22%20height%3D%2260%22%20fill%3D%22%230A1820%22%20rx%3D%2212%22%2F%3E%3Cg%20transform%3D%22translate%281%2C15%29%20scale%280.966%29%22%3E%3Cpath%20d%3D%22M38.4037%2015.2638L28.8771%205.73713L19.3504%2015.2638L16.7622%2012.6756L28.8771%200.561646L40.991%2012.6756L38.4037%2015.2638Z%22%20fill%3D%22%23FFAA13%22%2F%3E%3Cpath%20d%3D%22M38.4037%2021.8914L28.8771%2012.3647L19.3504%2021.8914L16.7622%2019.3032L28.8771%207.18921L40.991%2019.3032L38.4037%2021.8914Z%22%20fill%3D%22%23FFAA13%22%2F%3E%3Cpath%20d%3D%22M40.991%2025.9307L40.2975%2026.6241L35.7826%2025.8968L28.8771%2018.9913L21.9715%2025.8968L17.4566%2026.6241L16.7622%2025.9307L28.8771%2013.8158L40.991%2025.9307Z%22%20fill%3D%22%23FFE500%22%2F%3E%3Cpath%20d%3D%22M34.0509%2025.6177L28.8772%2024.7833L23.7026%2025.6177L28.8772%2020.4431L34.0509%2025.6177Z%22%20fill%3D%22%23FFE500%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E"/>
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --dark: #0A1820; --bg: #F7FAFC; --card: #ffffff;
+  --border: #D6DDE1; --muted: #6B828C;
+  --amber: #FFAA13; --yellow: #FFE500;
+  --shadow: 0px 8px 32px 0px rgba(51,71,82,0.18);
+  --c1: #F6AD55; --c2: #68D391; --c3: #63B3ED;
+  --c4: #B794F4; --c5: #FC8181; --c6: #F6E05E;
+}
+body { font-family: 'Golos Text', system-ui, sans-serif; background: var(--bg); color: var(--dark); min-height: 100vh; }
+
+/* ── NAV ── */
+nav { background: var(--dark); padding: 0 48px; height: 64px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.nav-left { display: flex; align-items: center; gap: 16px; }
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-divider { width: 1px; height: 20px; background: rgba(255,255,255,0.2); }
+.nav-title { font-size: 0.85rem; font-weight: 500; color: rgba(255,255,255,0.6); letter-spacing: 0.04em; text-transform: uppercase; }
+.back-link { font-size: 0.8rem; color: rgba(255,255,255,0.45); text-decoration: none; display: flex; align-items: center; gap: 5px; transition: color 0.15s; }
+.back-link:hover { color: rgba(255,255,255,0.8); }
+
+/* ── HERO ── */
+.hero { background: var(--dark); padding: 40px 48px 36px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+.hero h1 { font-size: 1.75rem; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
+.hero .sub { color: rgba(255,255,255,0.5); font-size: 0.85rem; margin-top: 4px; }
+.stat-pills { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+.stat-pill { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 10px; padding: 12px 18px; min-width: 100px; }
+.stat-pill .sp-val { font-size: 1.6rem; font-weight: 800; color: #fff; letter-spacing: -0.02em; line-height: 1; }
+.stat-pill .sp-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(255,255,255,0.4); margin-top: 4px; }
+.stat-pill.amber .sp-val { color: var(--amber); }
+
+/* ── BODY ── */
+.page-body { max-width: 1200px; margin: 0 auto; padding: 40px 48px 60px; display: flex; flex-direction: column; gap: 32px; }
+
+/* ── CARD ── */
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 28px 30px; box-shadow: 0 2px 8px rgba(51,71,82,0.06); }
+.card-title { font-size: 1rem; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+.card-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 20px; }
+
+/* ── PRIORITY MATRIX ── */
+.matrix-svg-wrap { width: 100%; overflow-x: auto; }
+.matrix-svg-wrap svg { width: 100%; min-width: 580px; }
+.bubble { cursor: pointer; transition: opacity 0.15s; }
+.bubble:hover { opacity: 0.85; }
+.bubble:hover .bubble-label { font-weight: 800; }
+.tooltip { position: absolute; background: var(--dark); color: #fff; font-size: 0.75rem; padding: 8px 12px; border-radius: 8px; pointer-events: none; opacity: 0; transition: opacity 0.15s; max-width: 200px; line-height: 1.4; z-index: 200; font-family: 'Golos Text', system-ui, sans-serif; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 16px; }
+.legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.78rem; }
+.legend-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── WORKFLOW MAP ── */
+.workflow-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 4px; }
+.workflow-table th { padding: 8px 12px; text-align: center; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); border-bottom: 2px solid var(--border); }
+.workflow-table th.row-label { text-align: left; width: 200px; }
+.workflow-table td { padding: 10px 12px; text-align: center; border-bottom: 1px solid #f0f4f8; }
+.workflow-table tr:last-child td { border-bottom: none; }
+.workflow-table td.row-label { text-align: left; font-weight: 600; font-size: 0.8rem; display: flex; align-items: center; gap: 8px; }
+.wf-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+.wf-mark { font-size: 1rem; }
+
+/* ── CLUSTER GRID ── */
+.cluster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 16px; }
+.cluster-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; border-top: 4px solid; }
+.cc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.cc-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.cc-counts { font-size: 0.75rem; color: var(--muted); display: flex; gap: 10px; }
+.cc-title { font-size: 1rem; font-weight: 800; color: var(--dark); margin-bottom: 6px; letter-spacing: -0.01em; }
+.cc-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.55; margin-bottom: 12px; }
+.cc-tickets { display: flex; flex-wrap: wrap; gap: 5px; }
+.ticket-chip { font-size: 0.7rem; font-family: 'SF Mono', 'Menlo', monospace; padding: 2px 7px; border-radius: 4px; background: #EEF2F5; color: #4a5568; font-weight: 600; cursor: default; }
+.ticket-chip.bug { background: #fff5f5; color: #c53030; }
+.ticket-chip.feat { background: #ebf8ff; color: #2b6cb0; }
+
+/* ── COLLAPSIBLE PANELS ── */
+.panel { background: var(--card); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.panel-header { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 20px 28px; background: var(--card); border: none; cursor: pointer; font-family: inherit; text-align: left; transition: background 0.15s; }
+.panel-header:hover { background: #f7fafc; }
+.ph-left { display: flex; align-items: center; gap: 12px; }
+.ph-title { font-size: 1rem; font-weight: 700; color: var(--dark); }
+.ph-count { background: var(--bg); border: 1px solid var(--border); border-radius: 20px; padding: 2px 10px; font-size: 0.75rem; color: var(--muted); font-weight: 600; }
+.ph-meta { font-size: 0.8rem; color: var(--muted); }
+.chevron { color: var(--muted); transition: transform 0.25s; font-size: 1.1rem; line-height: 1; }
+.panel.open .chevron { transform: rotate(180deg); }
+.panel-body { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+.panel-inner { padding: 0 28px 28px; }
+
+/* ── PRIORITY BAR ── */
+.pri-bar-wrap { margin-bottom: 8px; }
+.pri-bar { display: flex; height: 7px; border-radius: 99px; overflow: hidden; }
+.pb-urgent { background: #fc8181; }
+.pb-high { background: #f6ad55; }
+.pb-medium { background: #f6e05e; }
+.pb-low { background: #68d391; }
+.pb-none { background: #e2e8f0; }
+.pri-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.75rem; color: var(--muted); margin: 8px 0 18px; }
+.ldot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 18px; }
+.col-hd { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 10px; }
+
+/* ── BAR CHART ── */
+.bc { display: flex; flex-direction: column; gap: 5px; }
+.bc-row { display: flex; align-items: center; gap: 8px; }
+.bc-lbl { font-size: 0.75rem; width: 145px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bc-track { flex: 1; height: 16px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+.bc-fill { height: 100%; border-radius: 3px; display: flex; align-items: center; justify-content: flex-end; padding-right: 5px; font-size: 0.7rem; font-weight: 700; color: white; }
+
+/* ── STATUS DIST ── */
+.sd { display: flex; flex-direction: column; gap: 3px; }
+.sd-row { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; padding: 3px 0; border-bottom: 1px solid #f7fafc; }
+.sd-row:last-child { border: none; }
+.sd-lbl { color: var(--muted); width: 130px; flex-shrink: 0; }
+.sd-track { flex: 1; height: 5px; background: var(--bg); border-radius: 99px; overflow: hidden; }
+.sd-fill { height: 100%; border-radius: 99px; background: #cbd5e0; }
+.sd-fill.warn { background: #fc8181; }
+.sd-fill.ok { background: #68d391; }
+.sd-fill.blue { background: #63b3ed; }
+.sd-n { font-weight: 700; font-size: 0.8rem; width: 16px; text-align: right; }
+.divider { height: 1px; background: var(--border); margin: 18px 0; }
+
+/* ── TABLE ── */
+table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+thead th { text-align: left; padding: 7px 10px; font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); border-bottom: 2px solid var(--border); }
+tbody tr { border-bottom: 1px solid #f0f4f8; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #f8fafc; }
+td { padding: 9px 10px; vertical-align: top; }
+.tid { font-family: 'SF Mono','Menlo',monospace; font-size: 0.7rem; color: var(--muted); white-space: nowrap; }
+.chip { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
+.chip-urgent { background: #fff5f5; color: #c53030; }
+.chip-high   { background: #fffaf0; color: #c05621; }
+.chip-medium { background: #fffff0; color: #b7791f; }
+.chip-low    { background: #f0fff4; color: #276749; }
+.chip-none   { background: #f7fafc; color: #a0aec0; }
+.chip-status  { background: #edf2f7; color: #4a5568; }
+.chip-triage  { background: #fff5f5; color: #c53030; }
+.chip-prog    { background: #ebf8ff; color: #2b6cb0; }
+.chip-pend    { background: #fffff0; color: #b7791f; }
+
+/* ── RISK CARDS ── */
+.risk-group { margin-bottom: 20px; }
+.rg-header { display: flex; align-items: center; gap: 8px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px; }
+.ri { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.ri-red { background: #fc8181; }
+.ri-orange { background: #f6ad55; }
+.ri-yellow { background: #ecc94b; }
+.ri-green { background: #68d391; }
+.ri-gray { background: #cbd5e0; }
+.risk-cards { display: flex; flex-wrap: wrap; gap: 10px; }
+.rc { border-radius: 8px; padding: 13px 15px; border-left: 4px solid; min-width: 170px; flex: 1; max-width: 260px; }
+.rc .rc-lvl { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 3px; opacity: 0.6; }
+.rc .rc-name { font-weight: 700; font-size: 0.82rem; margin-bottom: 4px; }
+.rc .rc-why { font-size: 0.75rem; line-height: 1.45; opacity: 0.8; }
+.rc .rc-tix { font-size: 0.68rem; font-family: 'SF Mono','Menlo',monospace; margin-top: 6px; opacity: 0.55; }
+.rc-red  { background: #fff5f5; border-color: #fc8181; color: #742a2a; }
+.rc-org  { background: #fffaf0; border-color: #f6ad55; color: #7b341e; }
+.rc-yel  { background: #fffff0; border-color: #ecc94b; color: #744210; }
+.rc-grn  { background: #f0fff4; border-color: #68d391; color: #1c4532; }
+.rc-gry  { background: #f7fafc; border-color: #cbd5e0; color: #2d3748; }
+.risk-strip { display: flex; border-radius: 8px; overflow: hidden; height: 32px; margin-bottom: 22px; }
+.rs-seg { display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: white; gap: 4px; }
+.rs-red { background: #fc8181; }
+.rs-org { background: #f6ad55; }
+.rs-yel { background: #ecc94b; color: #744210; }
+.rs-grn { background: #68d391; color: #1c4532; }
+.rs-gry { background: #cbd5e0; color: #4a5568; }
+
+footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.8rem; }
+
+@media (max-width: 768px) {
+  nav, .hero, .page-body, footer { padding-left: 20px; padding-right: 20px; }
+  .two-col { grid-template-columns: 1fr; }
+  .cluster-grid { grid-template-columns: 1fr; }
+  .stat-pills { gap: 8px; }
+  .stat-pill .sp-val { font-size: 1.3rem; }
+}
+</style>
 </head>
 <body>
-  <nav>
-    <a class="nav-logo" href="https://www.tread.io" target="_blank" rel="noopener">
-      <svg xmlns="http://www.w3.org/2000/svg" width="120" height="24" viewBox="0 0 150 30" fill="none">
-  <path d="M59.0903 4.36316H73.9359V8.54708H68.92V25.2795H64.1078V8.54547H59.0903V4.36316Z" fill="white"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M90.856 10.5747C90.856 6.46764 87.8866 4.36292 83.9704 4.36292H76.4194V25.2793H81.2317V17.0138L87.6813 25.2777H93.8L86.5308 16.6346C89.1151 15.823 90.856 13.7182 90.856 10.5747ZM85.7863 10.9077C85.7863 13.5198 83.611 13.6463 81.7937 13.6463H81.2304V8.16905H81.7937C83.611 8.16905 85.7863 8.29559 85.7863 10.9077Z" fill="white"/>
-  <path d="M107.853 8.54522H100.582V12.7067H107.544V16.8906H100.582V21.0954H107.851V25.2793H95.7695V4.36292H107.851L107.853 8.54522Z" fill="white"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M126.155 25.2794H131.325L122.803 4.36145H118.348L109.823 25.2794H114.995L116.556 21.0955H124.592L126.155 25.2794ZM120.548 10.8281H120.599L122.954 16.9103H118.192L120.548 10.8281Z" fill="white"/>
-  <path fill-rule="evenodd" clip-rule="evenodd" d="M150 14.8082C150 8.72445 145.137 4.36292 139.352 4.36292H133.235V25.2793H139.352C145.162 25.2793 150 20.9192 150 14.8082ZM144.803 14.8335C144.777 18.3324 142.346 21.0198 138.788 21.0198H138.046V8.62164H138.788C142.371 8.62164 144.803 11.3347 144.803 14.8335Z" fill="white"/>
-  <path d="M38.4037 15.2638L28.8771 5.73713L19.3504 15.2638L16.7622 12.6756L28.8771 0.561646L40.991 12.6756L38.4037 15.2638Z" fill="white"/>
-  <path d="M38.4037 21.8914L28.8771 12.3647L19.3504 21.8914L16.7622 19.3032L28.8771 7.18921L40.991 19.3032L38.4037 21.8914Z" fill="white"/>
-  <path d="M40.991 25.9307L40.2975 26.6241L35.7826 25.8968L28.8771 18.9913L21.9715 25.8968L17.4566 26.6241L16.7622 25.9307L28.8771 13.8158L40.991 25.9307Z" fill="white"/>
-  <path d="M34.0509 25.6177L28.8772 24.7833L23.7026 25.6177L28.8772 20.4431L34.0509 25.6177Z" fill="white"/>
-  <path d="M16.0143 13.423L13.4272 16.01L15.9936 18.5763L18.5806 15.9893L16.0143 13.423Z" fill="white"/>
-  <path d="M12.7003 16.7372L10.1133 19.3242L15.9931 25.2041L18.5802 22.617L12.7003 16.7372Z" fill="white"/>
-  <path d="M16.1692 26.8316L11.7128 27.5498L6.80078 22.6378L9.38898 20.0505L16.1692 26.8316Z" fill="white"/>
-  <path d="M10.4626 27.752L0 29.4382L6.07481 23.3643L10.4626 27.752Z" fill="white"/>
-  <path d="M41.7406 13.4231L39.1738 15.989L41.7611 18.5771L44.3278 16.0113L41.7406 13.4231Z" fill="white"/>
-  <path d="M45.0522 16.7337L39.1724 22.6135L41.76 25.2012L47.6399 19.3214L45.0522 16.7337Z" fill="white"/>
-  <path d="M50.9548 22.6387L46.0428 27.5498L41.5854 26.8316L48.3665 20.0505L50.9548 22.6387Z" fill="white"/>
-  <path d="M57.7542 29.4382L47.2925 27.752L51.6803 23.3643L57.7542 29.4382Z" fill="white"/>
-</svg>
+
+<nav>
+  <div class="nav-left">
+    <a class="nav-logo" href="/" >
+      <svg xmlns="http://www.w3.org/2000/svg" width="100" height="20" viewBox="0 0 150 30" fill="none"><path d="M59.0903 4.36316H73.9359V8.54708H68.92V25.2795H64.1078V8.54547H59.0903V4.36316Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M90.856 10.5747C90.856 6.46764 87.8866 4.36292 83.9704 4.36292H76.4194V25.2793H81.2317V17.0138L87.6813 25.2777H93.8L86.5308 16.6346C89.1151 15.823 90.856 13.7182 90.856 10.5747ZM85.7863 10.9077C85.7863 13.5198 83.611 13.6463 81.7937 13.6463H81.2304V8.16905H81.7937C83.611 8.16905 85.7863 8.29559 85.7863 10.9077Z" fill="white"/><path d="M107.853 8.54522H100.582V12.7067H107.544V16.8906H100.582V21.0954H107.851V25.2793H95.7695V4.36292H107.851L107.853 8.54522Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M126.155 25.2794H131.325L122.803 4.36145H118.348L109.823 25.2794H114.995L116.556 21.0955H124.592L126.155 25.2794ZM120.548 10.8281H120.599L122.954 16.9103H118.192L120.548 10.8281Z" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M150 14.8082C150 8.72445 145.137 4.36292 139.352 4.36292H133.235V25.2793H139.352C145.162 25.2793 150 20.9192 150 14.8082ZM144.803 14.8335C144.777 18.3324 142.346 21.0198 138.788 21.0198H138.046V8.62164H138.788C142.371 8.62164 144.803 11.3347 144.803 14.8335Z" fill="white"/><path d="M38.4037 15.2638L28.8771 5.73713L19.3504 15.2638L16.7622 12.6756L28.8771 0.561646L40.991 12.6756L38.4037 15.2638Z" fill="white"/><path d="M38.4037 21.8914L28.8771 12.3647L19.3504 21.8914L16.7622 19.3032L28.8771 7.18921L40.991 19.3032L38.4037 21.8914Z" fill="white"/><path d="M40.991 25.9307L40.2975 26.6241L35.7826 25.8968L28.8771 18.9913L21.9715 25.8968L17.4566 26.6241L16.7622 25.9307L28.8771 13.8158L40.991 25.9307Z" fill="white"/><path d="M34.0509 25.6177L28.8772 24.7833L23.7026 25.6177L28.8772 20.4431L34.0509 25.6177Z" fill="white"/></svg>
       <div class="nav-divider"></div>
       <span class="nav-title">Customer Ops Hub</span>
     </a>
-  </nav>
-  <main>
-    <div class="center">
-      <a href="../" class="back">← Back to Hub</a>
-      <div class="icon-wrap">🎯</div>
-      <h1>CUS Priority Analysis</h1>
-      <p class="desc">Feature request and issue prioritization matrix for the Customer Success Linear queue — surfacing what matters most to customers and when.</p>
-      <div class="status-card">
-        <div class="status-label">Status</div>
-        <div class="status-note">Analysis is in progress. This page will surface the priority matrix visualization, tagging methodology, and a live view of the CUS Linear backlog.</div>
-        <span class="badge-wip">In Progress</span>
+    <a class="back-link" href="../">← Hub</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-top">
+    <div>
+      <h1>CUS Ops Tracker</h1>
+      <div class="sub">Bug · Feature · Risk analysis — Priority matrix &amp; workflow impact map · Generated May 22, 2026</div>
+    </div>
+  </div>
+  <div class="stat-pills">
+    <div class="stat-pill"><div class="sp-val">17</div><div class="sp-label">Open Bugs</div></div>
+    <div class="stat-pill"><div class="sp-val">26</div><div class="sp-label">Features</div></div>
+    <div class="stat-pill"><div class="sp-val">6</div><div class="sp-label">Clusters</div></div>
+    <div class="stat-pill"><div class="sp-val">12</div><div class="sp-label">At-Risk Customers</div></div>
+    <div class="stat-pill amber"><div class="sp-val">4</div><div class="sp-label">Critical / Red</div></div>
+  </div>
+</div>
+
+<div class="page-body">
+
+  <!-- ── PRIORITY MATRIX ── -->
+  <div class="card" style="position:relative;">
+    <div class="card-title">Priority Matrix</div>
+    <div class="card-sub">X axis: how many customers are affected · Y axis: daily operational pain · Bubble size: issue count</div>
+    <div class="matrix-svg-wrap">
+      <svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg" style="display:block;">
+        <!-- Quadrant fills -->
+        <rect x="70" y="28" width="300" height="196" fill="#f0fff4" opacity="0.7"/>
+        <rect x="370" y="28" width="302" height="196" fill="#fffbeb" opacity="0.7"/>
+        <rect x="70" y="224" width="300" height="196" fill="#f7fafc"/>
+        <rect x="370" y="224" width="302" height="196" fill="#eff6ff" opacity="0.7"/>
+        <!-- Axes -->
+        <line x1="70" y1="28" x2="70" y2="420" stroke="#D6DDE1" stroke-width="1"/>
+        <line x1="70" y1="420" x2="672" y2="420" stroke="#D6DDE1" stroke-width="1"/>
+        <!-- Midpoint lines -->
+        <line x1="370" y1="28" x2="370" y2="420" stroke="#D6DDE1" stroke-width="1" stroke-dasharray="5,4"/>
+        <line x1="70" y1="224" x2="672" y2="224" stroke="#D6DDE1" stroke-width="1" stroke-dasharray="5,4"/>
+        <!-- Quadrant labels -->
+        <text x="80" y="46" fill="#276749" font-size="10" font-weight="700" font-family="'Golos Text',system-ui" letter-spacing="0.04em">HIGH VALUE NICHE</text>
+        <text x="380" y="46" fill="#b7791f" font-size="10" font-weight="700" font-family="'Golos Text',system-ui" letter-spacing="0.04em">SHIP FIRST</text>
+        <text x="80" y="242" fill="#6B828C" font-size="10" font-weight="700" font-family="'Golos Text',system-ui" letter-spacing="0.04em">NICE TO HAVE</text>
+        <text x="380" y="242" fill="#2b6cb0" font-size="10" font-weight="700" font-family="'Golos Text',system-ui" letter-spacing="0.04em">SCALE WINS</text>
+        <!-- Y-axis labels -->
+        <text x="14" y="32" fill="#6B828C" font-size="9" font-family="'Golos Text',system-ui">High</text>
+        <text x="14" y="418" fill="#6B828C" font-size="9" font-family="'Golos Text',system-ui">Low</text>
+        <text x="8" y="230" fill="#6B828C" font-size="9" font-family="'Golos Text',system-ui" transform="rotate(-90,20,224)" text-anchor="middle">Daily Operational Pain</text>
+        <!-- X-axis labels -->
+        <text x="75" y="438" fill="#6B828C" font-size="9" font-family="'Golos Text',system-ui">Few</text>
+        <text x="645" y="438" fill="#6B828C" font-size="9" font-family="'Golos Text',system-ui">Many</text>
+        <text x="371" y="450" fill="#6B828C" font-size="9" font-family="'Golos Text',system-ui" text-anchor="middle">Customer Breadth →</text>
+
+        <!-- C1 Rates & Invoicing: x=68%, y=82% → svg x=478, y=108 -->
+        <g class="bubble" data-tip="C1 – Rates &amp; Invoicing&#10;9 issues · 6 customers&#10;PRO-1641, CUS-171, CUS-149, PRO-1640, CUS-125, CUS-158, CUS-51, CUS-174, PRO-1537">
+          <circle cx="478" cy="108" r="26" fill="#F6AD55" opacity="0.85" stroke="#fff" stroke-width="2"/>
+          <text x="478" y="105" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="'Golos Text',system-ui">C1</text>
+          <text x="478" y="117" text-anchor="middle" fill="white" font-size="8" font-family="'Golos Text',system-ui">Rates</text>
+        </g>
+
+        <!-- C2 Order & Dispatch: x=52%, y=72% → svg x=382, y=139 -->
+        <g class="bubble" data-tip="C2 – Order &amp; Dispatch&#10;11 issues · 6 customers&#10;TRE-13732, OPS-663, PRO-1549, PRO-1550, PRO-1547, PRO-1551, CUS-183, CUS-186, PRO-1646, CUS-182, CUS-76">
+          <circle cx="390" cy="132" r="28" fill="#68D391" opacity="0.85" stroke="#fff" stroke-width="2"/>
+          <text x="390" y="129" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="'Golos Text',system-ui">C2</text>
+          <text x="390" y="141" text-anchor="middle" fill="white" font-size="8" font-family="'Golos Text',system-ui">Dispatch</text>
+        </g>
+
+        <!-- C3 Reporting: x=55%, y=48% → svg x=400, y=232 -->
+        <g class="bubble" data-tip="C3 – Reporting &amp; Export&#10;6 issues · 5 customers&#10;REP-302, REP-284, REP-13, REP-294, REP-309, REP-280">
+          <circle cx="400" cy="236" r="21" fill="#63B3ED" opacity="0.85" stroke="#fff" stroke-width="2"/>
+          <text x="400" y="233" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="'Golos Text',system-ui">C3</text>
+          <text x="400" y="245" text-anchor="middle" fill="white" font-size="8" font-family="'Golos Text',system-ui">Reports</text>
+        </g>
+
+        <!-- C4 Permissions: x=60%, y=38% → svg x=430, y=272 -->
+        <g class="bubble" data-tip="C4 – Permissions &amp; Access&#10;7 issues · 6 customers&#10;CUS-136, OPS-578, CUS-129, CUS-195, TRE-13207, CUS-132, CUS-139">
+          <circle cx="430" cy="272" r="22" fill="#B794F4" opacity="0.85" stroke="#fff" stroke-width="2"/>
+          <text x="430" y="269" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="'Golos Text',system-ui">C4</text>
+          <text x="430" y="281" text-anchor="middle" fill="white" font-size="8" font-family="'Golos Text',system-ui">Access</text>
+        </g>
+
+        <!-- C5 Driver & Field: x=25%, y=55% → svg x=220, y=205 -->
+        <g class="bubble" data-tip="C5 – Driver &amp; Field Ops&#10;3 issues · 2 customers&#10;TRE-14014, MBL-1927, CUS-104">
+          <circle cx="220" cy="207" r="16" fill="#FC8181" opacity="0.85" stroke="#fff" stroke-width="2"/>
+          <text x="220" y="204" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="'Golos Text',system-ui">C5</text>
+          <text x="220" y="215" text-anchor="middle" fill="white" font-size="8" font-family="'Golos Text',system-ui">Driver</text>
+        </g>
+
+        <!-- C6 Ticket Mgmt: x=40%, y=25% → svg x=310, y=322 -->
+        <g class="bubble" data-tip="C6 – Ticket &amp; Order Mgmt&#10;6 issues · 5 customers&#10;CUS-160, CUS-112, CUS-138, CUS-172, CUS-176, CUS-79">
+          <circle cx="310" cy="322" r="21" fill="#D4A017" opacity="0.85" stroke="#fff" stroke-width="2"/>
+          <text x="310" y="319" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="'Golos Text',system-ui">C6</text>
+          <text x="310" y="331" text-anchor="middle" fill="white" font-size="8" font-family="'Golos Text',system-ui">Tickets</text>
+        </g>
+
+        <!-- Standalone -->
+        <g class="bubble" data-tip="Standalone – No strong cluster&#10;1 issue: CUS-201 (Buesing regression)">
+          <circle cx="155" cy="350" r="10" fill="#CBD5E0" opacity="0.8" stroke="#fff" stroke-width="1.5"/>
+          <text x="155" y="353" text-anchor="middle" fill="#4a5568" font-size="7.5" font-weight="700" font-family="'Golos Text',system-ui">SA</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#F6AD55"></span>C1 – Rates &amp; Invoicing</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#68D391"></span>C2 – Order &amp; Dispatch</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#63B3ED"></span>C3 – Reporting &amp; Export</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#B794F4"></span>C4 – Permissions &amp; Access</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#FC8181"></span>C5 – Driver &amp; Field Ops</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#D4A017"></span>C6 – Ticket &amp; Order Mgmt</div>
+    </div>
+    <div id="tooltip" class="tooltip"></div>
+  </div>
+
+  <!-- ── WORKFLOW IMPACT MAP ── -->
+  <div class="card">
+    <div class="card-title">Workflow Impact Map</div>
+    <div class="card-sub">Which Tread workflow areas are affected by each cluster</div>
+    <div style="overflow-x:auto;">
+      <table class="workflow-table">
+        <thead>
+          <tr>
+            <th class="row-label">Cluster</th>
+            <th>Order / Dispatch</th>
+            <th>Rates / Billing</th>
+            <th>Driver App</th>
+            <th>Ticket Mgmt</th>
+            <th>Reporting / Export</th>
+            <th>Account / Admin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="row-label"><span class="wf-dot" style="background:#F6AD55"></span>C1 – Rates &amp; Invoicing</td>
+            <td class="wf-mark">●</td><td class="wf-mark" style="color:#F6AD55">●</td><td></td><td></td><td class="wf-mark">●</td><td></td>
+          </tr>
+          <tr>
+            <td class="row-label"><span class="wf-dot" style="background:#68D391"></span>C2 – Order &amp; Dispatch</td>
+            <td class="wf-mark" style="color:#68D391">●</td><td></td><td class="wf-mark">●</td><td></td><td></td><td class="wf-mark">●</td>
+          </tr>
+          <tr>
+            <td class="row-label"><span class="wf-dot" style="background:#63B3ED"></span>C3 – Reporting</td>
+            <td></td><td class="wf-mark">●</td><td></td><td></td><td class="wf-mark" style="color:#63B3ED">●</td><td class="wf-mark">●</td>
+          </tr>
+          <tr>
+            <td class="row-label"><span class="wf-dot" style="background:#B794F4"></span>C4 – Permissions</td>
+            <td class="wf-mark">●</td><td></td><td></td><td></td><td></td><td class="wf-mark" style="color:#B794F4">●</td>
+          </tr>
+          <tr>
+            <td class="row-label"><span class="wf-dot" style="background:#FC8181"></span>C5 – Driver &amp; Field</td>
+            <td class="wf-mark">●</td><td class="wf-mark">●</td><td class="wf-mark" style="color:#FC8181">●</td><td></td><td></td><td></td>
+          </tr>
+          <tr>
+            <td class="row-label"><span class="wf-dot" style="background:#D4A017"></span>C6 – Ticket Mgmt</td>
+            <td class="wf-mark">●</td><td></td><td></td><td class="wf-mark" style="color:#D4A017">●</td><td></td><td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── CLUSTER CARDS ── -->
+  <div>
+    <div style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);margin-bottom:14px;">Clusters — Grouped by Issue Theme</div>
+    <div class="cluster-grid">
+
+      <div class="cluster-card" style="border-top-color:#F6AD55;">
+        <div class="cc-header">
+          <span class="cc-label" style="color:#c05621;">C1 — Ship First</span>
+          <span class="cc-counts"><span>9 issues</span><span>6 customers</span></span>
+        </div>
+        <div class="cc-title">Rates &amp; Invoicing Failures</div>
+        <div class="cc-desc">Rate card failures appear across onboarding and live accounts — vendor commissioned rates display incorrectly, fuel surcharges duplicate, and material sell rates export as buy rates. Three customers are also requesting QuickBooks and billing integrations that share the same workflow root.</div>
+        <div class="cc-tickets">
+          <span class="ticket-chip bug">PRO-1641</span><span class="ticket-chip bug">CUS-171</span><span class="ticket-chip bug">CUS-149</span><span class="ticket-chip bug">PRO-1640</span><span class="ticket-chip bug">CUS-125</span><span class="ticket-chip bug">CUS-158</span><span class="ticket-chip feat">CUS-51</span><span class="ticket-chip feat">CUS-174</span><span class="ticket-chip feat">PRO-1537</span>
+        </div>
+      </div>
+
+      <div class="cluster-card" style="border-top-color:#68D391;">
+        <div class="cc-header">
+          <span class="cc-label" style="color:#276749;">C2 — Ship First</span>
+          <span class="cc-counts"><span>11 issues</span><span>6 customers</span></span>
+        </div>
+        <div class="cc-title">Order &amp; Dispatch Workflow Gaps</div>
+        <div class="cc-desc">Dispatch has several friction points: job duplication limits, order cutoff time logic, send-all limitations, and timezone mismatches between SMS and the app. RPMx alone has four open dispatch items. Roster sorting and driver job counts are also missing for dispatchers.</div>
+        <div class="cc-tickets">
+          <span class="ticket-chip bug">TRE-13732</span><span class="ticket-chip feat">OPS-663</span><span class="ticket-chip feat">PRO-1549</span><span class="ticket-chip feat">PRO-1550</span><span class="ticket-chip feat">PRO-1547</span><span class="ticket-chip feat">PRO-1551</span><span class="ticket-chip feat">CUS-183</span><span class="ticket-chip feat">CUS-186</span><span class="ticket-chip feat">PRO-1646</span><span class="ticket-chip feat">CUS-182</span><span class="ticket-chip feat">CUS-76</span>
+        </div>
+      </div>
+
+      <div class="cluster-card" style="border-top-color:#63B3ED;">
+        <div class="cc-header">
+          <span class="cc-label" style="color:#2b6cb0;">C3 — Scale Wins</span>
+          <span class="cc-counts"><span>6 issues</span><span>5 customers</span></span>
+        </div>
+        <div class="cc-title">Reporting &amp; Export Gaps</div>
+        <div class="cc-desc">Teams cannot produce reliable reports directly from Tread — CSV encoding issues, incorrect field exports, and missing report types (driver performance, QB sync, Vista-ready) force manual workarounds. Five customers are impacted, with Daniela Trucking and AHS leading.</div>
+        <div class="cc-tickets">
+          <span class="ticket-chip bug">REP-302</span><span class="ticket-chip bug">REP-284</span><span class="ticket-chip feat">REP-13</span><span class="ticket-chip feat">REP-294</span><span class="ticket-chip feat">REP-309</span><span class="ticket-chip feat">REP-280</span>
+        </div>
+      </div>
+
+      <div class="cluster-card" style="border-top-color:#B794F4;">
+        <div class="cc-header">
+          <span class="cc-label" style="color:#553c9a;">C4 — Scale Wins</span>
+          <span class="cc-counts"><span>7 issues</span><span>6 customers</span></span>
+        </div>
+        <div class="cc-title">Permissions &amp; Access Gaps</div>
+        <div class="cc-desc">Admin access restrictions block common field actions. 403 errors prevent driver sharing, deleted company emails can't be re-invited, and dispatchers can't create projects or separate truck types. Six customers hit these walls independently — suggesting a product-wide structural gap.</div>
+        <div class="cc-tickets">
+          <span class="ticket-chip bug">CUS-136</span><span class="ticket-chip bug">OPS-578</span><span class="ticket-chip bug">CUS-129</span><span class="ticket-chip bug">CUS-195</span><span class="ticket-chip feat">TRE-13207</span><span class="ticket-chip feat">CUS-132</span><span class="ticket-chip feat">CUS-139</span>
+        </div>
+      </div>
+
+      <div class="cluster-card" style="border-top-color:#FC8181;">
+        <div class="cc-header">
+          <span class="cc-label" style="color:#c53030;">C5 — High Value Niche</span>
+          <span class="cc-counts"><span>3 issues</span><span>2 customers</span></span>
+        </div>
+        <div class="cc-title">Driver &amp; Field Operations</div>
+        <div class="cc-desc">Delivered quantity mismatches and tracking gaps impact billing accuracy. Two active issues at Daniela Trucking require immediate attention — MBL-1927 is past due (May 18). Assigned markers not showing for some drivers at Tomlinson compounds field visibility problems.</div>
+        <div class="cc-tickets">
+          <span class="ticket-chip bug">TRE-14014</span><span class="ticket-chip bug">MBL-1927</span><span class="ticket-chip bug">CUS-104</span>
+        </div>
+      </div>
+
+      <div class="cluster-card" style="border-top-color:#D4A017;">
+        <div class="cc-header">
+          <span class="cc-label" style="color:#744210;">C6 — Nice to Have</span>
+          <span class="cc-counts"><span>6 issues</span><span>5 customers</span></span>
+        </div>
+        <div class="cc-title">Ticket &amp; Order Management</div>
+        <div class="cc-desc">Customers need more control over how tickets and orders are structured — excluding APEX-uploaded tickets from totals, uploading final load tickets, duplicating orders across multiple days, hiding canceled jobs. Lower urgency but affects 5 customers who've been waiting.</div>
+        <div class="cc-tickets">
+          <span class="ticket-chip feat">CUS-160</span><span class="ticket-chip feat">CUS-112</span><span class="ticket-chip feat">CUS-138</span><span class="ticket-chip feat">CUS-172</span><span class="ticket-chip feat">CUS-176</span><span class="ticket-chip feat">CUS-79</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── COLLAPSIBLE: BUGS ── -->
+  <div class="panel" id="panel-bugs">
+    <button class="panel-header" onclick="togglePanel('panel-bugs')">
+      <div class="ph-left">
+        <span style="font-size:1.1rem;">🐛</span>
+        <span class="ph-title">Bugs</span>
+        <span class="ph-count">17 open</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span class="ph-meta">4 Urgent · 9 High · 4 No Priority</span>
+        <span class="chevron">▾</span>
+      </div>
+    </button>
+    <div class="panel-body">
+      <div class="panel-inner">
+        <div class="pri-bar-wrap">
+          <div class="pri-bar">
+            <div class="pb-urgent" style="width:23.5%"></div>
+            <div class="pb-high"   style="width:52.9%"></div>
+            <div class="pb-none"   style="width:23.5%"></div>
+          </div>
+        </div>
+        <div class="pri-legend">
+          <span><span class="ldot" style="background:#fc8181"></span>Urgent (4)</span>
+          <span><span class="ldot" style="background:#f6ad55"></span>High (9)</span>
+          <span><span class="ldot" style="background:#e2e8f0"></span>No Priority (4)</span>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="col-hd">Bugs by Customer</div>
+            <div class="bc">
+              <div class="bc-row"><div class="bc-lbl">Rock On Trucks</div><div class="bc-track"><div class="bc-fill" style="width:100%;background:#fc8181">3</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">AHS</div><div class="bc-track"><div class="bc-fill" style="width:100%;background:#fc8181">3</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">Daniela Trucking</div><div class="bc-track"><div class="bc-fill" style="width:66%;background:#f6ad55">2</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">Prime Aggregates</div><div class="bc-track"><div class="bc-fill" style="width:33%;background:#f6e05e;color:#744210">1</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">4M Trucking</div><div class="bc-track"><div class="bc-fill" style="width:33%;background:#f6e05e;color:#744210">1</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">Amrize NCR Fargo</div><div class="bc-track"><div class="bc-fill" style="width:33%;background:#f6e05e;color:#744210">1</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">6 others</div><div class="bc-track"><div class="bc-fill" style="width:33%;background:#e2e8f0;color:#718096">1 ea</div></div></div>
+            </div>
+          </div>
+          <div>
+            <div class="col-hd">Status</div>
+            <div class="sd">
+              <div class="sd-row"><span class="sd-lbl">Backlog</span><div class="sd-track"><div class="sd-fill" style="width:41%"></div></div><span class="sd-n">7</span></div>
+              <div class="sd-row"><span class="sd-lbl">No Status (—)</span><div class="sd-track"><div class="sd-fill" style="width:29%"></div></div><span class="sd-n">5</span></div>
+              <div class="sd-row"><span class="sd-lbl">Triage</span><div class="sd-track"><div class="sd-fill warn" style="width:12%"></div></div><span class="sd-n">2</span></div>
+              <div class="sd-row"><span class="sd-lbl">In Progress</span><div class="sd-track"><div class="sd-fill blue" style="width:6%"></div></div><span class="sd-n">1</span></div>
+              <div class="sd-row"><span class="sd-lbl">In Review</span><div class="sd-track"><div class="sd-fill blue" style="width:6%"></div></div><span class="sd-n">1</span></div>
+              <div class="sd-row"><span class="sd-lbl">Duplicate</span><div class="sd-track"><div class="sd-fill" style="width:6%"></div></div><span class="sd-n">1</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <table>
+          <thead><tr><th>Ticket</th><th>Customer</th><th>Summary</th><th>Priority</th><th>Status</th><th>Assigned</th></tr></thead>
+          <tbody>
+            <tr><td class="tid">PRO-1641</td><td>Prime Aggregates</td><td>Commissioned vendor rate shows full rate in testing</td><td><span class="chip chip-urgent">Urgent</span></td><td><span class="chip chip-triage">Triage</span></td><td>Saloni Shah</td></tr>
+            <tr><td class="tid">CUS-171</td><td>Rock On Trucks</td><td>Invoice PDF can omit fuel surcharge on first generation</td><td><span class="chip chip-urgent">Urgent</span></td><td><span class="chip chip-status">Duplicate</span></td><td>Richard Leung</td></tr>
+            <tr><td class="tid">CUS-149</td><td>Rock On Trucks</td><td>Fuel surcharge lines duplicate on some orders</td><td><span class="chip chip-urgent">Urgent</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">TRE-13732</td><td>Rock On Trucks</td><td>Rock On ticket chaser flow fails on job lookup</td><td><span class="chip chip-urgent">Urgent</span></td><td><span class="chip chip-triage">Triage</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">PRO-1640</td><td>4M</td><td>Unexpected rate/type change on ORD-841028</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-prog">In Progress</span></td><td>Saloni Shah</td></tr>
+            <tr><td class="tid">REP-302</td><td>AHS</td><td>CSV bug: material sell rate exporting as buy rate</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">CUS-125</td><td>AHS</td><td>Material rate selection not saved on completed orders</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">CUS-136</td><td>Amrize NCR Fargo</td><td>403 error when sharing drivers from vendor management</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">TRE-14014</td><td>Daniela Trucking</td><td>Delivered quantity incorrect — impacts invoicing</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">—</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">CUS-158</td><td>PJ Keating</td><td>Vendor rate card not applied to a job</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">CUS-104</td><td>Tomlinson</td><td>Assigned markers not showing for some drivers</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">CUS-129</td><td>Western States</td><td>Cannot add new phase code in some projects</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">OPS-578</td><td>Trans-Phos</td><td>Cannot re-invite driver email tied to deleted company</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">In Review</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">REP-284</td><td>AHS</td><td>Encoding issue on PROJ-79658 CSV export</td><td><span class="chip chip-none">—</span></td><td><span class="chip chip-status">—</span></td><td>datavinci@tread.io</td></tr>
+            <tr><td class="tid">CUS-201</td><td>Buesing</td><td>Unable to edit customer rate to invoice (regression — May 19)</td><td><span class="chip chip-none">—</span></td><td><span class="chip chip-status">—</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">MBL-1927</td><td>Daniela Trucking</td><td>Driver tracking gaps — Osvaldo Reyes (past due May 18)</td><td><span class="chip chip-none">—</span></td><td><span class="chip chip-status">—</span></td><td>Rafael</td></tr>
+            <tr><td class="tid">CUS-195</td><td>Peterson Cos.</td><td>Cannot upload materials — 404 error</td><td><span class="chip chip-none">—</span></td><td><span class="chip chip-status">—</span></td><td>Peter Bailey</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
-  </main>
-  <footer>Tread Customer Ops Hub &middot; Internal use only</footer>
+  </div>
+
+  <!-- ── COLLAPSIBLE: FEATURES ── -->
+  <div class="panel" id="panel-feat">
+    <button class="panel-header" onclick="togglePanel('panel-feat')">
+      <div class="ph-left">
+        <span style="font-size:1.1rem;">✨</span>
+        <span class="ph-title">Feature Requests</span>
+        <span class="ph-count">26 open</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span class="ph-meta">3 Urgent · 15 High · 6 Medium/Low</span>
+        <span class="chevron">▾</span>
+      </div>
+    </button>
+    <div class="panel-body">
+      <div class="panel-inner">
+        <div class="pri-bar-wrap">
+          <div class="pri-bar">
+            <div class="pb-urgent" style="width:11.5%"></div>
+            <div class="pb-high"   style="width:57.7%"></div>
+            <div class="pb-medium" style="width:15.4%"></div>
+            <div class="pb-low"    style="width:7.7%"></div>
+            <div class="pb-none"   style="width:7.7%"></div>
+          </div>
+        </div>
+        <div class="pri-legend">
+          <span><span class="ldot" style="background:#fc8181"></span>Urgent (3)</span>
+          <span><span class="ldot" style="background:#f6ad55"></span>High (15)</span>
+          <span><span class="ldot" style="background:#f6e05e"></span>Medium (4)</span>
+          <span><span class="ldot" style="background:#68d391"></span>Low (2)</span>
+          <span><span class="ldot" style="background:#e2e8f0"></span>No Priority (2)</span>
+        </div>
+        <div class="two-col">
+          <div>
+            <div class="col-hd">Features by Customer</div>
+            <div class="bc">
+              <div class="bc-row"><div class="bc-lbl">RPMx</div><div class="bc-track"><div class="bc-fill" style="width:100%;background:#63b3ed">4</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">Werdco</div><div class="bc-track"><div class="bc-fill" style="width:75%;background:#63b3ed">3</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">Daniela Trucking</div><div class="bc-track"><div class="bc-fill" style="width:50%;background:#63b3ed">2</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">Trans Phos</div><div class="bc-track"><div class="bc-fill" style="width:50%;background:#63b3ed">2</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">MAREX</div><div class="bc-track"><div class="bc-fill" style="width:50%;background:#63b3ed">2</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">Whitaker</div><div class="bc-track"><div class="bc-fill" style="width:50%;background:#63b3ed">2</div></div></div>
+              <div class="bc-row"><div class="bc-lbl">12 others</div><div class="bc-track"><div class="bc-fill" style="width:25%;background:#bee3f8;color:#2b6cb0">1 ea</div></div></div>
+            </div>
+          </div>
+          <div>
+            <div class="col-hd">Status</div>
+            <div class="sd">
+              <div class="sd-row"><span class="sd-lbl">Backlog</span><div class="sd-track"><div class="sd-fill" style="width:50%"></div></div><span class="sd-n">13</span></div>
+              <div class="sd-row"><span class="sd-lbl">Triage</span><div class="sd-track"><div class="sd-fill warn" style="width:31%"></div></div><span class="sd-n">8</span></div>
+              <div class="sd-row"><span class="sd-lbl">No Status (—)</span><div class="sd-track"><div class="sd-fill" style="width:12%"></div></div><span class="sd-n">3</span></div>
+              <div class="sd-row"><span class="sd-lbl">Pending Dev</span><div class="sd-track"><div class="sd-fill" style="width:8%;background:#f6e05e"></div></div><span class="sd-n">2</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <table>
+          <thead><tr><th>Ticket</th><th>Customer</th><th>Summary</th><th>Priority</th><th>Status</th><th>Assigned</th></tr></thead>
+          <tbody>
+            <tr><td class="tid">OPS-663</td><td>Trans-Phos</td><td>Recover deleted digital tickets + warning prompt</td><td><span class="chip chip-urgent">Urgent</span></td><td><span class="chip chip-triage">Triage</span></td><td>Peter Bailey</td></tr>
+            <tr><td class="tid">CUS-160</td><td>Amrize/Lafarge CA</td><td>Exclude APEX-uploaded tickets from totals and tracking</td><td><span class="chip chip-urgent">Urgent</span></td><td><span class="chip chip-status">Backlog</span></td><td>Peter Bailey</td></tr>
+            <tr><td class="tid">REP-13</td><td>Daniela Trucking</td><td>Driver Performance Report</td><td><span class="chip chip-urgent">Urgent</span></td><td><span class="chip chip-status">—</span></td><td>Tim Chung</td></tr>
+            <tr><td class="tid">TRE-13207</td><td>Amrize</td><td>Add regional parent account levels for Canada billing</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-triage">Triage</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">CUS-182</td><td>Carter Trucking</td><td>Add roster sorting or filtering for assignments</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">CUS-79</td><td>D. Crupi</td><td>Feature Improvement: Sharing Orders by email</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">REP-294</td><td>Daniela Trucking</td><td>QB Report to update 06/15</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Sameer Bhalla</td></tr>
+            <tr><td class="tid">CUS-176</td><td>Gulfshore Trucking</td><td>Add internal-only customer contact type</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">PRO-1537</td><td>MAREX</td><td>Feature Flag: Add Rate in PDF creation in Order Tab</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-triage">Triage</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">CUS-51</td><td>MAREX</td><td>Quickbooks Integration</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Latefa Redjouh</td></tr>
+            <tr><td class="tid">CUS-172</td><td>Rock On Trucks</td><td>Hide canceled jobs from Approve Jobs</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Richard Leung</td></tr>
+            <tr><td class="tid">CUS-76</td><td>Ronyx</td><td>Multi-timezone dispatch: different times in SMS vs app</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">PRO-1646</td><td>RPMx</td><td>RPMx — Add contact dropdown functionality</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-triage">Triage</span></td><td>Richard Leung</td></tr>
+            <tr><td class="tid">PRO-1549</td><td>RPMx</td><td>RPMx — Dispatch send all limitation</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-triage">Triage</span></td><td>Richard Leung</td></tr>
+            <tr><td class="tid">PRO-1550</td><td>RPMx</td><td>RPMx — Duplication of Job Limitation</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-triage">Triage</span></td><td>Saloni Shah</td></tr>
+            <tr><td class="tid">PRO-1547</td><td>RPMx</td><td>Order Cutoff Time — Next-Day vs. Second Business Day Logic</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-triage">Triage</span></td><td>Latefa Redjouh</td></tr>
+            <tr><td class="tid">PRO-1551</td><td>Whitaker</td><td>Driver Timesheets: Downloadable PDF Reports per Driver</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-triage">Triage</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">REP-309</td><td>RW Dunteman</td><td>Vista ready reports</td><td><span class="chip chip-high">High</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">CUS-112</td><td>TRANS PHOS</td><td>Assign or upload ticket for a final load</td><td><span class="chip chip-medium">Medium</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">CUS-183</td><td>VOLKER-STEVIN</td><td>Add # of jobs per driver in mobile for dispatcher</td><td><span class="chip chip-medium">Medium</span></td><td><span class="chip chip-pend">Pending Dev</span></td><td>Latefa Redjouh</td></tr>
+            <tr><td class="tid">CUS-138</td><td>Werdco</td><td>Support duplicating orders across multiple days</td><td><span class="chip chip-medium">Medium</span></td><td><span class="chip chip-status">Backlog</span></td><td>Saloni Shah</td></tr>
+            <tr><td class="tid">CUS-186</td><td>Whitaker</td><td>Dispatch missing in Approve Work for completed job</td><td><span class="chip chip-medium">Medium</span></td><td><span class="chip chip-pend">Pending Dev</span></td><td>Richard Leung</td></tr>
+            <tr><td class="tid">CUS-139</td><td>Werdco</td><td>Allow dispatchers and admins to create projects</td><td><span class="chip chip-low">Low</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">CUS-132</td><td>Werdco</td><td>Separating truck number from the Type</td><td><span class="chip chip-low">Low</span></td><td><span class="chip chip-status">Backlog</span></td><td>Unassigned</td></tr>
+            <tr><td class="tid">REP-280</td><td>AHS</td><td>Report update from email</td><td><span class="chip chip-none">—</span></td><td><span class="chip chip-status">—</span></td><td>datavinci@tread.io</td></tr>
+            <tr><td class="tid">CUS-174</td><td>Buesing</td><td>Buesing AR Requests</td><td><span class="chip chip-none">—</span></td><td><span class="chip chip-status">—</span></td><td>Sameer Bhalla</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── COLLAPSIBLE: CUSTOMER RISK ── -->
+  <div class="panel" id="panel-risk">
+    <button class="panel-header" onclick="togglePanel('panel-risk')">
+      <div class="ph-left">
+        <span style="font-size:1.1rem;">⚠️</span>
+        <span class="ph-title">Customer Risk</span>
+        <span class="ph-count">12 customers</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <span class="ph-meta">2 Red · 2 Red/Yellow · 5 Yellow · 1 Unknown · 2 Green</span>
+        <span class="chevron">▾</span>
+      </div>
+    </button>
+    <div class="panel-body">
+      <div class="panel-inner">
+        <div class="risk-strip">
+          <div class="rs-seg rs-red" style="flex:2">🔴 2 Critical</div>
+          <div class="rs-seg rs-org" style="flex:2">🟠 2 High Risk</div>
+          <div class="rs-seg rs-yel" style="flex:5">🟡 5 Watch</div>
+          <div class="rs-seg rs-gry" style="flex:1">? 1</div>
+          <div class="rs-seg rs-grn" style="flex:2">🟢 2 Stable</div>
+        </div>
+
+        <div class="risk-group">
+          <div class="rg-header"><span class="ri ri-red"></span><span style="color:#c53030">Critical — Immediate Attention</span></div>
+          <div class="risk-cards">
+            <div class="rc rc-red"><div class="rc-lvl">Red</div><div class="rc-name">Daniela Trucking</div><div class="rc-why">Reporting blockers unresolved. Driver tracking gaps past due (May 18). Multiple open escalations.</div><div class="rc-tix">REP-294 · TRE-14014 · MBL-1927 · REP-13</div></div>
+            <div class="rc rc-red"><div class="rc-lvl">Red</div><div class="rc-name">Statewide</div><div class="rc-why">Features promised by sales, not delivered. Onboarding delayed by bad client data. Have not paid invoices due to open issues.</div><div class="rc-tix">Statewide Linear project</div></div>
+          </div>
+        </div>
+
+        <div class="risk-group">
+          <div class="rg-header"><span class="ri ri-orange"></span><span style="color:#c05621">High Risk — Escalating</span></div>
+          <div class="risk-cards">
+            <div class="rc rc-org"><div class="rc-lvl">Yellow / Red</div><div class="rc-name">4M Trucking</div><div class="rc-why">Rates and data dropping issues unresolved. Active escalation in progress.</div><div class="rc-tix">PRO-1640</div></div>
+            <div class="rc rc-org"><div class="rc-lvl">Yellow / Red</div><div class="rc-name">Trans Phos</div><div class="rc-why">Stuck on going paperless — promised months ago. Multiple open items blocking progress.</div><div class="rc-tix">Bulk PDF Generation project · OPS-663 · OPS-578</div></div>
+          </div>
+        </div>
+
+        <div class="risk-group">
+          <div class="rg-header"><span class="ri ri-yellow"></span><span style="color:#b7791f">Watch — Needs Follow-up</span></div>
+          <div class="risk-cards">
+            <div class="rc rc-yel"><div class="rc-lvl">Yellow</div><div class="rc-name">RPMx</div><div class="rc-why">Long list of feature requests still unresolved. 4 Triage items open with no clear ETA.</div><div class="rc-tix">PRO-1646 · PRO-1549 · PRO-1550 · PRO-1547</div></div>
+            <div class="rc rc-yel"><div class="rc-lvl">Yellow</div><div class="rc-name">Terry Equipment</div><div class="rc-why">Focused on a real-time report they have in Ruckit — not yet delivered in Tread.</div><div class="rc-tix">REP-296</div></div>
+            <div class="rc rc-yel"><div class="rc-lvl">Yellow</div><div class="rc-name">Amrize SW (SW Ontario)</div><div class="rc-why">APEX orders for following day not populating. Internal Amrize ticket needed to unblock; potential live date delay.</div><div class="rc-tix">Orlando Tamayo internal ticket</div></div>
+            <div class="rc rc-yel"><div class="rc-lvl">Yellow</div><div class="rc-name">D. Crupi &amp; Sons</div><div class="rc-why">Custom report not loading. Account renamed — Omni name updated as workaround.</div><div class="rc-tix">CUS-79</div></div>
+            <div class="rc rc-yel"><div class="rc-lvl">Yellow</div><div class="rc-name">Prime Aggregates</div><div class="rc-why">Rates not working as expected during onboarding — bad start.</div><div class="rc-tix">PRO-1641</div></div>
+          </div>
+        </div>
+
+        <div class="risk-group">
+          <div class="rg-header"><span class="ri ri-gray"></span><span style="color:#6B828C">Status Unknown</span></div>
+          <div class="risk-cards">
+            <div class="rc rc-gry"><div class="rc-lvl">?</div><div class="rc-name">Advanced Hauling Solutions (AHS)</div><div class="rc-why">Vendor names don't match Tread Vendors page. Material sell rate exporting as buy rate.</div><div class="rc-tix">REP-302 · CUS-136</div></div>
+          </div>
+        </div>
+
+        <div class="risk-group">
+          <div class="rg-header"><span class="ri ri-green"></span><span style="color:#276749">Stable</span></div>
+          <div class="risk-cards">
+            <div class="rc rc-grn"><div class="rc-lvl">Green</div><div class="rc-name">RW Dunteman</div><div class="rc-why">Vista ready reports in backlog — tracked and acknowledged.</div><div class="rc-tix">REP-309</div></div>
+            <div class="rc rc-grn"><div class="rc-lvl">Green</div><div class="rc-name">Amrize Central Canada</div><div class="rc-why">Complex reporting requirements being managed.</div><div class="rc-tix">REP-290</div></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>Customer Ops Hub &middot; Internal use only &middot; Data from CUS Tracker spreadsheet, May 22 2026</footer>
+
+<div id="tooltip" class="tooltip" style="position:fixed;"></div>
+
+<script>
+  function togglePanel(id) {
+    const panel = document.getElementById(id);
+    const body = panel.querySelector('.panel-body');
+    const isOpen = panel.classList.contains('open');
+    if (isOpen) {
+      body.style.maxHeight = body.scrollHeight + 'px';
+      requestAnimationFrame(() => requestAnimationFrame(() => { body.style.maxHeight = '0'; }));
+      panel.classList.remove('open');
+    } else {
+      body.style.maxHeight = body.scrollHeight + 'px';
+      panel.classList.add('open');
+      body.addEventListener('transitionend', function h() {
+        if (panel.classList.contains('open')) body.style.maxHeight = 'none';
+        body.removeEventListener('transitionend', h);
+      });
+    }
+  }
+
+  const tip = document.getElementById('tooltip');
+  document.querySelectorAll('.bubble').forEach(g => {
+    g.addEventListener('mouseenter', e => {
+      const text = g.dataset.tip.replace(/&#10;/g, '\n');
+      tip.style.whiteSpace = 'pre';
+      tip.textContent = text;
+      tip.style.opacity = '1';
+    });
+    g.addEventListener('mousemove', e => {
+      tip.style.left = (e.clientX + 14) + 'px';
+      tip.style.top  = (e.clientY - 10) + 'px';
+    });
+    g.addEventListener('mouseleave', () => { tip.style.opacity = '0'; });
+  });
+</script>
 </body>
 </html>
