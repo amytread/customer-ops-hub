@@ -456,6 +456,11 @@ footer { padding: 28px 48px; border-top: 1px solid var(--border); color: var(--m
     </button>
     <div class="panel-body">
       <div class="panel-inner">
+        <div class="issue-tabs">
+          <button class="issue-tab active" id="ctab-all"  onclick="filterClusters('all')">All</button>
+          <button class="issue-tab"        id="ctab-bug"  onclick="filterClusters('bug')">🐛 Bugs</button>
+          <button class="issue-tab"        id="ctab-feat" onclick="filterClusters('feat')">✨ Features</button>
+        </div>
         <div class="cluster-grid">
           <div class="cluster-card" style="border-top-color:#F6AD55;">
             <div class="cc-header"><span class="cc-label" style="color:#c05621;">C1 — Ship First</span><span class="cc-counts"><span>9 issues</span><span>6 customers</span></span></div>
@@ -628,6 +633,14 @@ function togglePanel(id) {
       body.removeEventListener('transitionend', h);
     });
   }
+}
+
+function filterClusters(type) {
+  ['all','bug','feat'].forEach(t => document.getElementById('ctab-' + t).classList.remove('active'));
+  document.getElementById('ctab-' + type).classList.add('active');
+  document.querySelectorAll('.cluster-card .ticket-chip').forEach(chip => {
+    chip.style.display = (type === 'all' || chip.classList.contains(type)) ? '' : 'none';
+  });
 }
 
 function filterIssues(type) {
