@@ -13,7 +13,7 @@
   --border: #D6DDE1; --muted: #6B828C;
   --amber: #FFAA13; --yellow: #FFE500;
   --c1: #F6AD55; --c2: #68D391; --c3: #63B3ED;
-  --c4: #B794F4; --c5: #FC8181; --c6: #D4A017;
+  --c4: #B794F4; --c5: #FC8181; --c6: #FFE500;
 }
 body { font-family: 'Golos Text', system-ui, sans-serif; background: #ECEEF2; color: var(--dark); min-height: 100vh; }
 
@@ -38,7 +38,7 @@ nav { background: var(--dark); padding: 0; height: 64px; position: sticky; top: 
 .stat-pill .sp-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: rgba(255,255,255,0.4); margin-top: 4px; }
 .stat-pill.amber  .sp-val { color: var(--amber); }
 .stat-pill.red    .sp-val { color: #fc8181; }
-.stat-pill.blue   .sp-val { color: #D4860A; }
+.stat-pill.blue   .sp-val { color: var(--yellow); }
 .stat-pill.orange .sp-val { color: #f6ad55; }
 
 /* ── BODY ── */
@@ -75,7 +75,7 @@ nav { background: var(--dark); padding: 0; height: 64px; position: sticky; top: 
 .card-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 14px; }
 .pri-bar { display: flex; height: 7px; border-radius: 99px; overflow: hidden; }
 .pb-urgent { background: #fc8181; } .pb-high { background: #f6ad55; }
-.pb-medium { background: #f6e05e; } .pb-low { background: #68d391; }
+.pb-medium { background: #f6e05e; } .pb-low { background: var(--yellow); }
 .pb-none { background: #e2e8f0; }
 .pri-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.75rem; color: var(--muted); margin: 8px 0 18px; }
 .ldot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; vertical-align: middle; }
@@ -112,7 +112,7 @@ td { padding: 9px 10px; vertical-align: top; }
 .chip-urgent { background: #fff5f5; color: #c53030; }
 .chip-high   { background: #fffaf0; color: #c05621; }
 .chip-medium { background: #fffff0; color: #b7791f; }
-.chip-low    { background: #f0fff4; color: #276749; }
+.chip-low    { background: #FFFDE0; color: #7A6000; }
 .chip-none   { background: #f7fafc; color: #a0aec0; }
 .chip-status  { background: #edf2f7; color: #4a5568; }
 .chip-triage  { background: #fff5f5; color: #c53030; }
@@ -449,8 +449,8 @@ footer { padding: 0; border-top: 1px solid var(--border); color: var(--muted); f
             <div class="cc-desc">Delivered quantity mismatches and tracking gaps impact billing accuracy. Two active issues at Daniela Trucking require immediate attention — MBL-1927 is past due (May 18). Assigned markers not showing for some drivers at Tomlinson compounds field visibility problems.</div>
             <div class="cc-tickets"><span class="ticket-chip bug">TRE-14014</span><span class="ticket-chip bug">MBL-1927</span><span class="ticket-chip bug">CUS-104</span></div>
           </div>
-          <div class="cluster-card" style="border-top-color:#D4A017;">
-            <div class="cc-header"><span class="cc-label" style="color:#744210;">C6 — Nice to Have</span><span class="cc-counts"><span>6 issues</span><span>5 customers</span></span></div>
+          <div class="cluster-card" style="border-top-color:#FFE500;">
+            <div class="cc-header"><span class="cc-label" style="color:#7A6000;">C6 — Nice to Have</span><span class="cc-counts"><span>6 issues</span><span>5 customers</span></span></div>
             <div class="cc-title">Ticket &amp; Order Management</div>
             <div class="cc-desc">Customers need more control over how tickets and orders are structured — excluding APEX-uploaded tickets from totals, uploading final load tickets, duplicating orders across days, hiding canceled jobs. Lower urgency but affects 5 customers who've been waiting.</div>
             <div class="cc-tickets"><span class="ticket-chip feat">CUS-160</span><span class="ticket-chip feat">CUS-112</span><span class="ticket-chip feat">CUS-138</span><span class="ticket-chip feat">CUS-172</span><span class="ticket-chip feat">CUS-176</span><span class="ticket-chip feat">CUS-79</span></div>
@@ -488,7 +488,7 @@ footer { padding: 0; border-top: 1px solid var(--border); color: var(--muted); f
           <span><span class="ldot" style="background:#fc8181"></span>Urgent (7)</span>
           <span><span class="ldot" style="background:#f6ad55"></span>High (24)</span>
           <span><span class="ldot" style="background:#f6e05e"></span>Medium (4)</span>
-          <span><span class="ldot" style="background:#68d391"></span>Low (2)</span>
+          <span><span class="ldot" style="background:#FFE500"></span>Low (2)</span>
           <span><span class="ldot" style="background:#e2e8f0"></span>No Priority (6)</span>
         </div>
 
@@ -640,9 +640,9 @@ footer { padding: 0; border-top: 1px solid var(--border); color: var(--muted); f
               <text x="220" y="215" text-anchor="middle" fill="white" font-size="8" font-family="'Golos Text',system-ui">Driver</text>
             </g>
             <g class="bubble" data-tip="C6 – Ticket &amp; Order Mgmt&#10;6 issues · 5 customers&#10;Features: CUS-160, CUS-112, CUS-138, CUS-172, CUS-176, CUS-79">
-              <circle cx="310" cy="322" r="21" fill="#D4A017" opacity="0.85" stroke="#fff" stroke-width="2"/>
-              <text x="310" y="319" text-anchor="middle" fill="white" font-size="9" font-weight="700" font-family="'Golos Text',system-ui">C6</text>
-              <text x="310" y="331" text-anchor="middle" fill="white" font-size="8" font-family="'Golos Text',system-ui">Tickets</text>
+              <circle cx="310" cy="322" r="21" fill="#FFE500" opacity="0.85" stroke="#fff" stroke-width="2"/>
+              <text x="310" y="319" text-anchor="middle" fill="#0A1820" font-size="9" font-weight="700" font-family="'Golos Text',system-ui">C6</text>
+              <text x="310" y="331" text-anchor="middle" fill="#0A1820" font-size="8" font-family="'Golos Text',system-ui">Tickets</text>
             </g>
             <g class="bubble" data-tip="Standalone&#10;1 issue: CUS-201 (Buesing regression)">
               <circle cx="155" cy="350" r="10" fill="#CBD5E0" opacity="0.8" stroke="#fff" stroke-width="1.5"/>
@@ -656,7 +656,7 @@ footer { padding: 0; border-top: 1px solid var(--border); color: var(--muted); f
           <div class="legend-item"><span class="legend-dot" style="background:#0E7490"></span>C3 – Reporting &amp; Export</div>
           <div class="legend-item"><span class="legend-dot" style="background:#1E4D6B"></span>C4 – Permissions &amp; Access</div>
           <div class="legend-item"><span class="legend-dot" style="background:#E53E3E"></span>C5 – Driver &amp; Field Ops</div>
-          <div class="legend-item"><span class="legend-dot" style="background:#D4A017"></span>C6 – Ticket &amp; Order Mgmt</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#FFE500"></span>C6 – Ticket &amp; Order Mgmt</div>
         </div>
       </div>
     </div>
@@ -685,7 +685,7 @@ footer { padding: 0; border-top: 1px solid var(--border); color: var(--muted); f
               <tr><td class="row-label"><span class="wf-dot" style="background:#0E7490"></span>C3 – Reporting</td><td></td><td class="wf-mark">●</td><td></td><td></td><td class="wf-mark" style="color:#63B3ED">●</td><td class="wf-mark">●</td></tr>
               <tr><td class="row-label"><span class="wf-dot" style="background:#1E4D6B"></span>C4 – Permissions</td><td class="wf-mark">●</td><td></td><td></td><td></td><td></td><td class="wf-mark" style="color:#B794F4">●</td></tr>
               <tr><td class="row-label"><span class="wf-dot" style="background:#E53E3E"></span>C5 – Driver &amp; Field</td><td class="wf-mark">●</td><td class="wf-mark">●</td><td class="wf-mark" style="color:#FC8181">●</td><td></td><td></td><td></td></tr>
-              <tr><td class="row-label"><span class="wf-dot" style="background:#D4A017"></span>C6 – Ticket Mgmt</td><td class="wf-mark">●</td><td></td><td></td><td class="wf-mark" style="color:#D4A017">●</td><td></td><td></td></tr>
+              <tr><td class="row-label"><span class="wf-dot" style="background:#FFE500"></span>C6 – Ticket Mgmt</td><td class="wf-mark">●</td><td></td><td></td><td class="wf-mark" style="color:#B8A000">●</td><td></td><td></td></tr>
             </tbody>
           </table>
         </div>
