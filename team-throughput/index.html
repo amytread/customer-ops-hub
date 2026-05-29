@@ -138,8 +138,16 @@
     tbody td { border-bottom: 1px solid #EEF2F5; }
     tbody tr:last-child td { border-bottom: none; font-weight: 700; }
     .row-team td:first-child { font-weight: 600; }
+    .row-team td { border-bottom: none; }
     .pct-cell { font-weight: 700; }
     .totalrow td { padding-top: 13px; border-top: 2px solid var(--border); }
+
+    /* progress sub-rows */
+    .subrow td { color: var(--muted); font-size: 0.8rem; padding: 2px 8px 9px; border-bottom: 1px solid #EEF2F5; }
+    .subrow td:first-child { padding-left: 16px; font-weight: 500; }
+    .subrow .desc { text-align: left; }
+    .subrow .desc strong { color: var(--dark); font-weight: 700; }
+    .subrow .desc .flight-dot { color: var(--amber); }
 
     /* ── NOTES ── */
     .notes {
@@ -271,7 +279,9 @@
           </thead>
           <tbody>
             <tr class="row-team"><td>CUS</td><td>17</td><td>0</td><td class="pct-cell">0%</td></tr>
+            <tr class="subrow"><td>↳ in progress</td><td class="desc" colspan="3"><span class="flight-dot">●</span> <strong>1</strong> of 17 in Pending dev</td></tr>
             <tr class="row-team"><td>REP</td><td>6</td><td>1</td><td class="pct-cell">17%</td></tr>
+            <tr class="subrow"><td>↳ in review</td><td class="desc" colspan="3"><span class="flight-dot">●</span> <strong>4</strong> of 6 in In Review</td></tr>
             <tr class="totalrow"><td>Total</td><td>23</td><td>1</td><td class="pct-cell">4%</td></tr>
           </tbody>
         </table>
@@ -293,7 +303,9 @@
           </thead>
           <tbody>
             <tr class="row-team"><td>CUS</td><td>27</td><td>2</td><td class="pct-cell">7%</td></tr>
+            <tr class="subrow"><td>↳ in progress</td><td class="desc" colspan="3"><span class="flight-dot">●</span> <strong>1</strong> of 27 in Pending dev</td></tr>
             <tr class="row-team"><td>REP</td><td>12</td><td>1</td><td class="pct-cell">8%</td></tr>
+            <tr class="subrow"><td>↳ in review</td><td class="desc" colspan="3"><span class="flight-dot">●</span> <strong>7</strong> of 12 in In Review</td></tr>
             <tr class="totalrow"><td>Total</td><td>39</td><td>3</td><td class="pct-cell">8%</td></tr>
           </tbody>
         </table>
@@ -309,6 +321,7 @@
       <li><strong>1-week reads low by design</strong> — tickets opened in the last day or two physically haven't had time to close. The <strong>2-week view is the more meaningful one.</strong></li>
       <li><strong>"Completed" = status Done.</strong> REP work parked in <em>In Review</em> (e.g. REP-317/318/319) is <em>not</em> counted as completed.</li>
       <li><strong>Open tickets</strong> (top strip) = anything <em>not</em> Done, Canceled, or Duplicate — i.e. Triage, Backlog, Todo, In Progress, In Review, etc. — created by the team.</li>
+      <li><strong>In-flight sub-rows</strong> show near-done work that hasn't closed yet: REP tickets in <em>In Review</em>, and CUS tickets in <em>Pending development</em> (CUS has no "In Progress" status — Pending dev is its active/handed-to-eng stage). A leading indicator of completions about to land.</li>
       <li><strong>Qualifying tickets</strong> (created &amp; completed in-window):
         <div class="qualify">
           This week: <a class="tag" href="https://linear.app/treadapp/issue/REP-321" target="_blank" rel="noopener">REP-321</a><br/>
