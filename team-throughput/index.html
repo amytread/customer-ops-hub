@@ -162,6 +162,11 @@
       display: inline-block; font-family: ui-monospace, monospace;
       font-size: 0.74rem; background: #0A1820; color: #fff;
       padding: 2px 8px; border-radius: 6px; margin: 2px 4px 2px 0;
+      text-decoration: none; transition: background 0.15s, color 0.15s;
+    }
+    a.tag:hover {
+      background: linear-gradient(45deg, var(--amber), var(--yellow));
+      color: var(--dark);
     }
 
     /* ── FOOTER ── */
@@ -306,8 +311,8 @@
       <li><strong>Open tickets</strong> (top strip) = anything <em>not</em> Done, Canceled, or Duplicate — i.e. Triage, Backlog, Todo, In Progress, In Review, etc. — created by the team.</li>
       <li><strong>Qualifying tickets</strong> (created &amp; completed in-window):
         <div class="qualify">
-          This week: <span class="tag">REP-321</span><br/>
-          2-week: <span class="tag">REP-321</span><span class="tag">CUS-191</span><span class="tag">CUS-221</span>
+          This week: <a class="tag" href="https://linear.app/treadapp/issue/REP-321" target="_blank" rel="noopener">REP-321</a><br/>
+          2-week: <a class="tag" href="https://linear.app/treadapp/issue/REP-321" target="_blank" rel="noopener">REP-321</a><a class="tag" href="https://linear.app/treadapp/issue/CUS-191" target="_blank" rel="noopener">CUS-191</a><a class="tag" href="https://linear.app/treadapp/issue/CUS-221" target="_blank" rel="noopener">CUS-221</a>
         </div>
       </li>
     </ul>
