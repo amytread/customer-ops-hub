@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
-Render the Volume Pulse dashboard (customer-pulse/volume-pulse/index.html) from
+Render the Support Pulse dashboard (customer-pulse/support-pulse/index.html) from
 the three CSVs written by refresh_volume.py. Tread-branded, Chart.js, with a
-Daily / Weekly / Monthly toggle. No external data calls — pure CSV → HTML.
+Daily / Weekly / Monthly toggle. One idea per chart, built for at-a-glance reading.
+No external data calls — pure CSV → HTML.
 """
 import csv, datetime, json, os
 
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
-VOL_DIR = os.path.join(OUT_DIR, "volume-pulse")
+VOL_DIR = os.path.join(OUT_DIR, "support-pulse")
 TODAY = datetime.date.today().isoformat()
 
 TREAD_WORDMARK = '''<svg xmlns="http://www.w3.org/2000/svg" width="120" height="24" viewBox="0 0 150 30" fill="none">
@@ -58,21 +59,11 @@ def series(rows):
         out[c] = [num(r.get(c, "")) for r in rows]
     return out
 
-def kpi(rows):
-    if not rows:
-        return {}
-    last = rows[-1]
-    return {k: num(last.get(k, "")) for k in
-            ["ic_total", "ic_support_email", "ic_success_email", "ic_chat",
-             "lin_total_created", "grand_total", "metric_created_completed_1wk_pct"]}
-
 def main():
-    data = {g: series(load(f"volume_{g}.csv")) for g in ("daily", "weekly", "monthly")}
-    kpis = kpi(load("volume_weekly.csv")) or kpi(load("volume_daily.csv"))
-    html = TEMPLATE.replace("/*DATA*/", json.dumps(data)) \
-                   .replace("/*KPI*/", json.dumps(kpis)) \
-                   .replace("__WORDMARK__", TREAD_WORDMARK) \
-                   .replace("__DATE__", TODAY)
+    data = {g: series(load(f"support_{g}.csv")) for g in ("daily", "weekly", "monthly")}
+    html = (TEMPLATE.replace("/*DATA*/", json.dumps(data))
+                    .replace("__WORDMARK__", TREAD_WORDMARK)
+                    .replace("__DATE__", TODAY))
     os.makedirs(VOL_DIR, exist_ok=True)
     with open(os.path.join(VOL_DIR, "index.html"), "w") as f:
         f.write(html)
@@ -81,11 +72,11 @@ def main():
 TEMPLATE = r"""<!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Volume Pulse · Tread Customer Ops</title>
+<title>Support Pulse · Tread Customer Ops</title>
 <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-:root{--dark:#132732;--dark2:#0E1F2A;--panel:#17303D;--line:#23414F;--ink:#EAF2F6;--mut:#8FA8B4;--yellow:#FFE500;--amber:#FFAA13;--chat:#58C7C2;--cus:#9B8CFF;--rep:#4DA3FF;}
+:root{--dark:#132732;--dark2:#0E1F2A;--panel:#17303D;--line:#23414F;--ink:#EAF2F6;--mut:#8FA8B4;--yellow:#FFE500;--amber:#FFAA13;--chat:#58C7C2;--cus:#9B8CFF;--rep:#4DA3FF;--red:#FF6B6B;--green:#4ADE80;}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Golos Text',system-ui,sans-serif;background:var(--dark2);color:var(--ink)}
 nav{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:var(--dark);border-bottom:1px solid var(--line)}
@@ -94,113 +85,160 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 2
 .nav-title{font-size:.85rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
 .nav-back{color:var(--mut);text-decoration:none;font-size:.85rem;font-weight:600}
 .nav-back:hover{color:var(--ink)}
-.hero{padding:34px 28px 8px;max-width:1180px;margin:0 auto}
+.hero{padding:32px 28px 4px;max-width:1180px;margin:0 auto}
 .hero h1{font-size:1.9rem;font-weight:800;display:flex;align-items:center;gap:12px}
 .hero h1 .dot{width:11px;height:11px;border-radius:50%;background:var(--yellow);box-shadow:0 0 12px var(--yellow)}
-.hero p{color:var(--mut);max-width:760px;margin-top:8px;font-size:.95rem;line-height:1.5}
-.wrap{max-width:1180px;margin:0 auto;padding:18px 28px 60px}
-.toggle{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:4px;margin:18px 0 22px}
+.hero p{color:var(--mut);max-width:780px;margin-top:8px;font-size:.95rem;line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding:14px 28px 60px}
+.bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:16px 0 20px}
+.toggle{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:4px}
 .toggle button{font-family:inherit;font-weight:700;font-size:.82rem;color:var(--mut);background:none;border:none;padding:8px 18px;border-radius:7px;cursor:pointer}
 .toggle button.on{background:var(--yellow);color:#10222C}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:8px}
+.asof{font-size:.76rem;color:var(--mut)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
 .kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
-.kpi .l{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin-bottom:6px}
-.kpi .v{font-size:1.9rem;font-weight:800;line-height:1}
-.kpi .s{font-size:.74rem;color:var(--mut);margin-top:5px}
+.kpi .l{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin-bottom:8px}
+.kpi .v{font-size:2rem;font-weight:800;line-height:1}
 .kpi .v.y{color:var(--yellow)}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px}
+.kpi .d{font-size:.76rem;margin-top:7px;font-weight:600}
+.kpi .d.up{color:var(--green)}.kpi .d.down{color:var(--red)}.kpi .d.flat{color:var(--mut)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:20px 20px 14px}
 .card.full{grid-column:1/-1}
-.card h2{font-size:.95rem;font-weight:700;margin-bottom:2px}
-.card .meta{font-size:.78rem;color:var(--mut);margin-bottom:14px}
-canvas{max-height:300px}
-.note{font-size:.78rem;color:var(--mut);margin-top:10px;border-left:2px solid var(--amber);padding-left:10px}
+.card h2{font-size:1rem;font-weight:700;margin-bottom:2px}
+.card .meta{font-size:.78rem;color:var(--mut);margin-bottom:16px}
+.card .wrapc{position:relative;height:300px}
+.card.sm .wrapc{height:230px}
+.note{font-size:.76rem;color:var(--mut);margin-top:12px;border-left:2px solid var(--amber);padding-left:10px}
 .dl{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
-.dl a{font-size:.78rem;font-weight:700;color:#10222C;background:var(--yellow);padding:8px 14px;border-radius:8px;text-decoration:none}
+.dl a{font-size:.78rem;font-weight:700;color:#10222C;background:var(--yellow);padding:9px 15px;border-radius:8px;text-decoration:none}
 .dl a.alt{background:transparent;color:var(--mut);border:1px solid var(--line)}
-.foot{color:var(--mut);font-size:.76rem;margin-top:30px;border-top:1px solid var(--line);padding-top:16px;line-height:1.6}
+.foot{color:var(--mut);font-size:.76rem;margin-top:28px;border-top:1px solid var(--line);padding-top:16px;line-height:1.6}
 @media(max-width:860px){.grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,1fr)}}
 </style></head><body>
 <nav>
-  <a class="nav-logo" href="../">__WORDMARK__<div class="nav-divider"></div><span class="nav-title">Volume Pulse</span></a>
+  <a class="nav-logo" href="../">__WORDMARK__<div class="nav-divider"></div><span class="nav-title">Support Pulse</span></a>
   <a class="nav-back" href="../">← Hub</a>
 </nav>
 <div class="hero">
-  <h1><span class="dot"></span>Customer Ops Volume Pulse</h1>
+  <h1><span class="dot"></span>Support Pulse</h1>
   <p>The source of truth for support volume trends — Intercom (success@, support@, chat) and Linear (CUS &amp; REP issues), tracked daily, weekly, and monthly. Refreshed every morning.</p>
 </div>
 <div class="wrap">
-  <div class="toggle" id="tg">
-    <button data-g="daily">Daily</button>
-    <button data-g="weekly" class="on">Weekly</button>
-    <button data-g="monthly">Monthly</button>
+  <div class="bar">
+    <div class="toggle" id="tg">
+      <button data-g="daily">Daily</button>
+      <button data-g="weekly" class="on">Weekly</button>
+      <button data-g="monthly">Monthly</button>
+    </div>
+    <div class="asof" id="asof"></div>
   </div>
   <div class="kpis" id="kpis"></div>
+
   <div class="grid">
-    <div class="card full"><h2>Volume by channel</h2><div class="meta">Intercom success@ · support@ · chat, stacked, with Linear issues created</div><canvas id="cVol"></canvas></div>
-    <div class="card"><h2>Linear issues created — CUS vs REP</h2><div class="meta">with P0 / P1 priority overlay</div><canvas id="cLin"></canvas></div>
-    <div class="card"><h2>1 Metric — same-window completion</h2><div class="meta">% of CUS+REP issues created &amp; completed within 7 days</div><canvas id="cMetric"></canvas>
-      <div class="note">The most recent period is partial — issues created in the last 7 days may not have had time to complete, so the rate is understated until the window closes.</div></div>
-    <div class="card full"><h2>Intercom response &amp; handle time</h2><div class="meta">avg first admin reply (min) · avg time to resolution (hrs)</div><canvas id="cTime"></canvas></div>
+    <div class="card full">
+      <h2>Support volume by channel</h2><div class="meta">Inbound conversations — success@ · support@ · chat, stacked</div>
+      <div class="wrapc"><canvas id="cVol"></canvas></div>
+    </div>
+
+    <div class="card full">
+      <h2>The 1 Metric — same-window completion</h2><div class="meta">% of CUS+REP issues created &amp; completed within 7 days</div>
+      <div class="wrapc"><canvas id="cMetric"></canvas></div>
+      <div class="note">The most recent period is partial — issues created in the last 7 days may not have had time to complete, so the rate reads low until the window closes.</div>
+    </div>
+
+    <div class="card sm"><h2>Linear issues created</h2><div class="meta">CUS vs REP</div><div class="wrapc"><canvas id="cLin"></canvas></div></div>
+    <div class="card sm"><h2>Priority pressure — P0 &amp; P1</h2><div class="meta">CUS + REP issues labeled P0 / P1</div><div class="wrapc"><canvas id="cPrio"></canvas></div></div>
+
+    <div class="card sm"><h2>Avg first response</h2><div class="meta">Intercom — minutes to first admin reply</div><div class="wrapc"><canvas id="cResp"></canvas></div></div>
+    <div class="card sm"><h2>Avg resolution time</h2><div class="meta">Intercom — hours to close</div><div class="wrapc"><canvas id="cRes"></canvas></div></div>
   </div>
+
   <div class="dl">
-    <a href="volume_daily.csv" download>↓ Daily CSV</a>
-    <a href="volume_weekly.csv" download>↓ Weekly CSV</a>
-    <a href="volume_monthly.csv" download>↓ Monthly CSV</a>
+    <a href="support_pulse.xlsx" download>↓ Support Pulse workbook (.xlsx — Daily · Weekly · Monthly tabs)</a>
     <a class="alt" href="../team-throughput/">Team Throughput →</a>
   </div>
   <div class="foot">
-    Sources: Intercom Conversations API (channel = source type; success@ via the “Success@ Email” tag) · Linear GraphQL (CUS &amp; REP, P0/P1 via the Customer Prioritization label group). <br>
-    <strong>support_marco_escalations</strong> is a manual column (prod/eng escalations, found via Slack) — preserved across refreshes and editable directly in the CSV. Phone (Quo) is not yet included. Last refreshed __DATE__.
+    Sources: Intercom Conversations API (channel = source type; success@ via the “Success@ Email” tag) · Linear GraphQL (CUS &amp; REP; P0/P1 via the Customer Prioritization label group). <br>
+    <strong>Marco prod/eng escalations</strong> is a manual column (found via Slack) — type counts into the workbook (e.g. the Weekly tab); the daily refresh reads them back and never overwrites them. Phone (Quo) is not yet included. Last refreshed __DATE__.
   </div>
 </div>
 <script>
-const DATA=/*DATA*/, KPI=/*KPI*/;
-const C={ink:'#EAF2F6',mut:'#8FA8B4',grid:'#23414F',yellow:'#FFE500',amber:'#FFAA13',chat:'#58C7C2',cus:'#9B8CFF',rep:'#4DA3FF'};
-Chart.defaults.color=C.mut;Chart.defaults.borderColor=C.grid;Chart.defaults.font.family="'Golos Text',sans-serif";
+const DATA=/*DATA*/;
+const C={ink:'#EAF2F6',mut:'#8FA8B4',grid:'rgba(143,168,180,.14)',yellow:'#FFE500',amber:'#FFAA13',chat:'#58C7C2',cus:'#9B8CFF',rep:'#4DA3FF',red:'#FF6B6B',green:'#4ADE80'};
+Chart.defaults.color=C.mut;Chart.defaults.borderColor=C.grid;Chart.defaults.font.family="'Golos Text',sans-serif";Chart.defaults.font.size=11;
+Chart.defaults.plugins.legend.labels.boxWidth=10;Chart.defaults.plugins.legend.labels.usePointStyle=true;Chart.defaults.plugins.legend.position='bottom';
 let g='weekly',charts={};
-function ds(label,key,color,extra){return Object.assign({label,data:DATA[g][key],borderColor:color,backgroundColor:color},extra||{});}
-function mkKpis(){
-  const k=KPI||{};
-  const items=[
-    ['Intercom total','ic_total',k.ic_total,'support+success+chat'],
-    ['support@','ic_support_email',k.ic_support_email,'latest period'],
-    ['Linear created','lin_total_created',k.lin_total_created,'CUS + REP'],
-    ['1 Metric','metric_created_completed_1wk_pct',(k.metric_created_completed_1wk_pct==null?'—':k.metric_created_completed_1wk_pct+'%'),'same-window completion',true],
-  ];
-  document.getElementById('kpis').innerHTML=items.map(i=>
-    `<div class="kpi"><div class="l">${i[0]}</div><div class="v ${i[4]?'y':''}">${i[2]==null?'—':i[2]}</div><div class="s">${i[3]}</div></div>`).join('');
+const X={grid:{display:false},ticks:{maxRotation:0,autoSkip:true,maxTicksLimit:9}};
+const Y=(opts={})=>Object.assign({beginAtZero:true,grid:{color:C.grid,drawTicks:false},border:{display:false}},opts);
+const last=a=>{for(let i=a.length-1;i>=0;i--)if(a[i]!=null)return a[i];return null;};
+const prev=a=>{let seen=0;for(let i=a.length-1;i>=0;i--){if(a[i]!=null){seen++;if(seen===2)return a[i];}}return null;};
+
+function fmtDelta(cur,prv,opts){
+  if(cur==null||prv==null)return {cls:'flat',txt:'—'};
+  const d=cur-prv, pts=opts&&opts.pts;
+  const good = opts&&opts.higherBetter ? d>0 : null;
+  const cls = d===0?'flat':(good===null?'flat':(good?'up':'down'));
+  const arrow = d>0?'▲':(d<0?'▼':'■');
+  const val = pts ? Math.abs(d).toFixed(1)+' pts' : (Math.abs(d)%1?Math.abs(d).toFixed(1):Math.abs(d));
+  return {cls, txt:`${arrow} ${val} vs prior`};
 }
+function mkKpis(){
+  const d=DATA[g];
+  const defs=[
+    {l:'Support volume',key:'ic_total',sub:'success+support+chat'},
+    {l:'support@ inbound',key:'ic_support_email'},
+    {l:'Linear created',key:'lin_total_created',sub:'CUS + REP'},
+    {l:'1 Metric',key:'metric_created_completed_1wk_pct',pct:true,pts:true,higherBetter:true},
+  ];
+  document.getElementById('kpis').innerHTML=defs.map(o=>{
+    const cur=last(d[o.key]), prv=prev(d[o.key]);
+    const dd=fmtDelta(cur,prv,{pts:o.pts,higherBetter:o.higherBetter});
+    const v = cur==null?'—':(o.pct?cur+'%':cur);
+    return `<div class="kpi"><div class="l">${o.l}</div><div class="v ${o.pct?'y':''}">${v}</div><div class="d ${dd.cls}">${dd.txt}</div></div>`;
+  }).join('');
+  document.getElementById('asof').textContent = d.labels.length? `Latest: ${d.labels[d.labels.length-1]}` : '';
+}
+function area(key,color){return {data:DATA[g][key],borderColor:color,backgroundColor:color+'33',fill:true,stack:'s',tension:.35,borderWidth:2,pointRadius:0,pointHoverRadius:4};}
+function line(key,color,fill){return {data:DATA[g][key],borderColor:color,backgroundColor:fill?color+'22':color,fill:!!fill,tension:.35,borderWidth:2.5,pointRadius:0,pointHoverRadius:4};}
+function sum2(a,b){return DATA[g][a].map((v,i)=>(v||0)+(DATA[g][b][i]||0));}
+
 function draw(){
   Object.values(charts).forEach(c=>c.destroy());charts={};
   const L=DATA[g].labels;
-  const stack={stacked:true};
-  charts.v=new Chart(cVol,{type:'bar',data:{labels:L,datasets:[
-    ds('success@','ic_success_email',C.yellow,{stack:'ic'}),
-    ds('support@','ic_support_email',C.amber,{stack:'ic'}),
-    ds('chat','ic_chat',C.chat,{stack:'ic'}),
-    ds('Linear created','lin_total_created',C.rep,{stack:'lin',type:'line',fill:false,tension:.3,borderWidth:2,pointRadius:2}),
-  ]},options:{responsive:true,scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true}},plugins:{legend:{labels:{boxWidth:12}}}}});
-  charts.l=new Chart(cLin,{type:'bar',data:{labels:L,datasets:[
-    ds('CUS created','lin_cus_created',C.cus),ds('REP created','lin_rep_created',C.rep),
-    ds('P0','lin_cus_p0','#FF5C5C',{type:'line',borderWidth:0,pointRadius:0,hidden:false,stack:undefined}),
-  ].slice(0,2).concat([
-    {label:'P0 (CUS+REP)',data:L.map((_,i)=>(DATA[g].lin_cus_p0[i]||0)+(DATA[g].lin_rep_p0[i]||0)),type:'line',borderColor:'#FF5C5C',backgroundColor:'#FF5C5C',tension:.3,borderWidth:2,pointRadius:2},
-    {label:'P1 (CUS+REP)',data:L.map((_,i)=>(DATA[g].lin_cus_p1[i]||0)+(DATA[g].lin_rep_p1[i]||0)),type:'line',borderColor:C.amber,backgroundColor:C.amber,tension:.3,borderWidth:2,pointRadius:2},
-  ])},options:{responsive:true,scales:{x:{grid:{display:false}},y:{beginAtZero:true}},plugins:{legend:{labels:{boxWidth:12}}}}});
+  charts.v=new Chart(cVol,{type:'line',data:{labels:L,datasets:[
+    Object.assign({label:'success@'},area('ic_success_email',C.yellow)),
+    Object.assign({label:'support@'},area('ic_support_email',C.amber)),
+    Object.assign({label:'chat'},area('ic_chat',C.chat)),
+  ]},options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},scales:{x:X,y:Y({stacked:true})}}});
+
   charts.m=new Chart(cMetric,{type:'line',data:{labels:L,datasets:[
-    ds('% created & completed ≤7d','metric_created_completed_1wk_pct',C.yellow,{tension:.3,fill:true,backgroundColor:'rgba(255,229,0,.08)',borderWidth:2,pointRadius:2})
-  ]},options:{responsive:true,scales:{x:{grid:{display:false}},y:{beginAtZero:true,max:100,ticks:{callback:v=>v+'%'}}},plugins:{legend:{display:false}}}});
-  charts.t=new Chart(cTime,{data:{labels:L,datasets:[
-    ds('avg first reply (min)','ic_avg_first_response_min',C.chat,{type:'line',tension:.3,borderWidth:2,pointRadius:2,yAxisID:'y'}),
-    ds('avg resolution (hrs)','ic_avg_resolution_hr',C.amber,{type:'line',tension:.3,borderWidth:2,pointRadius:2,yAxisID:'y1'}),
-  ]},options:{responsive:true,scales:{x:{grid:{display:false}},y:{position:'left',beginAtZero:true,title:{display:true,text:'min'}},y1:{position:'right',beginAtZero:true,grid:{drawOnChartArea:false},title:{display:true,text:'hrs'}}},plugins:{legend:{labels:{boxWidth:12}}}}});
+    Object.assign({label:'% created & completed ≤7d'},line('metric_created_completed_1wk_pct',C.yellow,true)),
+  ]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:X,y:Y({max:100,ticks:{callback:v=>v+'%'}})}}});
+
+  charts.l=new Chart(cLin,{type:'bar',data:{labels:L,datasets:[
+    {label:'CUS',data:DATA[g].lin_cus_created,backgroundColor:C.cus,borderRadius:4,maxBarThickness:22},
+    {label:'REP',data:DATA[g].lin_rep_created,backgroundColor:C.rep,borderRadius:4,maxBarThickness:22},
+  ]},options:{maintainAspectRatio:false,scales:{x:X,y:Y()}}});
+
+  charts.p=new Chart(cPrio,{type:'bar',data:{labels:L,datasets:[
+    {label:'P0',data:sum2('lin_cus_p0','lin_rep_p0'),backgroundColor:C.red,borderRadius:4,maxBarThickness:22},
+    {label:'P1',data:sum2('lin_cus_p1','lin_rep_p1'),backgroundColor:C.amber,borderRadius:4,maxBarThickness:22},
+  ]},options:{maintainAspectRatio:false,scales:{x:X,y:Y({ticks:{precision:0}})}}});
+
+  charts.r=new Chart(cResp,{type:'line',data:{labels:L,datasets:[
+    Object.assign({label:'min'},line('ic_avg_first_response_min',C.chat,true)),
+  ]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:X,y:Y()}}});
+
+  charts.x=new Chart(cRes,{type:'line',data:{labels:L,datasets:[
+    Object.assign({label:'hrs'},line('ic_avg_resolution_hr',C.amber,true)),
+  ]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:X,y:Y()}}});
 }
 document.getElementById('tg').addEventListener('click',e=>{
   if(!e.target.dataset.g)return;
   g=e.target.dataset.g;
   [...tg.children].forEach(b=>b.classList.toggle('on',b.dataset.g===g));
-  draw();
+  mkKpis();draw();
 });
 mkKpis();draw();
 </script>

@@ -3,7 +3,7 @@
 Customer Ops Volume — source-of-truth refresh.
 
 Pulls support volume across channels and writes three CSVs (the spreadsheet)
-plus regenerates the Volume Pulse dashboard, then commits + pushes.
+plus regenerates the Support Pulse dashboard, then commits + pushes.
 
 Channels / metrics:
   Intercom  — success@ email, support@ email, chat  (+ avg first-response & resolution time)
@@ -18,14 +18,14 @@ Usage:
   python3 refresh_volume.py --backfill 90   # rebuild daily history from scratch (last 90d)
   python3 refresh_volume.py --no-deploy     # skip dashboard regen + git push
 
-Writes (under volume-pulse/):
-  volume_daily.csv  volume_weekly.csv  volume_monthly.csv
+Writes (under support-pulse/):
+  support_daily.csv  support_weekly.csv  support_monthly.csv
 """
 
 import argparse, csv, datetime, json, os, subprocess, sys, time, urllib.request, urllib.error
 
 REPO_DIR = os.path.dirname(os.path.abspath(__file__))
-OUT_DIR  = os.path.join(REPO_DIR, "volume-pulse")
+OUT_DIR  = os.path.join(REPO_DIR, "support-pulse")
 GEN_SCRIPT = os.path.join(REPO_DIR, "generate_volume.py")
 TODAY = datetime.date.today()
 
@@ -63,6 +63,23 @@ HELPER_COLS = ["_ic_resp_sum_sec", "_ic_resp_n", "_ic_res_sum_sec", "_ic_res_n",
 MANUAL_COLS = ["support_marco_escalations"]   # never overwritten by the refresh
 HEADER = (["period_label", "period_start", "period_end"]
           + FETCH_COLS[:4] + MANUAL_COLS + FETCH_COLS[4:] + HELPER_COLS)
+
+# The single workbook is the human deliverable: clean columns only (no "_" helpers).
+XLSX_PATH = os.path.join(OUT_DIR, "support_pulse.xlsx")
+CLEAN_COLS = [c for c in HEADER if not c.startswith("_")]
+PRETTY = {
+    "period_label": "Period", "period_start": "Start", "period_end": "End",
+    "ic_success_email": "IC success@", "ic_support_email": "IC support@",
+    "ic_chat": "IC chat", "ic_total": "IC total",
+    "support_marco_escalations": "Marco prod/eng escalations (manual)",
+    "lin_cus_created": "CUS created", "lin_cus_p0": "CUS P0", "lin_cus_p1": "CUS P1",
+    "lin_rep_created": "REP created", "lin_rep_p0": "REP P0", "lin_rep_p1": "REP P1",
+    "lin_total_created": "Linear total", "grand_total": "Grand total",
+    "metric_created_completed_1wk_pct": "1 Metric: created+completed ≤7d (%)",
+    "ic_avg_first_response_min": "Avg 1st response (min)",
+    "ic_avg_resolution_hr": "Avg resolution (hrs)",
+}
+SHEETS = [("Daily", "support_daily.csv"), ("Weekly", "support_weekly.csv"), ("Monthly", "support_monthly.csv")]
 
 # ── http helpers ──────────────────────────────────────────────────────────────
 def http_post(url, headers, body, _retries=2):
@@ -221,6 +238,78 @@ def write_csv(path, rows):
         for r in rows:
             w.writerow({k: r.get(k, "") for k in HEADER})
 
+def read_xlsx_manual():
+    """Manual columns are edited in the workbook — read them back so edits persist.
+    Returns {sheet_name: {period_label: {manual_col: value}}}. Empty if no workbook yet."""
+    out = {name: {} for name, _ in SHEETS}
+    if not os.path.exists(XLSX_PATH):
+        return out
+    import openpyxl
+    wb = openpyxl.load_workbook(XLSX_PATH, read_only=True, data_only=True)
+    for name, _ in SHEETS:
+        if name not in wb.sheetnames:
+            continue
+        ws = wb[name]
+        rows = ws.iter_rows(values_only=True)
+        try:
+            hdr = list(next(rows))
+        except StopIteration:
+            continue
+        idx = {h: i for i, h in enumerate(hdr)}
+        if "Period" not in idx:
+            continue
+        for r in rows:
+            label = r[idx["Period"]]
+            if label is None:
+                continue
+            rec = {}
+            for mc in MANUAL_COLS:
+                pi = idx.get(PRETTY[mc])
+                if pi is not None and r[pi] not in (None, ""):
+                    rec[mc] = r[pi]
+            if rec:
+                out[name][str(label)] = rec
+    wb.close()
+    return out
+
+def write_xlsx():
+    """Write the single deliverable workbook with Daily / Weekly / Monthly tabs (clean columns)."""
+    import openpyxl
+    from openpyxl.styles import Font, PatternFill, Alignment
+    wb = openpyxl.Workbook(); wb.remove(wb.active)
+    head_fill = PatternFill("solid", fgColor="132732")
+    head_font = Font(bold=True, color="FFE500")
+    for name, csv_name in SHEETS:
+        ws = wb.create_sheet(name)
+        ws.append([PRETTY[c] for c in CLEAN_COLS])
+        for cell in ws[1]:
+            cell.fill = head_fill; cell.font = head_font
+            cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+        for r in read_csv_list(os.path.join(OUT_DIR, csv_name)):
+            ws.append([_xnum(r.get(c, "")) for c in CLEAN_COLS])
+        ws.freeze_panes = "B2"
+        for i, c in enumerate(CLEAN_COLS, 1):
+            ws.column_dimensions[openpyxl.utils.get_column_letter(i)].width = \
+                12 if c.startswith(("ic_", "lin_", "grand", "metric", "period_s", "period_e")) else \
+                (22 if c in ("support_marco_escalations", "metric_created_completed_1wk_pct") else 14)
+        ws.auto_filter.ref = f"A1:{openpyxl.utils.get_column_letter(len(CLEAN_COLS))}1"
+    wb.save(XLSX_PATH)
+    print(f"  → {XLSX_PATH} ({len(SHEETS)} tabs)")
+
+def _xnum(v):
+    if v in (None, ""):
+        return None
+    try:
+        f = float(v); return int(f) if f == int(f) else f
+    except (ValueError, TypeError):
+        return v
+
+def read_csv_list(path):
+    if not os.path.exists(path):
+        return []
+    with open(path, newline="") as f:
+        return list(csv.DictReader(f))
+
 def build_daily_rows(by_day, existing):
     rows = []
     for d in sorted(by_day):
@@ -283,15 +372,27 @@ def main():
     args = ap.parse_args()
 
     os.makedirs(OUT_DIR, exist_ok=True)
-    daily_path = os.path.join(OUT_DIR, "volume_daily.csv")
+    daily_path = os.path.join(OUT_DIR, "support_daily.csv")
     existing = read_csv(daily_path)
+
+    # Manual columns are edited in the workbook — read them back (xlsx wins over CSV).
+    xman = read_xlsx_manual()
+    def manual_for(sheet, csv_rows):
+        out = {}
+        for label, row in csv_rows.items():
+            rec = {mc: row.get(mc, "") for mc in MANUAL_COLS if row.get(mc, "") not in (None, "")}
+            if rec:
+                out[label] = rec
+        out.update(xman.get(sheet, {}))
+        return out
+    man_daily = manual_for("Daily", existing)
 
     window = args.backfill if args.backfill else 10   # incremental refreshes a rolling 10d
     print(f"Fetching {'backfill ' if args.backfill else 'incremental '}{window}d…")
     by_day = {}
     fetch_intercom(window, by_day)
     fetch_linear(window, by_day)
-    fresh = build_daily_rows(by_day, existing)
+    fresh = build_daily_rows(by_day, man_daily)
 
     if args.backfill:
         merged = {r["period_label"]: r for r in fresh}              # full rebuild of window
@@ -305,14 +406,16 @@ def main():
     write_csv(daily_path, daily_rows)
     print(f"  → {daily_path} ({len(daily_rows)} days)")
 
-    # rollups (preserve any manual values already in the weekly/monthly files)
-    wk_existing = read_csv(os.path.join(OUT_DIR, "volume_weekly.csv"))
-    mo_existing = read_csv(os.path.join(OUT_DIR, "volume_monthly.csv"))
-    weekly  = _agg(daily_rows, iso_week_key, iso_week_label, iso_week_span, wk_existing)
-    monthly = _agg(daily_rows, month_key, month_label, month_span, mo_existing)
-    write_csv(os.path.join(OUT_DIR, "volume_weekly.csv"), weekly)
-    write_csv(os.path.join(OUT_DIR, "volume_monthly.csv"), monthly)
-    print(f"  → volume_weekly.csv ({len(weekly)} weeks), volume_monthly.csv ({len(monthly)} months)")
+    # rollups (preserve manual values — workbook edits win, CSV as fallback)
+    man_weekly  = manual_for("Weekly",  read_csv(os.path.join(OUT_DIR, "support_weekly.csv")))
+    man_monthly = manual_for("Monthly", read_csv(os.path.join(OUT_DIR, "support_monthly.csv")))
+    weekly  = _agg(daily_rows, iso_week_key, iso_week_label, iso_week_span, man_weekly)
+    monthly = _agg(daily_rows, month_key, month_label, month_span, man_monthly)
+    write_csv(os.path.join(OUT_DIR, "support_weekly.csv"), weekly)
+    write_csv(os.path.join(OUT_DIR, "support_monthly.csv"), monthly)
+    print(f"  → support_weekly.csv ({len(weekly)} weeks), support_monthly.csv ({len(monthly)} months)")
+
+    write_xlsx()   # single deliverable workbook (3 tabs)
 
     if args.deploy:
         deploy()
@@ -325,11 +428,11 @@ def deploy():
             print("  dashboard ERROR:", r.stderr[-500:]); sys.exit(1)
         print(" ", (r.stdout or "").strip())
     print("Committing + pushing…")
-    subprocess.run(["git", "-C", REPO_DIR, "add", "volume-pulse", "index.html"], check=True)
+    subprocess.run(["git", "-C", REPO_DIR, "add", "support-pulse", "index.html"], check=True)
     diff = subprocess.run(["git", "-C", REPO_DIR, "diff", "--staged", "--quiet"])
     if diff.returncode == 0:
         print("  no changes to push."); return
-    subprocess.run(["git", "-C", REPO_DIR, "commit", "-m", f"Volume Pulse refresh {TODAY.isoformat()}"], check=True)
+    subprocess.run(["git", "-C", REPO_DIR, "commit", "-m", f"Support Pulse refresh {TODAY.isoformat()}"], check=True)
     subprocess.run(["git", "-C", REPO_DIR, "push"], check=True)
     print("  pushed — GitHub Pages updates in ~30s")
 
