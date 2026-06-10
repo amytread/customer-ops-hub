@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Recommendation — Customer Roadmap Portal</title>
+<style>
+  :root {
+    --dark: #132732; --dark-2: #1c3441; --yellow: #FFE500;
+    --bg: #f4f5f7; --surface: #fff; --border: #e4e7eb; --border-2: #eceff2;
+    --text: #25323c; --strong: #0f1b24; --muted: #6b7785;
+    --green: #15a05a; --blue: #2f6fed; --red: #c0392b; --amber: #d68a00; --purple: #7c5cd6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; font-size: 14.5px; -webkit-font-smoothing: antialiased; padding: 0 0 60px; }
+  .sheet { max-width: 840px; margin: 0 auto; background: var(--surface); box-shadow: 0 12px 40px rgba(16,27,36,.12); }
+
+  /* Header band */
+  .hdr { background: var(--dark); color: #fff; padding: 26px 40px 28px; }
+  .hdr-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .hdr-top img { height: 22px; }
+  .hdr-top .tag { font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: #9fb2bd; border: 1px solid rgba(255,255,255,.18); padding: 5px 11px; border-radius: 999px; }
+  .hdr h1 { font-size: 25px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.2; }
+  .hdr h1 .y { color: var(--yellow); }
+  .hdr .meta { color: #9fb2bd; font-size: 12.5px; margin-top: 8px; }
+
+  .body { padding: 30px 40px; }
+  .section { margin-bottom: 26px; }
+  .section h2 { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--amber); font-weight: 700; margin-bottom: 10px; }
+  p { margin-bottom: 10px; }
+  b { color: var(--strong); }
+
+  .rec-card { background: var(--dark); color: #fff; border-radius: 14px; padding: 22px 24px; display: flex; align-items: center; gap: 22px; }
+  .rec-card .badge { background: var(--yellow); color: var(--dark); font-weight: 800; font-size: 12px; letter-spacing: .06em; padding: 7px 13px; border-radius: 999px; text-transform: uppercase; white-space: nowrap; }
+  .rec-card .rc-body .t { font-size: 20px; font-weight: 700; }
+  .rec-card .rc-body .d { color: #b9c7d0; font-size: 13.5px; margin-top: 3px; }
+
+  ul.clean { list-style: none; }
+  ul.clean li { padding: 7px 0 7px 26px; position: relative; border-bottom: 1px solid var(--border-2); }
+  ul.clean li:last-child { border-bottom: none; }
+  ul.clean li::before { content: "✓"; position: absolute; left: 0; top: 7px; color: var(--green); font-weight: 800; }
+  ul.clean li b { color: var(--strong); }
+
+  .callout { border-radius: 12px; padding: 16px 18px; margin-top: 4px; }
+  .callout.yellow { background: rgba(255,229,0,.13); border: 1px solid rgba(214,138,0,.32); }
+  .callout.gray { background: var(--bg); border: 1px solid var(--border); }
+  .callout .ct { font-weight: 700; color: var(--strong); margin-bottom: 5px; display: flex; align-items: center; gap: 7px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 6px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--border-2); }
+  th { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; font-weight: 700; }
+  td b { color: var(--strong); }
+  .win { background: rgba(21,160,90,.06); }
+  .chk { color: var(--green); font-weight: 700; } .warn { color: var(--amber); font-weight: 700; } .no { color: var(--muted); }
+
+  .price-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .price-box { flex: 1; min-width: 150px; background: var(--bg); border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .price-box .pv { font-size: 22px; font-weight: 800; color: var(--strong); }
+  .price-box .pk { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+  .flags li { padding: 6px 0 6px 24px; position: relative; }
+  .flags li::before { content: "▸"; position: absolute; left: 4px; color: var(--amber); }
+
+  .mockup-link { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: var(--dark-2); color: #fff; border-radius: 12px; padding: 16px 20px; text-decoration: none; }
+  .mockup-link .ml-t { font-weight: 700; font-size: 15px; }
+  .mockup-link .ml-d { color: #9fb2bd; font-size: 12.5px; margin-top: 2px; }
+  .mockup-link .ml-btn { background: var(--yellow); color: var(--dark); font-weight: 700; font-size: 13px; padding: 9px 15px; border-radius: 8px; white-space: nowrap; }
+
+  .foot { padding: 18px 40px 30px; color: var(--muted); font-size: 11.5px; border-top: 1px solid var(--border-2); }
+  .foot b { color: var(--text); }
+</style>
+</head>
+<body>
+<div class="sheet">
+  <div class="hdr">
+    <div class="hdr-top">
+      <img src="https://cdn.tread.io/tread-horizontal-white.svg" alt="Tread" />
+      <span class="tag">Internal Recommendation</span>
+    </div>
+    <h1>Giving customers visibility into <span class="y">product requests</span></h1>
+    <div class="meta">Prepared by Customer Ops · June 2026 · for leadership review</div>
+  </div>
+
+  <div class="body">
+
+    <div class="section">
+      <h2>The situation</h2>
+      <p>We already capture every customer request from Intercom into Linear — the integration is live, requests are aggregated, and Linear stays our system of record. <b>What's missing is the customer-facing window:</b> today customers can't see what we've logged, vote on what matters to them, or watch it ship. This recommends how to close that gap.</p>
+    </div>
+
+    <div class="section">
+      <h2>Recommendation</h2>
+      <div class="rec-card">
+        <span class="badge">Go with</span>
+        <div class="rc-body">
+          <div class="t">Featurebase — a customer-facing roadmap &amp; voting portal, embedded in Tread</div>
+          <div class="d">Sits on top of Linear (doesn't replace it) · customers log in via Tread (no second password) · ~$59/mo to start</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Why Featurebase, all things considered</h2>
+      <ul class="clean">
+        <li><b>Fits our stack instead of fighting it.</b> Integrates cleanly with both <b>Intercom</b> (which we're keeping) and <b>Linear</b> (our source of truth). The closest competitor, Productlane, is its own support inbox and leans toward replacing Intercom.</li>
+        <li><b>Pricing scales the right way.</b> We pay per <b>admin seat</b> (the person who triages) — <b>customers are unlimited and free.</b> Canny charges per customer ("tracked users"), so a successful board gets more expensive the more it's used.</li>
+        <li><b>Everything we want is on one tier.</b> SSO login, voting, and segmented roadmaps all live on the Professional plan — no jump to enterprise.</li>
+        <li><b>Linear stays the system of record.</b> Votes and requests sync back to the Linear issues we already have. It's a window, not a second database.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>The real prize: voting tied to real accounts</h2>
+      <p>Because customers log in as their real Tread account, votes aren't anonymous. We don't just see <i>"47 votes for QuickBooks export"</i> — we see <b>which accounts, weighted by value</b>. That turns the roadmap from guesswork into demand data we can prioritize by ARR. It also cuts duplicate support tickets (customers vote instead of re-asking) and closes the loop automatically when something ships.</p>
+    </div>
+
+    <div class="section">
+      <h2>Bonus: a roadmap tailored to each customer</h2>
+      <div class="callout yellow">
+        <div class="ct">🏢 Per-customer roadmaps (optional, same tier)</div>
+        <p style="margin:0;">The same login token can carry each customer's <b>company &amp; tier</b>, so every account can see <b>its own segmented roadmap</b> — their requests plus tier-specific items — <b>alongside the shared overall roadmap</b>. Best used by segment/tier (e.g. Enterprise) rather than a hand-built board per customer. Included on the Professional plan at no extra cost; can be switched on in a later phase.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>How it compares</h2>
+      <table>
+        <tr><th>For our needs</th><th class="win">Featurebase</th><th>Productlane</th><th>Canny</th></tr>
+        <tr><td>Customer login via Tread (SSO)</td><td class="win"><span class="chk">✓</span></td><td><span class="chk">✓</span></td><td><span class="chk">✓</span></td></tr>
+        <tr><td>Works with Intercom</td><td class="win"><span class="chk">✓ solid</span></td><td><span class="warn">⚠ unclear / replaces it</span></td><td><span class="chk">✓</span></td></tr>
+        <tr><td>Syncs to Linear</td><td class="win"><span class="chk">✓</span></td><td><span class="chk">✓ deepest</span></td><td><span class="chk">✓ (Pro tier)</span></td></tr>
+        <tr><td>Voting + segmented roadmaps</td><td class="win"><span class="chk">✓</span></td><td><span class="chk">✓</span></td><td><span class="chk">✓</span></td></tr>
+        <tr><td>Pricing model</td><td class="win"><b>per admin seat</b><br>customers free</td><td>per user</td><td><b>per customer</b><br>cost grows w/ use</td></tr>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>What it costs</h2>
+      <div class="price-row">
+        <div class="price-box"><div class="pv">~$59<span style="font-size:13px;color:var(--muted)">/mo</span></div><div class="pk">1 admin seat (Professional, billed yearly)</div></div>
+        <div class="price-box"><div class="pv">$0</div><div class="pk">Every customer who logs in &amp; votes</div></div>
+        <div class="price-box"><div class="pv">1×</div><div class="pk">Small eng task to set up the SSO handoff</div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>See it — mockup inside Tread</h2>
+      <a class="mockup-link" href="mockup.html">
+        <div>
+          <div class="ml-t">Interactive walkthrough →</div>
+          <div class="ml-d">4 steps: inside Tread · silent login · the board · per-customer roadmaps</div>
+        </div>
+        <span class="ml-btn">Open mockup</span>
+      </a>
+    </div>
+
+    <div class="section">
+      <h2>Honest flags before we commit</h2>
+      <ul class="flags">
+        <li><b>Confirm the SSO tier with Featurebase sales.</b> Their docs say SSO starts on Professional (~$59/seat); some sources cite a higher "Business" tier. Verify before we quote a number.</li>
+        <li><b>A voting board needs one owner to triage</b> submissions (merge duplicates, reply, keep it tidy). With no CSMs staffed, that's likely Customer Ops to start — voting lightens the load but doesn't remove it.</li>
+        <li><b>Recommend launching gated</b> (logged-in customers only) so competitors don't steer our roadmap.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Proposed next step</h2>
+      <div class="callout gray">
+        <p style="margin:0;">Confirm Featurebase's SSO pricing, then run a <b>scoped pilot</b>: stand up the overall roadmap, wire the Tread-login handoff, seed it with our existing Linear requests, and open it to a small set of accounts. Validate engagement before a wider rollout — low cost, reversible, no disruption to Intercom or Linear.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="foot">
+    <b>Bottom line:</b> It's already all in Linear. Featurebase adds the customer-facing window — voting, visibility, and (optionally) a roadmap per customer — working with our Intercom + Linear as-is, customers free, ~$59/mo for one seat. Confirm the SSO tier, then pilot.
+  </div>
+</div>
+</body>
+</html>

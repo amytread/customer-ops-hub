@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tread Horizon — Roadmap Portal (SSO) Concept</title>
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --surface: #ffffff;
+    --surface-2: #fafbfc;
+    --border: #e4e7eb;
+    --border-2: #eceff2;
+    --text: #1a2733;
+    --strong: #0f1b24;
+    --muted: #6b7785;
+    --label: #8a96a3;
+    --yellow: #FFE500;
+    --green: #15a05a;
+    --green-link: #1c9a55;
+    --blue: #2f6fed;
+    --red: #dc2626;
+    --amber: #e08a00;
+    --purple: #7c5cd6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.45;
+    padding: 26px 20px 70px;
+    -webkit-font-smoothing: antialiased;
+    font-size: 14px;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+
+  /* Page intro */
+  .intro-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .intro-head .brand { display: flex; align-items: center; gap: 12px; }
+  .intro-head .brand img { height: 22px; }
+  .intro-head .brand .pipe { width: 1px; height: 20px; background: var(--border); }
+  .intro-head .brand .ctx { font-size: 12.5px; color: var(--muted); }
+  .page-tag { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); border: 1px solid var(--border); background: var(--surface); padding: 5px 10px; border-radius: 999px; }
+  h1 { font-size: 23px; font-weight: 700; margin: 10px 0 5px; letter-spacing: -0.01em; color: var(--strong); }
+  .sub { color: var(--muted); font-size: 14px; max-width: 760px; margin-bottom: 20px; }
+
+  /* Step nav */
+  .steps { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+  .step-btn { flex: 1; min-width: 210px; text-align: left; cursor: pointer; background: var(--surface); border: 1px solid var(--border); border-radius: 11px; padding: 13px 15px; color: var(--text); transition: all .14s ease; box-shadow: 0 1px 2px rgba(16,27,36,.03); }
+  .step-btn:hover { border-color: #c9d0d6; }
+  .step-btn.active { border-color: var(--strong); box-shadow: 0 2px 8px rgba(16,27,36,.08); }
+  .step-btn .n { display: inline-flex; align-items: center; justify-content: center; width: 21px; height: 21px; border-radius: 999px; font-size: 11.5px; font-weight: 700; background: #eef0f2; color: var(--muted); margin-bottom: 7px; }
+  .step-btn.active .n { background: var(--yellow); color: var(--strong); }
+  .step-btn .t { font-weight: 650; font-size: 13.5px; display: block; color: var(--strong); }
+  .step-btn .d { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  /* Browser chrome */
+  .browser { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; box-shadow: 0 18px 50px rgba(16,27,36,.14); }
+  .chrome-bar { display: flex; align-items: center; gap: 7px; padding: 10px 13px; background: #eceef0; border-bottom: 1px solid var(--border); }
+  .dot { width: 11px; height: 11px; border-radius: 999px; }
+  .dot.r { background: #ff5f57; } .dot.y { background: #febc2e; } .dot.g { background: #28c840; }
+  .url { flex: 1; margin-left: 8px; background: #fff; border: 1px solid var(--border); border-radius: 7px; padding: 6px 12px; font-size: 12.5px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+  .url .lock { color: var(--green); font-size: 11px; }
+
+  /* ===== Tread Horizon shell ===== */
+  .topnav { display: flex; align-items: center; gap: 6px; padding: 0 18px; height: 56px; background: #fff; border-bottom: 1px solid var(--border); }
+  .topnav .logo { font-weight: 800; font-size: 19px; color: #111; letter-spacing: -0.02em; margin-right: 14px; }
+  .nav-item { padding: 7px 13px; border-radius: 8px; font-size: 13.5px; color: #3a4753; font-weight: 500; cursor: default; white-space: nowrap; position: relative; }
+  .nav-item.active { background: #eef0f2; color: var(--strong); font-weight: 600; }
+  .nav-item.roadmap { color: var(--strong); }
+  .nav-item.roadmap.highlight { background: rgba(255,229,0,.22); box-shadow: inset 0 0 0 1.5px var(--yellow); font-weight: 650; }
+  .nav-item.roadmap.highlight::after { content: "click"; position: absolute; top: -9px; right: -8px; font-size: 8.5px; letter-spacing: .08em; background: var(--yellow); color: var(--strong); padding: 2px 6px; border-radius: 999px; font-weight: 800; }
+  .topnav .spacer { flex: 1; }
+  .topnav .help { width: 26px; height: 26px; border: 1px solid var(--border); border-radius: 999px; display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 13px; margin-right: 14px; }
+  .acct { display: flex; flex-direction: column; line-height: 1.25; }
+  .acct .u { font-size: 13px; font-weight: 650; color: var(--strong); }
+  .acct .c { font-size: 11.5px; color: var(--muted); }
+  .acct-wrap { display: flex; align-items: center; gap: 8px; }
+  .acct-wrap .chev { color: var(--muted); font-size: 11px; }
+
+  .scene { display: none; }
+  .scene.active { display: block; }
+
+  /* ===== Scene 1: Dispatch ===== */
+  .disp { display: grid; grid-template-columns: 232px 1fr; min-height: 470px; background: var(--bg); }
+  .disp-rail { background: #fff; border-right: 1px solid var(--border); padding: 16px 14px; }
+  .rail-head { display: flex; align-items: center; justify-content: space-between; font-weight: 600; font-size: 13px; color: var(--strong); margin-bottom: 14px; }
+  .rail-head .col { color: var(--muted); border: 1px solid var(--border); border-radius: 6px; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-size: 11px; }
+  .stat-row { display: flex; gap: 22px; margin-bottom: 12px; }
+  .stat .k { font-size: 12px; color: var(--muted); }
+  .stat .v { font-size: 22px; font-weight: 700; color: var(--strong); }
+  .mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px 14px; font-size: 11.5px; color: var(--muted); margin-bottom: 8px; }
+  .mini-grid b { color: var(--text); font-weight: 600; }
+  .mini-grid .li { display: flex; justify-content: space-between; }
+  .show-less { color: var(--amber); font-size: 12px; font-weight: 600; text-align: center; margin: 4px 0 14px; }
+  .seg { display: flex; background: #eef0f2; border-radius: 8px; padding: 3px; margin-bottom: 12px; }
+  .seg div { flex: 1; text-align: center; font-size: 12.5px; padding: 6px; border-radius: 6px; color: var(--muted); font-weight: 500; }
+  .seg div.on { background: #fff; color: var(--strong); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  .rail-search { width: 100%; border: 1px solid var(--border); border-radius: 7px; padding: 7px 10px; font-size: 12.5px; color: var(--muted); margin-bottom: 12px; }
+  .drv-card { border: 1px solid var(--border); border-radius: 10px; padding: 11px 12px; margin-bottom: 9px; display: flex; align-items: flex-start; gap: 9px; }
+  .drv-card .grip { color: #c2cad1; font-size: 11px; line-height: 1; padding-top: 2px; }
+  .drv-card .body { flex: 1; }
+  .drv-card .name { font-size: 12.5px; } .drv-card .name b { color: var(--strong); } .drv-card .name a { color: var(--blue); font-weight: 600; }
+  .drv-card .meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .tag { display: inline-block; font-size: 9.5px; background: #eef0f2; color: #5a6b78; padding: 2px 7px; border-radius: 999px; margin-top: 5px; }
+  .toggle { width: 30px; height: 17px; background: var(--yellow); border-radius: 999px; position: relative; }
+  .toggle::after { content: ""; position: absolute; top: 2px; right: 2px; width: 13px; height: 13px; background: #fff; border-radius: 999px; }
+
+  .disp-main { padding: 16px 20px; overflow: hidden; }
+  .main-tabs { display: flex; gap: 4px; background: #eef0f2; border-radius: 8px; padding: 3px; width: fit-content; margin-bottom: 14px; }
+  .main-tabs div { padding: 6px 18px; border-radius: 6px; font-size: 13px; color: var(--muted); font-weight: 500; }
+  .main-tabs div.on { background: #fff; color: var(--strong); font-weight: 600; box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  .date-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .date-row .arrows { color: var(--muted); font-size: 13px; letter-spacing: 4px; }
+  .date-row .today { font-weight: 700; color: var(--strong); font-size: 15px; }
+  .date-row .spacer { flex: 1; }
+  .btn { font-size: 12.5px; font-weight: 600; padding: 7px 13px; border-radius: 8px; border: 1px solid var(--border); background: #fff; color: var(--text); display: inline-flex; align-items: center; gap: 6px; }
+  .btn.green { background: var(--green); border-color: var(--green); color: #fff; }
+  .btn.yellow { background: var(--yellow); border-color: var(--yellow); color: var(--strong); }
+  .filter-row { display: flex; align-items: center; gap: 9px; margin-bottom: 16px; flex-wrap: wrap; }
+  .pill-toggle { display: flex; background: #eef0f2; border-radius: 7px; padding: 3px; }
+  .pill-toggle div { padding: 5px 12px; border-radius: 5px; font-size: 12px; color: var(--muted); font-weight: 500; }
+  .pill-toggle div.on { background: var(--strong); color: #fff; font-weight: 600; }
+  .chip { border: 1px solid var(--border); border-radius: 999px; padding: 5px 12px; font-size: 12px; color: var(--text); background: #fff; }
+
+  .order-card { background: #fff; border: 1px solid var(--border); border-radius: 11px; padding: 16px 18px; margin-bottom: 14px; box-shadow: 0 1px 3px rgba(16,27,36,.04); }
+  .oc-head { display: flex; align-items: flex-start; gap: 10px; }
+  .oc-check { width: 16px; height: 16px; border: 1.5px solid #c2cad1; border-radius: 4px; margin-top: 2px; }
+  .oc-title { font-weight: 700; font-size: 16px; color: var(--strong); flex: 1; }
+  .oc-status { border: 1px solid var(--border); border-radius: 7px; padding: 5px 10px; font-size: 12px; color: var(--text); }
+  .oc-meta { font-size: 12.5px; color: var(--muted); margin: 7px 0 4px; }
+  .oc-meta b { color: var(--text); font-weight: 600; }
+  .oc-meta .glink { color: var(--green-link); font-weight: 600; }
+  .oc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 18px; font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .oc-grid b { color: var(--text); font-weight: 600; }
+  .hex { color: var(--green-link); }
+
+  /* ===== Scene 2: SSO handoff ===== */
+  .handoff { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 470px; text-align: center; padding: 30px; background: var(--bg); }
+  .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--yellow); border-radius: 999px; animation: spin .9s linear infinite; margin-bottom: 20px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .handoff h3 { font-size: 18px; margin-bottom: 7px; color: var(--strong); }
+  .handoff p { color: var(--muted); max-width: 460px; font-size: 13.5px; }
+  .token-flow { display: flex; align-items: center; gap: 12px; margin-top: 24px; flex-wrap: wrap; justify-content: center; }
+  .token-node { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; font-size: 12.5px; min-width: 130px; box-shadow: 0 1px 3px rgba(16,27,36,.05); }
+  .token-node .lbl { color: var(--label); font-size: 10px; text-transform: uppercase; letter-spacing: .1em; display: block; margin-bottom: 4px; }
+  .token-node b { color: var(--strong); }
+  .token-node small { color: var(--muted); }
+  .token-arrow { color: var(--amber); font-size: 18px; }
+  .no-login-banner { margin-top: 22px; background: rgba(21,160,90,.10); border: 1px solid rgba(21,160,90,.3); color: var(--green); padding: 9px 16px; border-radius: 999px; font-size: 12.5px; font-weight: 600; }
+
+  /* ===== Scene 3: Roadmap board ===== */
+  .rm-wrap { background: var(--bg); min-height: 470px; padding: 20px 24px; }
+  .rm-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 4px; }
+  .rm-head h2 { font-size: 20px; color: var(--strong); }
+  .rm-sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+  .rm-sub b { color: var(--text); }
+  .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .col-head { font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; margin-bottom: 11px; display: flex; align-items: center; gap: 7px; }
+  .col-head .swatch { width: 9px; height: 9px; border-radius: 999px; }
+  .col-head .cnt { color: #aab3bb; font-weight: 600; }
+  .req { background: #fff; border: 1px solid var(--border); border-radius: 11px; padding: 13px 14px; margin-bottom: 10px; box-shadow: 0 1px 2px rgba(16,27,36,.04); }
+  .req .rt { font-size: 13.5px; font-weight: 650; color: var(--strong); margin-bottom: 5px; }
+  .req .rd { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+  .req .row { display: flex; align-items: center; justify-content: space-between; }
+  .vote { display: inline-flex; align-items: center; gap: 6px; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 5px 10px; font-size: 12.5px; font-weight: 600; color: var(--text); cursor: pointer; transition: all .14s; }
+  .vote:hover { border-color: #c2cad1; }
+  .vote.voted { border-color: var(--strong); background: var(--strong); color: #fff; }
+  .vote.done { color: var(--green); border-color: rgba(21,160,90,.35); background: rgba(21,160,90,.08); cursor: default; }
+  .vote .arr { font-size: 10px; }
+  .tag-mine { font-size: 10px; background: rgba(47,111,237,.1); color: var(--blue); padding: 3px 8px; border-radius: 999px; font-weight: 600; }
+
+  /* segmented panels (scene 4) */
+  .seg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .seg-panel { background: #fff; border: 1px solid var(--border); border-radius: 11px; padding: 14px; box-shadow: 0 1px 2px rgba(16,27,36,.04); }
+  .seg-panel-head { font-size: 13px; font-weight: 700; color: var(--strong); margin-bottom: 4px; display: flex; align-items: center; gap: 7px; }
+  .seg-panel-head span { font-weight: 500; color: var(--muted); font-size: 11.5px; }
+  .seg-panel-sub { font-size: 11.5px; color: var(--muted); margin-bottom: 12px; }
+  .mini-req { border: 1px solid var(--border-2); border-radius: 9px; padding: 9px 11px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .mini-req .mt { font-size: 12.5px; font-weight: 600; color: var(--text); }
+  .mini-req .ms { font-size: 10.5px; color: var(--muted); }
+  .mini-tag { font-size: 9px; padding: 2px 7px; border-radius: 999px; font-weight: 600; white-space: nowrap; }
+  .mini-tag.mine { background: rgba(47,111,237,.1); color: var(--blue); }
+  .mini-tag.tier { background: rgba(124,92,214,.12); color: var(--purple); }
+  .mini-tag.done { background: rgba(21,160,90,.1); color: var(--green); }
+  .seg-callout { margin-top: 14px; background: rgba(255,229,0,.12); border: 1px solid rgba(214,138,0,.3); border-radius: 10px; padding: 11px 14px; font-size: 12.5px; color: var(--text); }
+  .seg-callout b { color: var(--strong); }
+
+  .note { margin-top: 16px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--yellow); border-radius: 10px; padding: 15px 17px; box-shadow: 0 1px 2px rgba(16,27,36,.03); }
+  .note .k { color: var(--amber); font-weight: 700; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+  .note p { font-size: 13.5px; color: var(--text); }
+  .note b { color: var(--strong); }
+
+  footer.page { margin-top: 26px; color: var(--muted); font-size: 11.5px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="intro-head">
+    <div class="brand">
+      <img src="https://cdn.tread.io/tread-horizontal-black.svg" alt="Tread" />
+      <span class="pipe"></span>
+      <span class="ctx">Roadmap portal — concept inside Tread Horizon</span>
+    </div>
+    <span class="page-tag">Concept Mockup · Not Live</span>
+  </div>
+
+  <h1>What Summit Haul Co. would see — roadmap portal via Tread login</h1>
+  <p class="sub">Customers reach the feedback &amp; roadmap board from inside Tread Horizon. Because Tread vouches for the logged-in user with a signed token (SSO), there is <b>no second login and no extra password</b> — they land on the board already signed in as themselves. Click through the three moments.</p>
+
+  <div class="steps">
+    <button class="step-btn active" data-scene="1"><span class="n">1</span><span class="t">Inside Tread Horizon</span><span class="d">Customer clicks "Roadmap" in the top nav</span></button>
+    <button class="step-btn" data-scene="2"><span class="n">2</span><span class="t">Silent handoff</span><span class="d">Tread passes a token — no login screen</span></button>
+    <button class="step-btn" data-scene="3"><span class="n">3</span><span class="t">On the board</span><span class="d">Signed in as themselves, votes &amp; submits</span></button>
+    <button class="step-btn" data-scene="4"><span class="n">4</span><span class="t">Per-customer roadmaps</span><span class="d">Each account sees its own + the overall</span></button>
+  </div>
+
+  <div class="browser">
+    <div class="chrome-bar">
+      <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      <span class="url"><span class="lock">🔒</span><span id="urlText">app.tread-horizon.com/dispatch</span></span>
+    </div>
+
+    <!-- Shared top nav -->
+    <div class="topnav">
+      <span class="logo">SH</span>
+      <span class="nav-item" id="nav-projects">Projects</span>
+      <span class="nav-item active" id="nav-dispatch">Dispatch</span>
+      <span class="nav-item">Approvals</span>
+      <span class="nav-item">Live Map</span>
+      <span class="nav-item">Reports</span>
+      <span class="nav-item">Sites</span>
+      <span class="nav-item">Settings</span>
+      <span class="nav-item roadmap highlight" id="nav-roadmap">Roadmap</span>
+      <span class="spacer"></span>
+      <span class="help">?</span>
+      <div class="acct-wrap">
+        <div class="acct"><span class="u">Jordan Blake</span><span class="c">Summit Haul Co. • Company Admin</span></div>
+        <span class="chev">▾</span>
+      </div>
+    </div>
+
+    <!-- SCENE 1: Dispatch -->
+    <div class="scene active" data-scene="1">
+      <div class="disp">
+        <div class="disp-rail">
+          <div class="rail-head">10-Jun-2026 Status <span class="col">‹</span></div>
+          <div class="stat-row">
+            <div class="stat"><div class="k">Accepted</div><div class="v">58/58</div></div>
+            <div class="stat"><div class="k">Available</div><div class="v">43/95</div></div>
+          </div>
+          <div class="mini-grid">
+            <div class="li"><span>Unassigned</span><b>0</b></div><div class="li"><span>Accepted</span><b>0</b></div>
+            <div class="li"><span>Assigned</span><b>0</b></div><div class="li"><span>En Route</span><b>5</b></div>
+            <div class="li"><span>Sent</span><b>0</b></div><div class="li"><span>Loaded</span><b>1</b></div>
+            <div class="li"><span>Rejected</span><b>0</b></div><div class="li"><span>Completed</span><b>52</b></div>
+          </div>
+          <div class="show-less">Show Less</div>
+          <div class="seg"><div class="on">Driver</div><div>Vendor</div></div>
+          <div class="rail-search">🔍 Search</div>
+          <div class="drv-card"><span class="grip">⠿</span><div class="body"><div class="name"><b>MLS-309</b> • <a>SH Driver Vendor</a></div><div class="meta">Belly Dump · Vendor Fleet Co.</div></div><span class="toggle"></span></div>
+          <div class="drv-card"><span class="grip">⠿</span><div class="body"><div class="name"><b>BDT-312</b> • <a>Marcus Hale</a></div><div class="meta">Belly Dump</div><span class="tag">SH Owned</span></div><span class="toggle"></span></div>
+          <div class="drv-card"><span class="grip">⠿</span><div class="body"><div class="name"><b>513</b> • <a>Dana Mercer</a></div><div class="meta">Belly Dump</div><span class="tag">SH Owned</span></div><span class="toggle"></span></div>
+        </div>
+        <div class="disp-main">
+          <div class="main-tabs"><div>Orders</div><div class="on">Drivers</div></div>
+          <div class="date-row"><span class="arrows">‹ ▦ ›</span><span class="today">Today, Wed Jun-10-2026</span><span class="spacer"></span><span class="btn green">➤ Send All Jobs</span><span class="btn">Export Jobs</span><span class="btn yellow">＋ New Order</span></div>
+          <div class="filter-row"><div class="pill-toggle"><div>External</div><div class="on">Orders 22</div></div><span class="btn">⇅ Filters</span><span class="chip">Casey.R</span><span class="chip">Jordan.B</span><span class="chip">No Department</span></div>
+
+          <div class="order-card">
+            <div class="oc-head"><span class="oc-check"></span><span class="oc-title">Ridgeline Depot - Phase 2</span><span class="oc-status">Completed ▾</span></div>
+            <div class="oc-meta"><b>Customer:</b> <span class="glink">Ridgeline Construction Co.</span> • <b>Order PO:</b> 25-0311 • <b>Rate:</b> $175.00 Per Load • <b>Material:</b> Select Fill • ORD-100482</div>
+            <div class="oc-grid">
+              <div><b>Start:</b> 7:00 AM Jun-10</div><div><b>Truck:</b> End Dump</div><div><b>Pickup:</b> <span class="hex">⬡</span> North Quarry</div><div><b>Trucks:</b> 1 (1/1 Accepted)</div>
+              <div><b>Requestor:</b> Casey Reed</div><div><b>Supervisor:</b> Site Lead</div><div><b>Dropoff:</b> <span class="hex">⬡</span> Ridgeline Depot</div><div><b>Loads:</b> 2 • 2 Load</div>
+            </div>
+          </div>
+          <div class="order-card">
+            <div class="oc-head"><span class="oc-check"></span><span class="oc-title">Lakeside Plant - Phase 1</span><span class="oc-status">Completed ▾</span></div>
+            <div class="oc-meta"><b>Customer:</b> <span class="glink">Harbor Infrastructure Group</span> • <b>Order PO:</b> 26-0411 • <b>Rate:</b> $150.00 Per Load • <b>Material:</b> Mason Sand • ORD-100517</div>
+            <div class="oc-grid">
+              <div><b>Start:</b> 12:00 PM Jun-10</div><div><b>Truck:</b> End Dump</div><div><b>Pickup:</b> <span class="hex">⬡</span> Hillcrest Pit</div><div><b>Trucks:</b> 1 (1/1 Accepted)</div>
+              <div><b>Requestor:</b> Jordan Blake</div><div><b>Supervisor:</b> Site Lead</div><div><b>Dropoff:</b> <span class="hex">⬡</span> Lakeside Plant</div><div><b>Loads:</b> 1 • 1 Load</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 2: SSO handoff -->
+    <div class="scene" data-scene="2">
+      <div class="handoff">
+        <div class="spinner"></div>
+        <h3>Signing Jordan into the roadmap…</h3>
+        <p>Tread recognizes Jordan is already logged in and hands the portal a signed token identifying her. She sees no login form.</p>
+        <div class="token-flow">
+          <div class="token-node"><span class="lbl">Logged into</span><b>Tread Horizon</b><br/><small>Jordan @ Summit Haul Co.</small></div>
+          <span class="token-arrow">→</span>
+          <div class="token-node"><span class="lbl">Signed token (JWT)</span><b>identity passed</b><br/><small>name · company · email</small></div>
+          <span class="token-arrow">→</span>
+          <div class="token-node"><span class="lbl">Lands on</span><b>Roadmap portal</b><br/><small>already authenticated</small></div>
+        </div>
+        <div class="no-login-banner">✓ No separate account · No extra password</div>
+      </div>
+    </div>
+
+    <!-- SCENE 3: Roadmap board -->
+    <div class="scene" data-scene="3">
+      <div class="rm-wrap">
+        <div class="rm-head"><div><h2>Product Roadmap</h2></div><span class="btn yellow">＋ Submit a request</span></div>
+        <div class="rm-sub">Vote on what we build next. Your requests are tied to <b>Summit Haul Co.</b> — we'll notify you when they ship.</div>
+        <div class="board">
+          <div class="col">
+            <div class="col-head"><span class="swatch" style="background:var(--purple)"></span>Under Review <span class="cnt">3</span></div>
+            <div class="req"><div class="rt">Bulk-edit job statuses</div><div class="rd">Change status on multiple jobs at once from Dispatch.</div><div class="row"><span class="tag-mine">Your request</span><span class="vote voted"><span class="arr">▲</span> 18</span></div></div>
+            <div class="req"><div class="rt">Custom driver-pay rules</div><div class="rd">Per-driver and per-material pay overrides.</div><div class="row"><span></span><span class="vote"><span class="arr">▲</span> 31</span></div></div>
+            <div class="req"><div class="rt">Saved dispatch filters</div><div class="rd">Reuse filter sets like "Casey.R + No Dept".</div><div class="row"><span></span><span class="vote"><span class="arr">▲</span> 12</span></div></div>
+          </div>
+          <div class="col">
+            <div class="col-head"><span class="swatch" style="background:var(--blue)"></span>Planned <span class="cnt">2</span></div>
+            <div class="req"><div class="rt">QuickBooks export</div><div class="rd">Push completed orders straight to QuickBooks.</div><div class="row"><span></span><span class="vote"><span class="arr">▲</span> 47</span></div></div>
+            <div class="req"><div class="rt">SMS dispatch alerts to drivers</div><div class="rd">Auto-text drivers when a job is sent.</div><div class="row"><span></span><span class="vote"><span class="arr">▲</span> 22</span></div></div>
+          </div>
+          <div class="col">
+            <div class="col-head"><span class="swatch" style="background:var(--green)"></span>Shipped <span class="cnt">1</span></div>
+            <div class="req"><div class="rt">Mobile photo upload on tickets</div><div class="rd">Drivers attach load photos from the app.</div><div class="row"><span class="tag-mine">Your request</span><span class="vote done"><span class="arr">✓</span> Shipped</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCENE 4: Per-customer roadmaps -->
+    <div class="scene" data-scene="4">
+      <div class="rm-wrap">
+        <div class="rm-head"><div><h2>One overall roadmap + a view per customer</h2></div></div>
+        <div class="rm-sub">Because Tread passes the customer's <b>company &amp; tier</b> inside the SSO token, the board can show each account its own segmented roadmap alongside the shared one — same Professional tier, no extra cost.</div>
+        <div class="seg-grid">
+          <div class="seg-panel">
+            <div class="seg-panel-head">🌐 Overall roadmap <span>· every customer sees this</span></div>
+            <div class="seg-panel-sub">The shared, company-wide product direction.</div>
+            <div class="mini-req"><div><div class="mt">QuickBooks export</div><div class="ms">Planned</div></div><span class="mini-tag tier">47 votes</span></div>
+            <div class="mini-req"><div><div class="mt">SMS dispatch alerts</div><div class="ms">Planned</div></div><span class="mini-tag tier">22 votes</span></div>
+            <div class="mini-req"><div><div class="mt">Custom driver-pay rules</div><div class="ms">Under Review</div></div><span class="mini-tag tier">31 votes</span></div>
+            <div class="mini-req"><div><div class="mt">Mobile photo upload</div><div class="ms">Shipped</div></div><span class="mini-tag done">✓ Shipped</span></div>
+          </div>
+          <div class="seg-panel">
+            <div class="seg-panel-head">🏢 Summit Haul Co.'s view <span>· segmented to this account</span></div>
+            <div class="seg-panel-sub">Their own requests + items scoped to their tier/contract.</div>
+            <div class="mini-req"><div><div class="mt">Bulk-edit job statuses</div><div class="ms">Under Review</div></div><span class="mini-tag mine">Your request</span></div>
+            <div class="mini-req"><div><div class="mt">Saved dispatch filters</div><div class="ms">Under Review</div></div><span class="mini-tag mine">Your request</span></div>
+            <div class="mini-req"><div><div class="mt">Enterprise SSO &amp; SCIM</div><div class="ms">Planned · Enterprise tier</div></div><span class="mini-tag tier">Your tier</span></div>
+            <div class="mini-req"><div><div class="mt">Mobile photo upload</div><div class="ms">Shipped</div></div><span class="mini-tag done">✓ Shipped</span></div>
+          </div>
+        </div>
+        <div class="seg-callout">💡 <b>How it works:</b> the same SSO token that logs Jordan in also carries <b>Summit Haul Co. · Enterprise</b>. The board uses that to filter what she sees — so every account gets a roadmap that feels tailored to them, while you maintain just one set of items synced from Linear.</div>
+      </div>
+    </div>
+
+  </div><!-- /browser -->
+
+  <div class="note" id="sceneNote">
+    <span class="k">What's happening</span>
+    <p id="noteText"></p>
+  </div>
+
+  <footer class="page">Tread Horizon · concept mockup of an SSO (Tread-login) roadmap portal · for internal review · sample data</footer>
+</div>
+
+<script>
+  const urls = { 1: "app.tread-horizon.com/dispatch", 2: "roadmap.tread-horizon.com/auth?sso=…", 3: "roadmap.tread-horizon.com", 4: "roadmap.tread-horizon.com" };
+  const notes = {
+    1: "Jordan is already logged into Tread Horizon. A <b>Roadmap</b> link sits in her normal top nav, right alongside Reports and Settings — so it reads as just another part of Tread. <i>(Placement is flexible: it could also live under the <b>?</b> help menu.)</i>",
+    2: "When she clicks, Tread mints a <b>signed token (JWT)</b> carrying her identity and silently hands it to the portal. She never sees a login screen, never creates an account, never picks a password. <b>This handoff is the one piece that needs a small engineering task to set up.</b>",
+    3: "She's on the board as <b>Jordan Blake, Summit Haul Co.</b>. She browses the roadmap by status, upvotes what matters, sees <b>her own requests flagged</b>, gets notified when they ship, and submits new ones. Every vote ties back to her real account — so internally you know exactly which customer wants what.",
+    4: "Optional <b>phase 2</b>: each account sees its <b>own segmented roadmap</b> (their requests + tier-specific items) alongside the shared overall roadmap. Driven by the company/tier we already pass in the SSO token — included on the same Professional tier, no extra cost. Best used by <b>segment/tier</b>, not a hand-built board per individual customer."
+  };
+  const btns = document.querySelectorAll('.step-btn');
+  const scenes = document.querySelectorAll('.scene');
+  const urlText = document.getElementById('urlText');
+  const noteText = document.getElementById('noteText');
+  const navDispatch = document.getElementById('nav-dispatch');
+  const navRoadmap = document.getElementById('nav-roadmap');
+
+  function show(n) {
+    btns.forEach(b => b.classList.toggle('active', b.dataset.scene === n));
+    scenes.forEach(s => s.classList.toggle('active', s.dataset.scene === n));
+    urlText.textContent = urls[n];
+    noteText.innerHTML = notes[n];
+    // reflect active page in the nav
+    const onRoadmap = (n !== '1');
+    navRoadmap.classList.toggle('active', onRoadmap);
+    navRoadmap.classList.toggle('highlight', n === '1');
+    navDispatch.classList.toggle('active', n === '1');
+  }
+  btns.forEach(b => b.addEventListener('click', () => show(b.dataset.scene)));
+  show('1');
+</script>
+</body>
+</html>
