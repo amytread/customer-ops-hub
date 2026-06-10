@@ -186,6 +186,17 @@
   .mini-tag.done { background: rgba(21,160,90,.1); color: var(--green); }
   .seg-callout { margin-top: 14px; background: rgba(255,229,0,.12); border: 1px solid rgba(214,138,0,.3); border-radius: 10px; padding: 11px 14px; font-size: 12.5px; color: var(--text); }
   .seg-callout b { color: var(--strong); }
+  .seg-controls { display: flex; align-items: center; gap: 8px; margin-bottom: 11px; flex-wrap: wrap; }
+  .seg-sort { font-size: 11px; border: 1px solid var(--border); border-radius: 7px; padding: 5px 10px; color: var(--text); background: #fff; display: flex; align-items: center; gap: 5px; font-weight: 600; }
+  .seg-weight { font-size: 10.5px; background: rgba(124,92,214,.12); color: var(--purple); padding: 5px 10px; border-radius: 999px; font-weight: 700; }
+  .mini-left { display: flex; align-items: center; gap: 9px; }
+  .rank { display: inline-flex; width: 19px; height: 19px; border-radius: 999px; background: var(--strong); color: #fff; font-size: 10.5px; font-weight: 700; align-items: center; justify-content: center; flex-shrink: 0; }
+  .mini-right { display: flex; flex-direction: column; gap: 4px; align-items: flex-end; }
+  .prio { font-size: 9px; padding: 2px 8px; border-radius: 999px; font-weight: 700; white-space: nowrap; }
+  .prio.crit { background: rgba(192,57,43,.12); color: var(--red); }
+  .prio.high { background: rgba(214,138,0,.15); color: var(--amber); }
+  .prio.med { background: #eef0f2; color: var(--muted); }
+  .seg-callout.blue { background: rgba(47,111,237,.07); border-color: rgba(47,111,237,.28); margin-top: 10px; }
 
   .note { margin-top: 16px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--yellow); border-radius: 10px; padding: 15px 17px; box-shadow: 0 1px 2px rgba(16,27,36,.03); }
   .note .k { color: var(--amber); font-weight: 700; font-size: 11px; letter-spacing: .07em; text-transform: uppercase; display: block; margin-bottom: 6px; }
@@ -347,13 +358,15 @@
           <div class="seg-panel">
             <div class="seg-panel-head">🏢 Summit Haul Co.'s view <span>· segmented to this account</span></div>
             <div class="seg-panel-sub">Their own requests + items scoped to their tier/contract.</div>
-            <div class="mini-req"><div><div class="mt">Bulk-edit job statuses</div><div class="ms">Under Review</div></div><span class="mini-tag mine">Your request</span></div>
-            <div class="mini-req"><div><div class="mt">Saved dispatch filters</div><div class="ms">Under Review</div></div><span class="mini-tag mine">Your request</span></div>
-            <div class="mini-req"><div><div class="mt">Enterprise SSO &amp; SCIM</div><div class="ms">Planned · Enterprise tier</div></div><span class="mini-tag tier">Your tier</span></div>
-            <div class="mini-req"><div><div class="mt">Mobile photo upload</div><div class="ms">Shipped</div></div><span class="mini-tag done">✓ Shipped</span></div>
+            <div class="seg-controls"><span class="seg-sort">⭐ Sorted by your priority ▾</span><span class="seg-weight">Weighted: Enterprise · $48K ARR</span></div>
+            <div class="mini-req"><div class="mini-left"><span class="rank">1</span><div><div class="mt">Bulk-edit job statuses</div><div class="ms">Under Review</div></div></div><div class="mini-right"><span class="prio crit">🔥 Critical</span><span class="mini-tag mine">Your request</span></div></div>
+            <div class="mini-req"><div class="mini-left"><span class="rank">2</span><div><div class="mt">Saved dispatch filters</div><div class="ms">Under Review</div></div></div><div class="mini-right"><span class="prio high">High</span><span class="mini-tag mine">Your request</span></div></div>
+            <div class="mini-req"><div class="mini-left"><span class="rank">3</span><div><div class="mt">Enterprise SSO &amp; SCIM</div><div class="ms">Planned · Enterprise tier</div></div></div><div class="mini-right"><span class="prio med">Medium</span><span class="mini-tag tier">Your tier</span></div></div>
+            <div class="mini-req"><div class="mini-left"><span class="rank" style="background:var(--green)">✓</span><div><div class="mt">Mobile photo upload</div><div class="ms">Shipped</div></div></div><div class="mini-right"><span class="mini-tag done">✓ Shipped</span></div></div>
           </div>
         </div>
         <div class="seg-callout">💡 <b>How it works:</b> the same SSO token that logs Jordan in also carries <b>Summit Haul Co. · Enterprise</b>. The board uses that to filter what she sees — so every account gets a roadmap that feels tailored to them, while you maintain just one set of items synced from Linear.</div>
+        <div class="seg-callout blue">🎯 <b>They prioritize their input — you keep the order.</b> Summit Haul Co. ranks their own asks (Critical → Medium) and those weight by account value (<b>Enterprise · $48K ARR</b>), so what matters most to them surfaces in Linear. The roadmap <i>sequence</i> stays yours — customers influence it, they don't reorder your roadmap.</div>
       </div>
     </div>
 
