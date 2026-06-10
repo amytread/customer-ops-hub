@@ -61,9 +61,26 @@ def series(rows):
         out[c] = [num(r.get(c, "")) for r in rows]
     return out
 
+def load_categories():
+    """Long-format categories CSV → {date: {main: {sub: count}}}."""
+    out = {}
+    p = os.path.join(VOL_DIR, "support_categories_daily.csv")
+    if not os.path.exists(p):
+        return out
+    with open(p, newline="") as f:
+        for r in csv.DictReader(f):
+            try:
+                c = int(float(r["count"]))
+            except (ValueError, KeyError):
+                continue
+            out.setdefault(r["date"], {}).setdefault(r["main"], {})[r["sub"]] = c
+    return out
+
 def main():
     data = {g: series(load(f"support_{g}.csv")) for g in ("daily", "weekly", "monthly")}
+    cats = load_categories()
     html = (TEMPLATE.replace("/*DATA*/", json.dumps(data))
+                    .replace("/*CATS*/", json.dumps(cats))
                     .replace("__WORDMARK__", TREAD_WORDMARK)
                     .replace("__DATE__", TODAY))
     os.makedirs(VOL_DIR, exist_ok=True)
@@ -92,7 +109,18 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 2
 .hero h1 .dot{width:11px;height:11px;border-radius:50%;background:var(--yellow);box-shadow:0 0 12px var(--yellow)}
 .hero p{color:var(--mut);max-width:780px;margin-top:8px;font-size:.95rem;line-height:1.5}
 .wrap{max-width:1180px;margin:0 auto;padding:14px 28px 60px}
+.vtabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:18px 0 4px}
+.vtabs button{font-family:inherit;font-weight:700;font-size:.9rem;color:var(--mut);background:none;border:none;border-bottom:2px solid transparent;padding:10px 16px;cursor:pointer;margin-bottom:-1px}
+.vtabs button.on{color:var(--ink);border-bottom-color:var(--yellow)}
 .bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:16px 0 20px}
+.tbl{width:100%;border-collapse:collapse;font-size:.82rem}
+.tbl th{text-align:left;color:var(--mut);font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:.68rem;padding:8px 10px;border-bottom:1px solid var(--line)}
+.tbl td{padding:7px 10px;border-bottom:1px solid rgba(35,65,79,.5)}
+.tbl td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.tbl td.bar-cell{width:34%}
+.tbl .minib{height:8px;border-radius:4px;background:var(--cus)}
+.tbl tr.maincat td{font-weight:700;color:var(--ink);background:rgba(255,229,0,.05)}
+.tbl tr.subcat td:first-child{padding-left:24px;color:var(--mut)}
 .toggle{display:inline-flex;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:4px}
 .toggle button{font-family:inherit;font-weight:700;font-size:.82rem;color:var(--mut);background:none;border:none;padding:8px 18px;border-radius:7px;cursor:pointer}
 .toggle button.on{background:var(--yellow);color:#10222C}
@@ -145,6 +173,13 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 2
     </div>
     <div class="asof" id="asof"></div>
   </div>
+
+  <div class="vtabs" id="vt">
+    <button data-v="overview" class="on">Overview</button>
+    <button data-v="type">By type</button>
+  </div>
+
+ <div id="viewOverview">
   <div class="kpis" id="kpis"></div>
 
   <div class="grid">
@@ -165,6 +200,25 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 2
     <div class="card sm"><h2>Avg first response</h2><div class="meta">Intercom — minutes to first admin reply</div><div class="wrapc"><canvas id="cResp"></canvas></div></div>
     <div class="card sm"><h2>Avg resolution time</h2><div class="meta">Intercom — hours to close</div><div class="wrapc"><canvas id="cRes"></canvas></div></div>
   </div>
+ </div>
+
+ <div id="viewType" style="display:none">
+  <div class="grid">
+    <div class="card full">
+      <h2>Volume by type — trend</h2><div class="meta">Inbound conversations by main category over the selected range</div>
+      <div class="wrapc"><canvas id="cTypeTrend"></canvas></div>
+    </div>
+    <div class="card full">
+      <h2>Volume by type — totals</h2><div class="meta">Main categories segmented by sub-category, over the selected range</div>
+      <div class="wrapc"><canvas id="cTypeBar"></canvas></div>
+    </div>
+    <div class="card full">
+      <h2>Category breakdown</h2><div class="meta">Main category › sub-category, by conversation volume</div>
+      <table class="tbl"><thead><tr><th>Category</th><th style="text-align:right">Volume</th><th>Share</th></tr></thead><tbody id="catTbody"></tbody></table>
+      <div class="note">Type is derived from Intercom conversation tags (one category per conversation). “Uncategorized” = conversations with only channel/routing tags or none. Mapping lives in <code>refresh_volume.py</code> and is easy to refine.</div>
+    </div>
+  </div>
+ </div>
 
   <div class="dl">
     <a href="support_pulse.xlsx" download>↓ Support Pulse workbook (.xlsx — Daily · Weekly · Monthly tabs)</a>
@@ -177,7 +231,10 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 2
 </div>
 <script>
 const DATA=/*DATA*/;
+const CATS=/*CATS*/;
 const C={ink:'#EAF2F6',mut:'#8FA8B4',grid:'rgba(143,168,180,.14)',yellow:'#FFE500',amber:'#FFAA13',chat:'#58C7C2',cus:'#9B8CFF',rep:'#4DA3FF',red:'#FF6B6B',green:'#4ADE80'};
+const MAINCOLORS={'Account & Access':'#9B8CFF','Tickets':'#4DA3FF','Dispatch':'#58C7C2','Jobs':'#4ADE80','Billing & Rates':'#FFAA13','Integrations':'#FF8FB1','Reporting & Insights':'#FFE500','Mobile & App':'#7DD3FC','Compliance':'#F472B6','Feature Requests':'#A3E635','Bugs':'#FF6B6B','Other':'#6B828C'};
+const catColor=(m,i)=>MAINCOLORS[m]||['#9B8CFF','#4DA3FF','#58C7C2','#4ADE80','#FFAA13','#FF8FB1','#FFE500'][i%7];
 Chart.defaults.color=C.mut;Chart.defaults.borderColor=C.grid;Chart.defaults.font.family="'Golos Text',sans-serif";Chart.defaults.font.size=11;
 Chart.defaults.plugins.legend.labels.boxWidth=10;Chart.defaults.plugins.legend.labels.usePointStyle=true;Chart.defaults.plugins.legend.position='bottom';
 let g='weekly', charts={}, range={from:0,to:0}, cur=null;
@@ -239,8 +296,7 @@ function area(key,color){return {data:cur[key],borderColor:color,backgroundColor
 function line(key,color,fill){return {data:cur[key],borderColor:color,backgroundColor:fill?color+'22':color,fill:!!fill,tension:.35,borderWidth:2.5,pointRadius:0,pointHoverRadius:4};}
 function sum2(a,b){return cur[a].map((v,i)=>(v||0)+(cur[b][i]||0));}
 
-function draw(){
-  Object.values(charts).forEach(c=>c.destroy());charts={};
+function drawOverview(){
   const L=cur.labels;
   charts.v=new Chart(cVol,{type:'line',data:{labels:L,datasets:[
     Object.assign({label:'success@'},area('ic_success_email',C.yellow)),
@@ -270,11 +326,62 @@ function draw(){
     Object.assign({label:'hrs'},line('ic_avg_resolution_hr',C.amber,true)),
   ]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:X,y:Y()}}});
 }
+// ── Volume-by-type helpers (CATS is per-day; aggregate by date window) ──
+let vmode='overview';
+const winDates=()=>{const f=Math.min(range.from,range.to),t=Math.max(range.from,range.to);return [DATA[g].period_start[f],DATA[g].period_end[t]];};
+function sumCats(d0,d1){const acc={};for(const dt in CATS){if(dt>=d0&&dt<=d1){const day=CATS[dt];for(const m in day){acc[m]=acc[m]||{};for(const s in day[m])acc[m][s]=(acc[m][s]||0)+day[m][s];}}}return acc;}
+function mainTotal(o){const t={};for(const m in o)t[m]=Object.values(o[m]).reduce((a,b)=>a+b,0);return t;}
+function drawType(){
+  const f=Math.min(range.from,range.to), t=Math.max(range.from,range.to);
+  const L=cur.labels;
+  const agg=sumCats(...winDates()), tot=mainTotal(agg);
+  const mains=Object.keys(agg).sort((a,b)=>tot[b]-tot[a]);
+
+  // Trend: one stacked-area series per main category across the visible periods
+  const trendDs=mains.map((m,i)=>{
+    const data=L.map((_,j)=>{const ps=DATA[g].period_start[f+j],pe=DATA[g].period_end[f+j];const a=sumCats(ps,pe);return a[m]?Object.values(a[m]).reduce((x,y)=>x+y,0):0;});
+    const col=catColor(m,i);
+    return {label:m,data,borderColor:col,backgroundColor:col+'33',fill:true,stack:'s',tension:.35,borderWidth:1.5,pointRadius:0,pointHoverRadius:4};
+  });
+  charts.tt=new Chart(cTypeTrend,{type:'line',data:{labels:L,datasets:trendDs},options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},scales:{x:X,y:Y({stacked:true})},plugins:{legend:{labels:{boxWidth:10}}}}});
+
+  // Totals: bar per main category, stacked by sub-category (legend hidden; table has detail)
+  const barDs=[];
+  mains.forEach((m,i)=>{const subs=Object.keys(agg[m]).sort((a,b)=>agg[m][b]-agg[m][a]);
+    subs.forEach((s,k)=>{const data=mains.map(mm=>mm===m?agg[m][s]:0);
+      barDs.push({label:`${m} › ${s}`,data,backgroundColor:shade(catColor(m,i),k),borderRadius:3,maxBarThickness:46,stack:'x'});});});
+  charts.tb=new Chart(cTypeBar,{type:'bar',data:{labels:mains,datasets:barDs},options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.dataset.label.split(' › ')[1]+': '+c.parsed.y}}},scales:{x:Object.assign({stacked:true},X),y:Y({stacked:true,ticks:{precision:0}})}}});
+
+  // Breakdown table
+  const grand=mains.reduce((a,m)=>a+tot[m],0)||1;
+  let html='';
+  mains.forEach((m,i)=>{
+    html+=`<tr class="maincat"><td>${m}</td><td class="n">${tot[m]}</td><td class="bar-cell"><div class="minib" style="width:${Math.round(100*tot[m]/grand)}%;background:${catColor(m,i)}"></div></td></tr>`;
+    Object.entries(agg[m]).sort((a,b)=>b[1]-a[1]).forEach(([s,c])=>{
+      html+=`<tr class="subcat"><td>${s}</td><td class="n">${c}</td><td>${(100*c/grand).toFixed(1)}%</td></tr>`;});
+  });
+  document.getElementById('catTbody').innerHTML=html || '<tr><td colspan="3" style="color:var(--mut)">No tagged conversations in range.</td></tr>';
+}
+function shade(hex,k){ // lighten a hex color by step k for sub-segment contrast
+  const n=parseInt(hex.slice(1),16); let r=n>>16,gg=(n>>8)&255,b=n&255;
+  const f=1-Math.min(k*0.13,0.6); const mix=v=>Math.round(v*f+255*(1-f));
+  return `rgb(${mix(r)},${mix(gg)},${mix(b)})`;
+}
 function render(){
-  cur=view(); mkKpis(); draw();
+  cur=view();
+  Object.values(charts).forEach(c=>c.destroy());charts={};
+  if(vmode==='overview'){mkKpis();drawOverview();} else {drawType();}
   const L=cur.labels;
   document.getElementById('asof').textContent = !L.length?'' : (L.length===1?`Showing ${L[0]}`:`Showing ${L[0]} → ${L[L.length-1]}`);
 }
+document.getElementById('vt').addEventListener('click',e=>{
+  if(!e.target.dataset.v)return;
+  vmode=e.target.dataset.v;
+  [...vt.children].forEach(b=>b.classList.toggle('on',b.dataset.v===vmode));
+  document.getElementById('viewOverview').style.display = vmode==='overview'?'':'none';
+  document.getElementById('viewType').style.display = vmode==='type'?'':'none';
+  render();
+});
 document.getElementById('tg').addEventListener('click',e=>{
   if(!e.target.dataset.g)return;
   g=e.target.dataset.g;

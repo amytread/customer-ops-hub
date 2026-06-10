@@ -81,6 +81,11 @@ PRETTY = {
 }
 SHEETS = [("Daily", "support_daily.csv"), ("Weekly", "support_weekly.csv"), ("Monthly", "support_monthly.csv")]
 
+# Volume-by-type is stored long-format (one row per day×main×sub) so the dashboard
+# can aggregate it across any selected date range and granularity.
+CATEGORIES_PATH = os.path.join(OUT_DIR, "support_categories_daily.csv")
+CATEGORIES_HEADER = ["date", "main", "sub", "count"]
+
 # ── http helpers ──────────────────────────────────────────────────────────────
 def http_post(url, headers, body, _retries=2):
     data = json.dumps(body).encode()
@@ -99,8 +104,82 @@ def http_post(url, headers, body, _retries=2):
 def _empty_day():
     return {c: 0 for c in FETCH_COLS + HELPER_COLS}
 
+# ── Volume-by-type taxonomy ───────────────────────────────────────────────────
+# Each conversation is assigned to ONE (main, sub) by the FIRST matching rule, in
+# the order below — so put specific/topical categories before channel/noise tags.
+# Matching is case-insensitive substring against the conversation's Intercom tags.
+# "Hzon"/"Hor" suffixes = Horizon; folded into the same buckets. Refine freely.
+CATEGORY_RULES = [
+    # main, sub, [keywords matched against tag text (lowercased)]
+    ("Tickets", "Add tickets",        ["adding ticket", "add ticket"]),
+    ("Tickets", "Edit tickets",       ["edit ticket"]),
+    ("Tickets", "Delete tickets",     ["delete ticket"]),
+    ("Tickets", "Find tickets",       ["find ticket"]),
+    ("Tickets", "Move tickets",       ["move ticket"]),
+    ("Tickets", "Download tickets",   ["download ticket"]),
+    ("Tickets", "Digital tickets",    ["digital ticket"]),
+    ("Tickets", "Other tickets",      ["ticket"]),
+    ("Dispatch", "Dispatch help",     ["dispatch help"]),
+    ("Dispatch", "Dispatch issues",   ["dispatch issue"]),
+    ("Dispatch", "Dispatchers",       ["dispatcher"]),
+    ("Dispatch", "Live map",          ["live map"]),
+    ("Dispatch", "Dispatch (other)",  ["dispatch"]),
+    ("Jobs", "Job cancellation",      ["job cancellation", "cancel"]),
+    ("Jobs", "Job inquiries",         ["job inquir", "job inquiries"]),
+    ("Jobs", "Job standby",           ["standby", "job-standby"]),
+    ("Jobs", "Start job",             ["start job"]),
+    ("Jobs", "Create order",          ["create order"]),
+    ("Jobs", "Excess soil",           ["excess soil"]),
+    ("Jobs", "Sites",                 ["sites"]),
+    ("Billing & Rates", "Billing",    ["billing"]),
+    ("Billing & Rates", "Invoicing",  ["invoic"]),
+    ("Billing & Rates", "Fuel surcharge", ["fuel surcharge"]),
+    ("Billing & Rates", "Rates",      ["rate"]),
+    ("Billing & Rates", "Settlement/Payment", ["settlement", "payment"]),
+    ("Integrations", "Apex",          ["apex"]),
+    ("Integrations", "Axle",          ["axle"]),
+    ("Integrations", "API",           ["api"]),
+    ("Integrations", "Telematics",    ["telematics"]),
+    ("Integrations", "Import/Export", ["import", "export"]),
+    ("Integrations", "Integration (other)", ["integration"]),
+    ("Reporting & Insights", "Reporting",   ["report", "gs report"]),
+    ("Reporting & Insights", "Cycle times", ["cycle time"]),
+    ("Reporting & Insights", "Insights",    ["insights"]),
+    ("Reporting & Insights", "Data",        ["data"]),
+    ("Mobile & App", "Mobile app",    ["mobile app"]),
+    ("Mobile & App", "Driver app",    ["driver app"]),
+    ("Mobile & App", "App storage",   ["app storage", "storage"]),
+    ("Mobile & App", "Location/GPS",  ["location", "gps"]),
+    ("Compliance", "Compliance",      ["compliance", "csa"]),
+    ("Compliance", "Prevailing wage", ["prevailing wage"]),
+    ("Compliance", "Hours",           ["checking hours", "clocking out"]),
+    ("Account & Access", "Driver management", ["add driver", "move driver", "delete driver", "driver type", "driver day"]),
+    ("Account & Access", "Vendor management", ["vendor", "add ven"]),
+    ("Account & Access", "Login & access",    ["login", "get code", "access", "password", "sso"]),
+    ("Account & Access", "Registration",      ["registration", "add client", "add customer", "add sub", "connected customer", "invite"]),
+    ("Account & Access", "Equipment & trucks",["equipment", "truck"]),
+    ("Account & Access", "Account support",   ["acc support", "account support"]),
+    ("Feature Requests", "Feature request",   ["feature"]),
+    ("Bugs", "Bug",                   ["bug"]),
+    ("Other", "Looking for work",     ["looking for work"]),
+    ("Other", "Lead",                 ["lead"]),
+    ("Other", "General inquiries",    ["general inquir"]),
+    ("Other", "Spam/Test",            ["spam", "test"]),
+]
+# Tags that are channel/routing/noise — not topical; ignored when categorizing.
+CATEGORY_NOISE = {"email", "success@ email", "nar", "enterprise"}
+
+def categorize(tags):
+    """Return (main, sub) for one conversation from its tag list, or ('Other','Uncategorized')."""
+    lowered = [t.lower() for t in tags if t and t.lower() not in CATEGORY_NOISE]
+    for main, sub, kws in CATEGORY_RULES:
+        for kw in kws:
+            if any(kw in t for t in lowered):
+                return main, sub
+    return "Other", "Uncategorized"
+
 # ── Intercom ──────────────────────────────────────────────────────────────────
-def fetch_intercom(days, by_day):
+def fetch_intercom(days, by_day, cat_by_day=None):
     """Page all conversations created in [now-days, now]; bucket counts + timing per day."""
     since = int((datetime.datetime.now() - datetime.timedelta(days=days)).timestamp())
     headers = {"Authorization": f"Bearer {INTERCOM_TOKEN}", "Accept": "application/json",
@@ -132,6 +211,11 @@ def fetch_intercom(days, by_day):
                     row["ic_support_email"] += 1
             else:
                 continue  # ignore admin_initiated / other source types for channel volume
+            # volume-by-type: assign this conversation to one (main, sub)
+            if cat_by_day is not None:
+                main, sub = categorize(tags)
+                cat_by_day.setdefault(d, {}).setdefault(main, {}).setdefault(sub, 0)
+                cat_by_day[d][main][sub] += 1
             # timing (only present once a human replied / closed)
             st = c.get("statistics") or {}
             ttr = st.get("time_to_admin_reply")
@@ -310,6 +394,31 @@ def read_csv_list(path):
     with open(path, newline="") as f:
         return list(csv.DictReader(f))
 
+def read_categories():
+    """Load the long-format categories CSV into {date: {main: {sub: count}}}."""
+    out = {}
+    if not os.path.exists(CATEGORIES_PATH):
+        return out
+    with open(CATEGORIES_PATH, newline="") as f:
+        for r in csv.DictReader(f):
+            try:
+                cnt = int(float(r["count"]))
+            except (ValueError, KeyError):
+                continue
+            out.setdefault(r["date"], {}).setdefault(r["main"], {})[r["sub"]] = cnt
+    return out
+
+def write_categories(cat_by_day):
+    rows = []
+    for d in sorted(cat_by_day):
+        for main in sorted(cat_by_day[d]):
+            for sub, cnt in sorted(cat_by_day[d][main].items()):
+                rows.append({"date": d, "main": main, "sub": sub, "count": cnt})
+    with open(CATEGORIES_PATH, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=CATEGORIES_HEADER)
+        w.writeheader(); w.writerows(rows)
+    return len(rows)
+
 def build_daily_rows(by_day, existing):
     rows = []
     for d in sorted(by_day):
@@ -389,8 +498,8 @@ def main():
 
     window = args.backfill if args.backfill else 10   # incremental refreshes a rolling 10d
     print(f"Fetching {'backfill ' if args.backfill else 'incremental '}{window}d…")
-    by_day = {}
-    fetch_intercom(window, by_day)
+    by_day, cat_by_day = {}, {}
+    fetch_intercom(window, by_day, cat_by_day)
     fetch_linear(window, by_day)
     fresh = build_daily_rows(by_day, man_daily)
 
@@ -414,6 +523,20 @@ def main():
     write_csv(os.path.join(OUT_DIR, "support_weekly.csv"), weekly)
     write_csv(os.path.join(OUT_DIR, "support_monthly.csv"), monthly)
     print(f"  → support_weekly.csv ({len(weekly)} weeks), support_monthly.csv ({len(monthly)} months)")
+
+    # volume-by-type: upsert the same window into the long-format categories file
+    cat_existing = read_categories()
+    if args.backfill:
+        cutoff = min(cat_by_day) if cat_by_day else None
+        merged_cat = dict(cat_by_day)
+        for d, v in cat_existing.items():
+            if cutoff and d < cutoff and d not in merged_cat:
+                merged_cat[d] = v
+    else:
+        merged_cat = dict(cat_existing)
+        merged_cat.update(cat_by_day)   # refreshed days overwrite
+    ncat = write_categories(merged_cat)
+    print(f"  → support_categories_daily.csv ({ncat} rows, {len(merged_cat)} days)")
 
     write_xlsx()   # single deliverable workbook (3 tabs)
 

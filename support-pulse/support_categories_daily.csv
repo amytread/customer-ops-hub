@@ -1,0 +1,577 @@
+date,main,sub,count
+2026-03-13,Account & Access,Account support,2
+2026-03-13,Account & Access,Driver management,2
+2026-03-13,Other,Uncategorized,2
+2026-03-14,Account & Access,Account support,1
+2026-03-15,Account & Access,Account support,1
+2026-03-15,Other,Uncategorized,1
+2026-03-16,Account & Access,Account support,2
+2026-03-16,Account & Access,Driver management,1
+2026-03-16,Account & Access,Equipment & trucks,1
+2026-03-16,Account & Access,Login & access,2
+2026-03-16,Mobile & App,Location/GPS,1
+2026-03-16,Other,Uncategorized,1
+2026-03-17,Account & Access,Account support,3
+2026-03-17,Account & Access,Driver management,1
+2026-03-17,Account & Access,Login & access,1
+2026-03-17,Other,Uncategorized,2
+2026-03-18,Account & Access,Account support,1
+2026-03-18,Account & Access,Login & access,1
+2026-03-18,Account & Access,Vendor management,2
+2026-03-18,Mobile & App,Location/GPS,1
+2026-03-18,Other,Uncategorized,2
+2026-03-18,Reporting & Insights,Reporting,1
+2026-03-19,Account & Access,Account support,1
+2026-03-19,Account & Access,Driver management,2
+2026-03-19,Account & Access,Login & access,2
+2026-03-19,Mobile & App,Mobile app,1
+2026-03-19,Other,Uncategorized,2
+2026-03-19,Tickets,Add tickets,2
+2026-03-20,Account & Access,Driver management,2
+2026-03-20,Account & Access,Login & access,2
+2026-03-20,Account & Access,Vendor management,1
+2026-03-20,Reporting & Insights,Reporting,1
+2026-03-22,Account & Access,Driver management,2
+2026-03-22,Account & Access,Login & access,2
+2026-03-22,Other,Uncategorized,1
+2026-03-23,Account & Access,Account support,3
+2026-03-23,Account & Access,Driver management,2
+2026-03-23,Account & Access,Vendor management,1
+2026-03-23,Billing & Rates,Rates,3
+2026-03-23,Other,Uncategorized,2
+2026-03-24,Account & Access,Account support,4
+2026-03-24,Account & Access,Driver management,2
+2026-03-24,Account & Access,Login & access,2
+2026-03-24,Billing & Rates,Billing,1
+2026-03-24,Other,Uncategorized,1
+2026-03-24,Reporting & Insights,Reporting,1
+2026-03-24,Tickets,Add tickets,1
+2026-03-25,Account & Access,Account support,6
+2026-03-25,Account & Access,Driver management,3
+2026-03-25,Account & Access,Login & access,1
+2026-03-25,Account & Access,Vendor management,2
+2026-03-25,Integrations,API,1
+2026-03-25,Jobs,Start job,1
+2026-03-25,Other,Uncategorized,3
+2026-03-25,Reporting & Insights,Reporting,1
+2026-03-25,Tickets,Delete tickets,1
+2026-03-26,Account & Access,Account support,1
+2026-03-26,Account & Access,Driver management,4
+2026-03-26,Account & Access,Login & access,7
+2026-03-26,Account & Access,Vendor management,2
+2026-03-26,Billing & Rates,Rates,1
+2026-03-26,Feature Requests,Feature request,2
+2026-03-26,Mobile & App,Location/GPS,1
+2026-03-26,Tickets,Add tickets,2
+2026-03-27,Account & Access,Account support,4
+2026-03-27,Account & Access,Driver management,2
+2026-03-27,Account & Access,Equipment & trucks,1
+2026-03-27,Other,Uncategorized,1
+2026-03-28,Account & Access,Login & access,2
+2026-03-28,Jobs,Start job,1
+2026-03-28,Other,Spam/Test,1
+2026-03-29,Account & Access,Account support,1
+2026-03-29,Mobile & App,Mobile app,1
+2026-03-30,Account & Access,Account support,7
+2026-03-30,Account & Access,Driver management,4
+2026-03-30,Account & Access,Login & access,2
+2026-03-30,Account & Access,Vendor management,2
+2026-03-30,Billing & Rates,Rates,1
+2026-03-30,Mobile & App,Location/GPS,1
+2026-03-30,Other,Uncategorized,3
+2026-03-30,Tickets,Add tickets,2
+2026-03-31,Account & Access,Account support,5
+2026-03-31,Account & Access,Driver management,5
+2026-03-31,Account & Access,Login & access,5
+2026-03-31,Account & Access,Vendor management,1
+2026-03-31,Jobs,Job inquiries,1
+2026-03-31,Other,Spam/Test,1
+2026-03-31,Other,Uncategorized,7
+2026-04-01,Account & Access,Account support,4
+2026-04-01,Account & Access,Driver management,1
+2026-04-01,Account & Access,Login & access,2
+2026-04-01,Account & Access,Vendor management,1
+2026-04-01,Compliance,Compliance,1
+2026-04-01,Dispatch,Dispatch help,1
+2026-04-01,Other,Uncategorized,2
+2026-04-01,Reporting & Insights,Reporting,1
+2026-04-02,Account & Access,Account support,3
+2026-04-02,Account & Access,Driver management,1
+2026-04-02,Account & Access,Login & access,2
+2026-04-02,Account & Access,Vendor management,1
+2026-04-02,Billing & Rates,Billing,1
+2026-04-02,Billing & Rates,Rates,1
+2026-04-02,Integrations,API,1
+2026-04-02,Mobile & App,Location/GPS,1
+2026-04-02,Other,Spam/Test,1
+2026-04-02,Other,Uncategorized,3
+2026-04-02,Tickets,Add tickets,2
+2026-04-03,Account & Access,Account support,1
+2026-04-03,Account & Access,Driver management,1
+2026-04-03,Account & Access,Login & access,2
+2026-04-03,Mobile & App,App storage,1
+2026-04-03,Mobile & App,Mobile app,1
+2026-04-04,Account & Access,Account support,1
+2026-04-04,Account & Access,Driver management,1
+2026-04-04,Account & Access,Login & access,1
+2026-04-04,Account & Access,Vendor management,1
+2026-04-05,Account & Access,Account support,2
+2026-04-05,Account & Access,Login & access,1
+2026-04-05,Compliance,Compliance,1
+2026-04-06,Account & Access,Account support,9
+2026-04-06,Account & Access,Driver management,4
+2026-04-06,Account & Access,Login & access,5
+2026-04-06,Account & Access,Vendor management,1
+2026-04-06,Billing & Rates,Billing,1
+2026-04-06,Other,Uncategorized,4
+2026-04-06,Tickets,Add tickets,1
+2026-04-07,Account & Access,Account support,9
+2026-04-07,Account & Access,Login & access,3
+2026-04-07,Billing & Rates,Billing,1
+2026-04-07,Billing & Rates,Settlement/Payment,1
+2026-04-07,Jobs,Start job,1
+2026-04-07,Mobile & App,Mobile app,1
+2026-04-07,Other,Uncategorized,6
+2026-04-07,Tickets,Add tickets,1
+2026-04-08,Account & Access,Account support,5
+2026-04-08,Account & Access,Driver management,2
+2026-04-08,Account & Access,Login & access,2
+2026-04-08,Account & Access,Registration,1
+2026-04-08,Account & Access,Vendor management,1
+2026-04-08,Dispatch,Dispatch help,2
+2026-04-08,Other,Uncategorized,4
+2026-04-08,Reporting & Insights,Data,1
+2026-04-08,Reporting & Insights,Reporting,1
+2026-04-09,Account & Access,Account support,5
+2026-04-09,Account & Access,Driver management,2
+2026-04-09,Account & Access,Login & access,1
+2026-04-09,Account & Access,Vendor management,5
+2026-04-09,Compliance,Prevailing wage,1
+2026-04-09,Mobile & App,App storage,2
+2026-04-09,Mobile & App,Mobile app,1
+2026-04-09,Other,Uncategorized,1
+2026-04-09,Tickets,Download tickets,1
+2026-04-10,Account & Access,Account support,8
+2026-04-10,Account & Access,Driver management,6
+2026-04-10,Account & Access,Login & access,5
+2026-04-10,Account & Access,Registration,1
+2026-04-10,Account & Access,Vendor management,2
+2026-04-10,Billing & Rates,Billing,1
+2026-04-10,Integrations,API,1
+2026-04-10,Other,Spam/Test,5
+2026-04-10,Other,Uncategorized,9
+2026-04-10,Tickets,Add tickets,1
+2026-04-11,Account & Access,Account support,2
+2026-04-11,Mobile & App,Mobile app,1
+2026-04-11,Other,Spam/Test,1
+2026-04-12,Account & Access,Account support,1
+2026-04-12,Account & Access,Driver management,2
+2026-04-12,Account & Access,Login & access,1
+2026-04-12,Mobile & App,Mobile app,1
+2026-04-12,Other,Looking for work,1
+2026-04-13,Account & Access,Account support,7
+2026-04-13,Account & Access,Driver management,3
+2026-04-13,Account & Access,Login & access,1
+2026-04-13,Account & Access,Vendor management,2
+2026-04-13,Other,Uncategorized,3
+2026-04-14,Account & Access,Account support,2
+2026-04-14,Account & Access,Login & access,3
+2026-04-14,Account & Access,Vendor management,4
+2026-04-14,Billing & Rates,Billing,1
+2026-04-14,Mobile & App,Location/GPS,1
+2026-04-14,Reporting & Insights,Reporting,1
+2026-04-15,Account & Access,Account support,3
+2026-04-15,Account & Access,Driver management,2
+2026-04-15,Account & Access,Login & access,1
+2026-04-15,Account & Access,Registration,2
+2026-04-15,Billing & Rates,Rates,1
+2026-04-15,Integrations,Axle,1
+2026-04-15,Integrations,Import/Export,1
+2026-04-15,Mobile & App,Location/GPS,1
+2026-04-15,Other,Uncategorized,3
+2026-04-16,Account & Access,Account support,3
+2026-04-16,Account & Access,Driver management,2
+2026-04-16,Account & Access,Login & access,1
+2026-04-16,Account & Access,Registration,1
+2026-04-16,Compliance,Compliance,1
+2026-04-16,Dispatch,Dispatch help,1
+2026-04-16,Feature Requests,Feature request,1
+2026-04-16,Other,Uncategorized,1
+2026-04-16,Tickets,Download tickets,1
+2026-04-16,Tickets,Other tickets,1
+2026-04-17,Account & Access,Account support,2
+2026-04-17,Account & Access,Driver management,2
+2026-04-17,Account & Access,Login & access,1
+2026-04-17,Billing & Rates,Settlement/Payment,1
+2026-04-17,Mobile & App,Location/GPS,1
+2026-04-17,Other,Uncategorized,4
+2026-04-17,Tickets,Add tickets,1
+2026-04-19,Account & Access,Account support,1
+2026-04-19,Account & Access,Driver management,1
+2026-04-19,Other,Uncategorized,1
+2026-04-20,Account & Access,Account support,4
+2026-04-20,Account & Access,Driver management,5
+2026-04-20,Account & Access,Login & access,4
+2026-04-20,Account & Access,Vendor management,1
+2026-04-20,Feature Requests,Feature request,1
+2026-04-20,Other,Spam/Test,1
+2026-04-20,Other,Uncategorized,4
+2026-04-21,Account & Access,Account support,5
+2026-04-21,Account & Access,Driver management,1
+2026-04-21,Account & Access,Login & access,2
+2026-04-21,Account & Access,Vendor management,1
+2026-04-21,Feature Requests,Feature request,1
+2026-04-21,Other,Looking for work,2
+2026-04-21,Other,Uncategorized,11
+2026-04-21,Reporting & Insights,Reporting,1
+2026-04-21,Tickets,Add tickets,2
+2026-04-22,Account & Access,Account support,4
+2026-04-22,Account & Access,Driver management,2
+2026-04-22,Account & Access,Login & access,4
+2026-04-22,Account & Access,Vendor management,1
+2026-04-22,Billing & Rates,Billing,1
+2026-04-22,Mobile & App,Location/GPS,2
+2026-04-22,Other,Looking for work,1
+2026-04-22,Other,Uncategorized,7
+2026-04-22,Tickets,Add tickets,1
+2026-04-23,Account & Access,Account support,8
+2026-04-23,Account & Access,Driver management,2
+2026-04-23,Account & Access,Login & access,4
+2026-04-23,Account & Access,Registration,1
+2026-04-23,Other,Looking for work,1
+2026-04-23,Other,Uncategorized,3
+2026-04-23,Tickets,Add tickets,1
+2026-04-23,Tickets,Digital tickets,1
+2026-04-24,Account & Access,Account support,4
+2026-04-24,Account & Access,Driver management,2
+2026-04-24,Account & Access,Login & access,2
+2026-04-24,Account & Access,Vendor management,1
+2026-04-24,Mobile & App,App storage,1
+2026-04-24,Other,Uncategorized,5
+2026-04-25,Account & Access,Driver management,2
+2026-04-25,Account & Access,Login & access,1
+2026-04-26,Account & Access,Account support,1
+2026-04-26,Account & Access,Driver management,2
+2026-04-26,Billing & Rates,Billing,1
+2026-04-26,Dispatch,Dispatch help,1
+2026-04-26,Other,Looking for work,1
+2026-04-26,Other,Uncategorized,3
+2026-04-26,Tickets,Add tickets,1
+2026-04-27,Account & Access,Account support,6
+2026-04-27,Account & Access,Driver management,8
+2026-04-27,Account & Access,Login & access,3
+2026-04-27,Account & Access,Vendor management,2
+2026-04-27,Billing & Rates,Rates,1
+2026-04-27,Integrations,Apex,1
+2026-04-27,Mobile & App,Location/GPS,1
+2026-04-27,Mobile & App,Mobile app,1
+2026-04-27,Other,Uncategorized,3
+2026-04-27,Reporting & Insights,Reporting,1
+2026-04-27,Tickets,Add tickets,2
+2026-04-28,Account & Access,Account support,3
+2026-04-28,Account & Access,Driver management,2
+2026-04-28,Account & Access,Login & access,2
+2026-04-28,Account & Access,Vendor management,2
+2026-04-28,Billing & Rates,Rates,1
+2026-04-28,Jobs,Job cancellation,1
+2026-04-28,Jobs,Start job,2
+2026-04-28,Mobile & App,Driver app,1
+2026-04-28,Other,Uncategorized,6
+2026-04-28,Reporting & Insights,Reporting,1
+2026-04-28,Tickets,Add tickets,1
+2026-04-29,Account & Access,Account support,6
+2026-04-29,Account & Access,Driver management,1
+2026-04-29,Account & Access,Login & access,1
+2026-04-29,Mobile & App,Mobile app,1
+2026-04-29,Other,Uncategorized,1
+2026-04-29,Tickets,Add tickets,1
+2026-04-30,Account & Access,Account support,2
+2026-04-30,Account & Access,Driver management,3
+2026-04-30,Account & Access,Login & access,3
+2026-04-30,Account & Access,Vendor management,1
+2026-04-30,Other,Looking for work,1
+2026-04-30,Other,Spam/Test,1
+2026-04-30,Other,Uncategorized,1
+2026-04-30,Reporting & Insights,Reporting,1
+2026-05-01,Account & Access,Account support,1
+2026-05-01,Account & Access,Driver management,1
+2026-05-01,Account & Access,Login & access,1
+2026-05-01,Account & Access,Vendor management,1
+2026-05-01,Billing & Rates,Billing,1
+2026-05-01,Compliance,Hours,2
+2026-05-01,Other,Spam/Test,2
+2026-05-01,Other,Uncategorized,2
+2026-05-01,Reporting & Insights,Reporting,1
+2026-05-02,Feature Requests,Feature request,1
+2026-05-02,Other,Uncategorized,1
+2026-05-03,Account & Access,Driver management,3
+2026-05-03,Account & Access,Vendor management,1
+2026-05-04,Account & Access,Account support,3
+2026-05-04,Account & Access,Driver management,7
+2026-05-04,Account & Access,Login & access,1
+2026-05-04,Account & Access,Vendor management,2
+2026-05-04,Billing & Rates,Billing,2
+2026-05-04,Dispatch,Dispatch help,1
+2026-05-04,Jobs,Start job,1
+2026-05-04,Other,Looking for work,1
+2026-05-04,Other,Uncategorized,1
+2026-05-04,Tickets,Add tickets,1
+2026-05-05,Account & Access,Account support,3
+2026-05-05,Account & Access,Driver management,4
+2026-05-05,Account & Access,Login & access,6
+2026-05-05,Account & Access,Registration,1
+2026-05-05,Account & Access,Vendor management,5
+2026-05-05,Billing & Rates,Rates,1
+2026-05-05,Compliance,Compliance,2
+2026-05-05,Feature Requests,Feature request,1
+2026-05-05,Integrations,Integration (other),1
+2026-05-05,Mobile & App,Mobile app,2
+2026-05-05,Other,Uncategorized,4
+2026-05-05,Tickets,Add tickets,1
+2026-05-06,Account & Access,Account support,4
+2026-05-06,Account & Access,Driver management,7
+2026-05-06,Account & Access,Login & access,2
+2026-05-06,Account & Access,Vendor management,1
+2026-05-06,Billing & Rates,Billing,1
+2026-05-06,Billing & Rates,Rates,2
+2026-05-06,Integrations,Apex,1
+2026-05-06,Mobile & App,App storage,2
+2026-05-06,Other,Spam/Test,1
+2026-05-06,Other,Uncategorized,4
+2026-05-06,Reporting & Insights,Reporting,3
+2026-05-07,Account & Access,Account support,1
+2026-05-07,Account & Access,Driver management,7
+2026-05-07,Account & Access,Equipment & trucks,1
+2026-05-07,Account & Access,Login & access,3
+2026-05-07,Account & Access,Vendor management,2
+2026-05-07,Integrations,API,1
+2026-05-07,Jobs,Start job,1
+2026-05-07,Other,Looking for work,1
+2026-05-07,Other,Uncategorized,5
+2026-05-07,Reporting & Insights,Reporting,1
+2026-05-07,Tickets,Add tickets,1
+2026-05-08,Account & Access,Account support,6
+2026-05-08,Account & Access,Driver management,2
+2026-05-08,Account & Access,Login & access,4
+2026-05-08,Account & Access,Vendor management,1
+2026-05-08,Mobile & App,Mobile app,1
+2026-05-08,Other,Looking for work,1
+2026-05-08,Other,Uncategorized,8
+2026-05-09,Account & Access,Account support,1
+2026-05-09,Account & Access,Driver management,1
+2026-05-09,Account & Access,Login & access,2
+2026-05-09,Account & Access,Vendor management,2
+2026-05-09,Mobile & App,Mobile app,1
+2026-05-09,Other,Looking for work,1
+2026-05-09,Other,Uncategorized,2
+2026-05-10,Account & Access,Login & access,1
+2026-05-10,Dispatch,Dispatch help,1
+2026-05-11,Account & Access,Account support,6
+2026-05-11,Account & Access,Driver management,7
+2026-05-11,Account & Access,Equipment & trucks,1
+2026-05-11,Account & Access,Login & access,1
+2026-05-11,Dispatch,Dispatch help,1
+2026-05-11,Other,Spam/Test,3
+2026-05-11,Other,Uncategorized,3
+2026-05-11,Reporting & Insights,Data,1
+2026-05-11,Tickets,Add tickets,2
+2026-05-12,Account & Access,Account support,2
+2026-05-12,Account & Access,Driver management,3
+2026-05-12,Account & Access,Vendor management,1
+2026-05-12,Billing & Rates,Fuel surcharge,1
+2026-05-12,Integrations,Apex,1
+2026-05-12,Integrations,Axle,1
+2026-05-12,Jobs,Sites,1
+2026-05-12,Mobile & App,Location/GPS,2
+2026-05-12,Other,Spam/Test,1
+2026-05-12,Other,Uncategorized,6
+2026-05-12,Tickets,Add tickets,1
+2026-05-13,Account & Access,Account support,6
+2026-05-13,Account & Access,Driver management,2
+2026-05-13,Account & Access,Equipment & trucks,1
+2026-05-13,Account & Access,Login & access,1
+2026-05-13,Account & Access,Vendor management,1
+2026-05-13,Feature Requests,Feature request,1
+2026-05-13,Integrations,Apex,1
+2026-05-13,Other,Uncategorized,5
+2026-05-14,Account & Access,Account support,8
+2026-05-14,Account & Access,Driver management,3
+2026-05-14,Account & Access,Login & access,4
+2026-05-14,Billing & Rates,Rates,1
+2026-05-14,Compliance,Compliance,1
+2026-05-14,Integrations,Apex,1
+2026-05-14,Mobile & App,Mobile app,1
+2026-05-14,Other,Uncategorized,5
+2026-05-15,Account & Access,Account support,3
+2026-05-15,Account & Access,Driver management,1
+2026-05-15,Account & Access,Login & access,1
+2026-05-15,Account & Access,Vendor management,5
+2026-05-15,Billing & Rates,Rates,1
+2026-05-15,Compliance,Compliance,1
+2026-05-15,Integrations,Telematics,2
+2026-05-15,Mobile & App,Location/GPS,1
+2026-05-15,Mobile & App,Mobile app,2
+2026-05-15,Other,Uncategorized,3
+2026-05-15,Reporting & Insights,Reporting,1
+2026-05-17,Account & Access,Account support,2
+2026-05-17,Account & Access,Driver management,1
+2026-05-17,Other,Uncategorized,1
+2026-05-18,Account & Access,Account support,2
+2026-05-18,Account & Access,Driver management,4
+2026-05-18,Account & Access,Vendor management,1
+2026-05-18,Billing & Rates,Fuel surcharge,1
+2026-05-18,Billing & Rates,Rates,1
+2026-05-18,Jobs,Sites,1
+2026-05-18,Mobile & App,Mobile app,1
+2026-05-18,Other,Uncategorized,4
+2026-05-18,Tickets,Add tickets,1
+2026-05-18,Tickets,Other tickets,1
+2026-05-19,Account & Access,Account support,2
+2026-05-19,Account & Access,Driver management,4
+2026-05-19,Account & Access,Login & access,3
+2026-05-19,Account & Access,Vendor management,2
+2026-05-19,Billing & Rates,Rates,1
+2026-05-19,Feature Requests,Feature request,3
+2026-05-19,Mobile & App,Mobile app,1
+2026-05-19,Other,Spam/Test,2
+2026-05-19,Other,Uncategorized,2
+2026-05-20,Account & Access,Account support,2
+2026-05-20,Account & Access,Driver management,6
+2026-05-20,Account & Access,Login & access,2
+2026-05-20,Account & Access,Vendor management,2
+2026-05-20,Compliance,Compliance,1
+2026-05-20,Jobs,Start job,2
+2026-05-20,Mobile & App,Location/GPS,1
+2026-05-20,Other,Uncategorized,4
+2026-05-20,Tickets,Add tickets,1
+2026-05-21,Account & Access,Account support,4
+2026-05-21,Account & Access,Driver management,1
+2026-05-21,Account & Access,Equipment & trucks,1
+2026-05-21,Account & Access,Login & access,2
+2026-05-21,Account & Access,Vendor management,1
+2026-05-21,Feature Requests,Feature request,1
+2026-05-21,Other,Uncategorized,5
+2026-05-21,Tickets,Add tickets,1
+2026-05-22,Account & Access,Account support,2
+2026-05-22,Account & Access,Driver management,3
+2026-05-22,Account & Access,Equipment & trucks,1
+2026-05-22,Billing & Rates,Billing,1
+2026-05-22,Other,Uncategorized,2
+2026-05-23,Account & Access,Account support,1
+2026-05-24,Account & Access,Driver management,4
+2026-05-24,Account & Access,Login & access,1
+2026-05-25,Account & Access,Account support,2
+2026-05-25,Account & Access,Driver management,2
+2026-05-25,Account & Access,Equipment & trucks,1
+2026-05-25,Account & Access,Login & access,2
+2026-05-25,Dispatch,Dispatch help,1
+2026-05-26,Account & Access,Account support,5
+2026-05-26,Account & Access,Driver management,5
+2026-05-26,Account & Access,Login & access,1
+2026-05-26,Compliance,Compliance,2
+2026-05-26,Other,Spam/Test,1
+2026-05-26,Other,Uncategorized,7
+2026-05-27,Account & Access,Account support,4
+2026-05-27,Account & Access,Driver management,2
+2026-05-27,Account & Access,Login & access,2
+2026-05-27,Account & Access,Vendor management,3
+2026-05-27,Billing & Rates,Rates,1
+2026-05-27,Other,Uncategorized,6
+2026-05-27,Reporting & Insights,Reporting,1
+2026-05-28,Account & Access,Account support,6
+2026-05-28,Account & Access,Driver management,1
+2026-05-28,Account & Access,Equipment & trucks,1
+2026-05-28,Account & Access,Login & access,1
+2026-05-28,Account & Access,Vendor management,2
+2026-05-28,Billing & Rates,Rates,1
+2026-05-28,Compliance,Compliance,1
+2026-05-28,Other,Looking for work,3
+2026-05-28,Other,Uncategorized,20
+2026-05-29,Account & Access,Account support,1
+2026-05-29,Account & Access,Driver management,3
+2026-05-29,Account & Access,Login & access,1
+2026-05-29,Account & Access,Registration,2
+2026-05-29,Account & Access,Vendor management,2
+2026-05-29,Compliance,Compliance,1
+2026-05-29,Other,Spam/Test,1
+2026-05-29,Other,Uncategorized,16
+2026-05-30,Account & Access,Account support,3
+2026-05-30,Account & Access,Driver management,1
+2026-05-30,Account & Access,Login & access,1
+2026-05-31,Account & Access,Account support,1
+2026-05-31,Account & Access,Driver management,3
+2026-05-31,Account & Access,Login & access,1
+2026-06-01,Account & Access,Account support,4
+2026-06-01,Account & Access,Driver management,5
+2026-06-01,Account & Access,Login & access,1
+2026-06-01,Account & Access,Registration,10
+2026-06-01,Account & Access,Vendor management,2
+2026-06-01,Jobs,Start job,1
+2026-06-01,Other,Spam/Test,2
+2026-06-01,Other,Uncategorized,10
+2026-06-02,Account & Access,Account support,3
+2026-06-02,Account & Access,Driver management,2
+2026-06-02,Account & Access,Login & access,4
+2026-06-02,Account & Access,Registration,12
+2026-06-02,Account & Access,Vendor management,2
+2026-06-02,Compliance,Compliance,2
+2026-06-02,Jobs,Sites,1
+2026-06-02,Mobile & App,Location/GPS,1
+2026-06-02,Other,Uncategorized,5
+2026-06-03,Account & Access,Account support,3
+2026-06-03,Account & Access,Driver management,6
+2026-06-03,Account & Access,Login & access,3
+2026-06-03,Account & Access,Registration,13
+2026-06-03,Account & Access,Vendor management,2
+2026-06-03,Mobile & App,Location/GPS,2
+2026-06-03,Other,Spam/Test,2
+2026-06-03,Other,Uncategorized,13
+2026-06-03,Tickets,Add tickets,1
+2026-06-04,Account & Access,Account support,1
+2026-06-04,Account & Access,Driver management,2
+2026-06-04,Account & Access,Login & access,2
+2026-06-04,Account & Access,Registration,5
+2026-06-04,Account & Access,Vendor management,2
+2026-06-04,Dispatch,Dispatch help,1
+2026-06-04,Jobs,Start job,1
+2026-06-04,Other,Spam/Test,1
+2026-06-04,Other,Uncategorized,13
+2026-06-05,Account & Access,Account support,2
+2026-06-05,Account & Access,Driver management,3
+2026-06-05,Account & Access,Registration,4
+2026-06-05,Other,Uncategorized,12
+2026-06-05,Tickets,Add tickets,1
+2026-06-05,Tickets,Move tickets,1
+2026-06-06,Account & Access,Account support,1
+2026-06-06,Account & Access,Login & access,1
+2026-06-06,Account & Access,Registration,2
+2026-06-06,Mobile & App,App storage,1
+2026-06-07,Account & Access,Login & access,1
+2026-06-07,Account & Access,Registration,3
+2026-06-07,Account & Access,Vendor management,2
+2026-06-07,Other,Uncategorized,2
+2026-06-08,Account & Access,Account support,4
+2026-06-08,Account & Access,Driver management,5
+2026-06-08,Account & Access,Login & access,1
+2026-06-08,Account & Access,Registration,11
+2026-06-08,Account & Access,Vendor management,4
+2026-06-08,Compliance,Compliance,1
+2026-06-08,Jobs,Sites,1
+2026-06-08,Other,Uncategorized,13
+2026-06-08,Reporting & Insights,Reporting,2
+2026-06-09,Account & Access,Account support,7
+2026-06-09,Account & Access,Driver management,4
+2026-06-09,Account & Access,Login & access,6
+2026-06-09,Account & Access,Registration,21
+2026-06-09,Account & Access,Vendor management,2
+2026-06-09,Dispatch,Dispatch help,1
+2026-06-09,Other,Looking for work,1
+2026-06-09,Other,Uncategorized,23
+2026-06-10,Account & Access,Account support,3
+2026-06-10,Account & Access,Driver management,2
+2026-06-10,Account & Access,Login & access,2
+2026-06-10,Account & Access,Registration,9
+2026-06-10,Compliance,Compliance,1
+2026-06-10,Integrations,API,1
+2026-06-10,Other,Uncategorized,25
+2026-06-10,Tickets,Add tickets,1
