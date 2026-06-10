@@ -54,7 +54,9 @@ def series(rows):
             "grand_total", "metric_created_completed_1wk_pct",
             "ic_avg_first_response_min", "ic_avg_resolution_hr",
             "support_marco_escalations"]
-    out = {"labels": [r["period_label"] for r in rows]}
+    out = {"labels": [r["period_label"] for r in rows],
+           "period_start": [r.get("period_start", "") for r in rows],
+           "period_end": [r.get("period_end", "") for r in rows]}
     for c in cols:
         out[c] = [num(r.get(c, "")) for r in rows]
     return out
@@ -95,6 +97,11 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 2
 .toggle button{font-family:inherit;font-weight:700;font-size:.82rem;color:var(--mut);background:none;border:none;padding:8px 18px;border-radius:7px;cursor:pointer}
 .toggle button.on{background:var(--yellow);color:#10222C}
 .asof{font-size:.76rem;color:var(--mut)}
+.range{display:flex;align-items:center;gap:10px;font-size:.76rem;color:var(--mut)}
+.range label{display:flex;align-items:center;gap:6px}
+.range select{font-family:inherit;font-size:.8rem;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:150px}
+.range #resetRange{font-family:inherit;font-size:.74rem;font-weight:600;color:var(--mut);background:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;cursor:pointer}
+.range #resetRange:hover{color:var(--ink);border-color:var(--mut)}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
 .kpi{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
 .kpi .l{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);margin-bottom:8px}
@@ -130,6 +137,11 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 2
       <button data-g="daily">Daily</button>
       <button data-g="weekly" class="on">Weekly</button>
       <button data-g="monthly">Monthly</button>
+    </div>
+    <div class="range">
+      <label>From <select id="from"></select></label>
+      <label>To <select id="to"></select></label>
+      <button id="resetRange" type="button">Reset</button>
     </div>
     <div class="asof" id="asof"></div>
   </div>
@@ -168,15 +180,41 @@ const DATA=/*DATA*/;
 const C={ink:'#EAF2F6',mut:'#8FA8B4',grid:'rgba(143,168,180,.14)',yellow:'#FFE500',amber:'#FFAA13',chat:'#58C7C2',cus:'#9B8CFF',rep:'#4DA3FF',red:'#FF6B6B',green:'#4ADE80'};
 Chart.defaults.color=C.mut;Chart.defaults.borderColor=C.grid;Chart.defaults.font.family="'Golos Text',sans-serif";Chart.defaults.font.size=11;
 Chart.defaults.plugins.legend.labels.boxWidth=10;Chart.defaults.plugins.legend.labels.usePointStyle=true;Chart.defaults.plugins.legend.position='bottom';
-let g='weekly',charts={};
+let g='weekly', charts={}, range={from:0,to:0}, cur=null;
 const X={grid:{display:false},ticks:{maxRotation:0,autoSkip:true,maxTicksLimit:9}};
 const Y=(opts={})=>Object.assign({beginAtZero:true,grid:{color:C.grid,drawTicks:false},border:{display:false}},opts);
 const last=a=>{for(let i=a.length-1;i>=0;i--)if(a[i]!=null)return a[i];return null;};
 const prev=a=>{let seen=0;for(let i=a.length-1;i>=0;i--){if(a[i]!=null){seen++;if(seen===2)return a[i];}}return null;};
-
-function fmtDelta(cur,prv,opts){
-  if(cur==null||prv==null)return {cls:'flat',txt:'—'};
-  const d=cur-prv, pts=opts&&opts.pts;
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function ymd(s){const p=String(s).split('-').map(Number);return{y:p[0],m:p[1],d:p[2]};}
+// Human date labels — weeks/months shown as date ranges, not week numbers.
+function disp(gr,i){
+  const s=DATA[gr].period_start[i], e=DATA[gr].period_end[i];
+  if(!s)return DATA[gr].labels[i];
+  const a=ymd(s);
+  if(gr==='daily')  return `${MON[a.m-1]} ${a.d}`;
+  if(gr==='monthly')return `${MON[a.m-1]} ${a.y}`;
+  const b=ymd(e);
+  return a.m===b.m ? `${MON[a.m-1]} ${a.d}–${b.d}` : `${MON[a.m-1]} ${a.d} – ${MON[b.m-1]} ${b.d}`;
+}
+function allDisp(){return DATA[g].labels.map((_,i)=>disp(g,i));}
+function populateRange(reset){
+  const d=allDisp(), n=d.length;
+  if(reset){range.from=0;range.to=n-1;}
+  range.from=Math.min(range.from,n-1); range.to=Math.min(range.to,n-1);
+  const fill=(el,sel)=>{el.innerHTML=d.map((x,i)=>`<option value="${i}"${i===sel?' selected':''}>${x}</option>`).join('');};
+  fill(document.getElementById('from'),range.from);
+  fill(document.getElementById('to'),range.to);
+}
+function view(){
+  const f=Math.min(range.from,range.to), t=Math.max(range.from,range.to);
+  const src=DATA[g], o={labels:allDisp().slice(f,t+1)};
+  for(const k in src){if(k!=='labels' && Array.isArray(src[k]))o[k]=src[k].slice(f,t+1);}
+  return o;
+}
+function fmtDelta(c,p,opts){
+  if(c==null||p==null)return {cls:'flat',txt:'—'};
+  const d=c-p, pts=opts&&opts.pts;
   const good = opts&&opts.higherBetter ? d>0 : null;
   const cls = d===0?'flat':(good===null?'flat':(good?'up':'down'));
   const arrow = d>0?'▲':(d<0?'▼':'■');
@@ -184,28 +222,26 @@ function fmtDelta(cur,prv,opts){
   return {cls, txt:`${arrow} ${val} vs prior`};
 }
 function mkKpis(){
-  const d=DATA[g];
   const defs=[
-    {l:'Support volume',key:'ic_total',sub:'success+support+chat'},
+    {l:'Support volume',key:'ic_total'},
     {l:'support@ inbound',key:'ic_support_email'},
-    {l:'Linear created',key:'lin_total_created',sub:'CUS + REP'},
+    {l:'Linear created',key:'lin_total_created'},
     {l:'1 Metric',key:'metric_created_completed_1wk_pct',pct:true,pts:true,higherBetter:true},
   ];
   document.getElementById('kpis').innerHTML=defs.map(o=>{
-    const cur=last(d[o.key]), prv=prev(d[o.key]);
-    const dd=fmtDelta(cur,prv,{pts:o.pts,higherBetter:o.higherBetter});
-    const v = cur==null?'—':(o.pct?cur+'%':cur);
+    const c=last(cur[o.key]), p=prev(cur[o.key]);
+    const dd=fmtDelta(c,p,{pts:o.pts,higherBetter:o.higherBetter});
+    const v=c==null?'—':(o.pct?c+'%':c);
     return `<div class="kpi"><div class="l">${o.l}</div><div class="v ${o.pct?'y':''}">${v}</div><div class="d ${dd.cls}">${dd.txt}</div></div>`;
   }).join('');
-  document.getElementById('asof').textContent = d.labels.length? `Latest: ${d.labels[d.labels.length-1]}` : '';
 }
-function area(key,color){return {data:DATA[g][key],borderColor:color,backgroundColor:color+'33',fill:true,stack:'s',tension:.35,borderWidth:2,pointRadius:0,pointHoverRadius:4};}
-function line(key,color,fill){return {data:DATA[g][key],borderColor:color,backgroundColor:fill?color+'22':color,fill:!!fill,tension:.35,borderWidth:2.5,pointRadius:0,pointHoverRadius:4};}
-function sum2(a,b){return DATA[g][a].map((v,i)=>(v||0)+(DATA[g][b][i]||0));}
+function area(key,color){return {data:cur[key],borderColor:color,backgroundColor:color+'33',fill:true,stack:'s',tension:.35,borderWidth:2,pointRadius:0,pointHoverRadius:4};}
+function line(key,color,fill){return {data:cur[key],borderColor:color,backgroundColor:fill?color+'22':color,fill:!!fill,tension:.35,borderWidth:2.5,pointRadius:0,pointHoverRadius:4};}
+function sum2(a,b){return cur[a].map((v,i)=>(v||0)+(cur[b][i]||0));}
 
 function draw(){
   Object.values(charts).forEach(c=>c.destroy());charts={};
-  const L=DATA[g].labels;
+  const L=cur.labels;
   charts.v=new Chart(cVol,{type:'line',data:{labels:L,datasets:[
     Object.assign({label:'success@'},area('ic_success_email',C.yellow)),
     Object.assign({label:'support@'},area('ic_support_email',C.amber)),
@@ -217,8 +253,8 @@ function draw(){
   ]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:X,y:Y({max:100,ticks:{callback:v=>v+'%'}})}}});
 
   charts.l=new Chart(cLin,{type:'bar',data:{labels:L,datasets:[
-    {label:'CUS',data:DATA[g].lin_cus_created,backgroundColor:C.cus,borderRadius:4,maxBarThickness:22},
-    {label:'REP',data:DATA[g].lin_rep_created,backgroundColor:C.rep,borderRadius:4,maxBarThickness:22},
+    {label:'CUS',data:cur.lin_cus_created,backgroundColor:C.cus,borderRadius:4,maxBarThickness:22},
+    {label:'REP',data:cur.lin_rep_created,backgroundColor:C.rep,borderRadius:4,maxBarThickness:22},
   ]},options:{maintainAspectRatio:false,scales:{x:X,y:Y()}}});
 
   charts.p=new Chart(cPrio,{type:'bar',data:{labels:L,datasets:[
@@ -234,13 +270,21 @@ function draw(){
     Object.assign({label:'hrs'},line('ic_avg_resolution_hr',C.amber,true)),
   ]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:X,y:Y()}}});
 }
+function render(){
+  cur=view(); mkKpis(); draw();
+  const L=cur.labels;
+  document.getElementById('asof').textContent = !L.length?'' : (L.length===1?`Showing ${L[0]}`:`Showing ${L[0]} → ${L[L.length-1]}`);
+}
 document.getElementById('tg').addEventListener('click',e=>{
   if(!e.target.dataset.g)return;
   g=e.target.dataset.g;
   [...tg.children].forEach(b=>b.classList.toggle('on',b.dataset.g===g));
-  mkKpis();draw();
+  populateRange(true); render();
 });
-mkKpis();draw();
+document.getElementById('from').addEventListener('change',e=>{range.from=+e.target.value; populateRange(false); render();});
+document.getElementById('to').addEventListener('change',e=>{range.to=+e.target.value; populateRange(false); render();});
+document.getElementById('resetRange').addEventListener('click',()=>{populateRange(true); render();});
+populateRange(true); render();
 </script>
 </body></html>"""
 

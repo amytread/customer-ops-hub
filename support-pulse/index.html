@@ -153,7 +153,7 @@ function populateRange(reset){
 function view(){
   const f=Math.min(range.from,range.to), t=Math.max(range.from,range.to);
   const src=DATA[g], o={labels:allDisp().slice(f,t+1)};
-  for(const k in src){if(Array.isArray(src[k]))o[k]=src[k].slice(f,t+1);}
+  for(const k in src){if(k!=='labels' && Array.isArray(src[k]))o[k]=src[k].slice(f,t+1);}
   return o;
 }
 function fmtDelta(c,p,opts){
