@@ -1,0 +1,389 @@
+date,usertype,count
+2026-03-14,Dispatcher,1
+2026-03-15,Unknown,1
+2026-03-15,Company Admin,1
+2026-03-16,Dispatcher,4
+2026-03-16,Unknown,3
+2026-03-16,Driver,1
+2026-03-17,Unknown,3
+2026-03-17,Reporting,2
+2026-03-17,Driver,1
+2026-03-17,Biller,1
+2026-03-18,Unknown,4
+2026-03-18,Reporting,2
+2026-03-18,Driver,1
+2026-03-18,Company Admin,1
+2026-03-19,Unknown,7
+2026-03-19,Driver,2
+2026-03-19,Foreman,1
+2026-03-20,Unknown,5
+2026-03-20,Driver,1
+2026-03-22,Driver,3
+2026-03-22,Unknown,2
+2026-03-23,Unknown,4
+2026-03-23,Driver,2
+2026-03-23,Dispatcher,2
+2026-03-23,Company Admin,2
+2026-03-23,Biller,1
+2026-03-24,Unknown,8
+2026-03-24,Driver,2
+2026-03-24,Reporting,1
+2026-03-24,Foreman,1
+2026-03-25,Unknown,8
+2026-03-25,Driver,5
+2026-03-25,Dispatcher,3
+2026-03-25,Company Admin,2
+2026-03-25,Reporting,1
+2026-03-26,Driver,7
+2026-03-26,Unknown,5
+2026-03-26,Company Admin,5
+2026-03-26,Dispatcher,2
+2026-03-26,Foreman,1
+2026-03-27,Unknown,4
+2026-03-27,Driver,2
+2026-03-27,Biller,1
+2026-03-27,Company Admin,1
+2026-03-28,Unknown,3
+2026-03-28,Driver,1
+2026-03-29,Driver,2
+2026-03-30,Driver,9
+2026-03-30,Unknown,9
+2026-03-30,Dispatcher,2
+2026-03-30,Reporting,1
+2026-03-30,Company Admin,1
+2026-03-31,Unknown,12
+2026-03-31,Dispatcher,4
+2026-03-31,Reporting,3
+2026-03-31,Driver,3
+2026-03-31,Biller,2
+2026-03-31,Foreman,1
+2026-04-01,Unknown,4
+2026-04-01,Dispatcher,3
+2026-04-01,Reporting,2
+2026-04-01,Driver,2
+2026-04-01,Foreman,1
+2026-04-01,Platform Admin,1
+2026-04-02,Driver,7
+2026-04-02,Unknown,5
+2026-04-02,Dispatcher,3
+2026-04-02,Biller,2
+2026-04-03,Unknown,4
+2026-04-03,Driver,1
+2026-04-03,Dispatcher,1
+2026-04-04,Unknown,2
+2026-04-04,Driver,1
+2026-04-04,Dispatcher,1
+2026-04-05,Driver,3
+2026-04-05,Unknown,1
+2026-04-06,Unknown,10
+2026-04-06,Dispatcher,7
+2026-04-06,Driver,4
+2026-04-06,Company Admin,3
+2026-04-06,Biller,1
+2026-04-07,Unknown,9
+2026-04-07,Driver,8
+2026-04-07,Platform Admin,2
+2026-04-07,Dispatcher,2
+2026-04-07,Reporting,1
+2026-04-07,Biller,1
+2026-04-08,Unknown,6
+2026-04-08,Driver,6
+2026-04-08,Dispatcher,4
+2026-04-08,Reporting,2
+2026-04-08,Company Admin,1
+2026-04-09,Unknown,9
+2026-04-09,Driver,4
+2026-04-09,Reporting,2
+2026-04-09,Company Admin,2
+2026-04-09,Dispatcher,2
+2026-04-10,Unknown,18
+2026-04-10,Dispatcher,11
+2026-04-10,Driver,5
+2026-04-10,Reporting,2
+2026-04-10,Biller,1
+2026-04-10,Platform Admin,1
+2026-04-10,Company Admin,1
+2026-04-11,Driver,2
+2026-04-11,Reporting,1
+2026-04-11,Unknown,1
+2026-04-12,Driver,5
+2026-04-12,Company Admin,1
+2026-04-13,Unknown,5
+2026-04-13,Driver,5
+2026-04-13,Company Admin,2
+2026-04-13,Dispatcher,2
+2026-04-13,Reporting,1
+2026-04-13,Foreman,1
+2026-04-14,Unknown,5
+2026-04-14,Driver,4
+2026-04-14,Biller,1
+2026-04-14,Reporting,1
+2026-04-14,Dispatcher,1
+2026-04-15,Unknown,6
+2026-04-15,Driver,4
+2026-04-15,Biller,2
+2026-04-15,Reporting,1
+2026-04-15,Foreman,1
+2026-04-15,Dispatcher,1
+2026-04-16,Unknown,6
+2026-04-16,Company Admin,2
+2026-04-16,Reporting,2
+2026-04-16,Driver,2
+2026-04-16,Dispatcher,1
+2026-04-17,Driver,4
+2026-04-17,Unknown,3
+2026-04-17,Biller,2
+2026-04-17,Reporting,1
+2026-04-17,Company Admin,1
+2026-04-17,Dispatcher,1
+2026-04-19,Unknown,2
+2026-04-19,Company Admin,1
+2026-04-20,Unknown,10
+2026-04-20,Driver,4
+2026-04-20,Dispatcher,3
+2026-04-20,Reporting,2
+2026-04-20,Foreman,1
+2026-04-21,Unknown,9
+2026-04-21,Driver,8
+2026-04-21,Dispatcher,3
+2026-04-21,Reporting,3
+2026-04-21,Biller,2
+2026-04-21,Company Admin,1
+2026-04-22,Driver,6
+2026-04-22,Unknown,6
+2026-04-22,Dispatcher,5
+2026-04-22,Company Admin,4
+2026-04-22,Reporting,1
+2026-04-22,Platform Admin,1
+2026-04-23,Unknown,10
+2026-04-23,Driver,5
+2026-04-23,Biller,3
+2026-04-23,Dispatcher,2
+2026-04-23,Reporting,1
+2026-04-24,Unknown,13
+2026-04-24,Reporting,1
+2026-04-24,Dispatcher,1
+2026-04-25,Driver,2
+2026-04-25,Company Admin,1
+2026-04-26,Driver,4
+2026-04-26,Unknown,3
+2026-04-26,Biller,2
+2026-04-26,Dispatcher,1
+2026-04-27,Unknown,13
+2026-04-27,Driver,6
+2026-04-27,Dispatcher,4
+2026-04-27,Company Admin,2
+2026-04-27,Reporting,2
+2026-04-27,Foreman,1
+2026-04-27,Biller,1
+2026-04-28,Driver,11
+2026-04-28,Unknown,4
+2026-04-28,Biller,3
+2026-04-28,Reporting,3
+2026-04-28,Dispatcher,1
+2026-04-29,Unknown,4
+2026-04-29,Driver,4
+2026-04-29,Dispatcher,2
+2026-04-29,Reporting,1
+2026-04-30,Unknown,7
+2026-04-30,Driver,3
+2026-04-30,Biller,1
+2026-04-30,Reporting,1
+2026-04-30,Dispatcher,1
+2026-05-01,Driver,4
+2026-05-01,Unknown,3
+2026-05-01,Dispatcher,2
+2026-05-01,Company Admin,1
+2026-05-01,Reporting,1
+2026-05-01,Foreman,1
+2026-05-02,Unknown,1
+2026-05-02,Biller,1
+2026-05-03,Driver,2
+2026-05-03,Dispatcher,2
+2026-05-04,Driver,9
+2026-05-04,Unknown,5
+2026-05-04,Dispatcher,3
+2026-05-04,Company Admin,3
+2026-05-05,Unknown,13
+2026-05-05,Dispatcher,7
+2026-05-05,Driver,5
+2026-05-05,Biller,3
+2026-05-05,Company Admin,2
+2026-05-05,Reporting,1
+2026-05-06,Unknown,13
+2026-05-06,Biller,5
+2026-05-06,Driver,4
+2026-05-06,Reporting,4
+2026-05-06,Dispatcher,1
+2026-05-06,Company Admin,1
+2026-05-07,Unknown,15
+2026-05-07,Driver,4
+2026-05-07,Dispatcher,2
+2026-05-07,Company Admin,2
+2026-05-07,Biller,1
+2026-05-08,Unknown,9
+2026-05-08,Company Admin,4
+2026-05-08,Driver,4
+2026-05-08,Dispatcher,3
+2026-05-08,Biller,3
+2026-05-09,Driver,3
+2026-05-09,Unknown,3
+2026-05-09,Company Admin,2
+2026-05-09,Dispatcher,1
+2026-05-09,Biller,1
+2026-05-10,Unknown,1
+2026-05-10,Dispatcher,1
+2026-05-11,Unknown,9
+2026-05-11,Driver,9
+2026-05-11,Company Admin,4
+2026-05-11,Dispatcher,2
+2026-05-11,Reporting,1
+2026-05-12,Unknown,5
+2026-05-12,Dispatcher,4
+2026-05-12,Driver,4
+2026-05-12,Biller,2
+2026-05-12,Company Admin,2
+2026-05-12,Reporting,1
+2026-05-12,Platform Admin,1
+2026-05-12,Foreman,1
+2026-05-13,Driver,6
+2026-05-13,Dispatcher,5
+2026-05-13,Unknown,3
+2026-05-13,Company Admin,1
+2026-05-13,Biller,1
+2026-05-13,Reporting,1
+2026-05-13,Platform Admin,1
+2026-05-14,Unknown,10
+2026-05-14,Driver,6
+2026-05-14,Dispatcher,4
+2026-05-14,Reporting,3
+2026-05-14,Biller,1
+2026-05-15,Dispatcher,7
+2026-05-15,Unknown,6
+2026-05-15,Driver,3
+2026-05-15,Company Admin,2
+2026-05-15,Biller,2
+2026-05-15,Reporting,1
+2026-05-17,Driver,3
+2026-05-17,Dispatcher,1
+2026-05-18,Driver,9
+2026-05-18,Unknown,5
+2026-05-18,Platform Admin,1
+2026-05-18,Biller,1
+2026-05-18,Company Admin,1
+2026-05-19,Unknown,9
+2026-05-19,Driver,4
+2026-05-19,Dispatcher,3
+2026-05-19,Biller,2
+2026-05-19,Company Admin,2
+2026-05-20,Driver,8
+2026-05-20,Unknown,7
+2026-05-20,Dispatcher,2
+2026-05-20,Reporting,2
+2026-05-20,Viewer,1
+2026-05-20,Company Admin,1
+2026-05-21,Driver,10
+2026-05-21,Unknown,3
+2026-05-21,Reporting,1
+2026-05-21,Company Admin,1
+2026-05-21,Biller,1
+2026-05-22,Driver,5
+2026-05-22,Unknown,2
+2026-05-22,Biller,1
+2026-05-22,Company Admin,1
+2026-05-23,Driver,1
+2026-05-24,Unknown,3
+2026-05-24,Driver,1
+2026-05-24,Dispatcher,1
+2026-05-25,Driver,5
+2026-05-25,Unknown,3
+2026-05-26,Unknown,8
+2026-05-26,Driver,7
+2026-05-26,Manager,2
+2026-05-26,Dispatcher,2
+2026-05-26,Reporting,1
+2026-05-26,Company Admin,1
+2026-05-27,Unknown,7
+2026-05-27,Driver,6
+2026-05-27,Dispatcher,4
+2026-05-27,Reporting,2
+2026-05-28,Unknown,19
+2026-05-28,Driver,12
+2026-05-28,Dispatcher,2
+2026-05-28,Reporting,1
+2026-05-28,Company Admin,1
+2026-05-28,Biller,1
+2026-05-29,Driver,8
+2026-05-29,Unknown,7
+2026-05-29,Dispatcher,7
+2026-05-29,Reporting,2
+2026-05-29,Biller,2
+2026-05-29,Foreman,1
+2026-05-30,Unknown,3
+2026-05-30,Driver,1
+2026-05-30,Dispatcher,1
+2026-05-31,Company Admin,3
+2026-05-31,Driver,2
+2026-06-01,Unknown,10
+2026-06-01,Driver,10
+2026-06-01,Dispatcher,8
+2026-06-01,Reporting,4
+2026-06-01,Company Admin,2
+2026-06-01,Biller,1
+2026-06-02,Driver,14
+2026-06-02,Unknown,8
+2026-06-02,Dispatcher,7
+2026-06-02,Reporting,2
+2026-06-02,Company Admin,1
+2026-06-03,Driver,19
+2026-06-03,Unknown,14
+2026-06-03,Dispatcher,8
+2026-06-03,Reporting,2
+2026-06-03,Biller,1
+2026-06-03,Platform Admin,1
+2026-06-04,Unknown,8
+2026-06-04,Driver,8
+2026-06-04,Dispatcher,5
+2026-06-04,Reporting,3
+2026-06-04,Biller,2
+2026-06-04,Foreman,1
+2026-06-04,Company Admin,1
+2026-06-05,Biller,6
+2026-06-05,Dispatcher,6
+2026-06-05,Unknown,5
+2026-06-05,Driver,5
+2026-06-05,Reporting,1
+2026-06-06,Dispatcher,2
+2026-06-06,Foreman,1
+2026-06-06,Unknown,1
+2026-06-06,Driver,1
+2026-06-07,Driver,4
+2026-06-07,Unknown,2
+2026-06-07,Dispatcher,1
+2026-06-07,Biller,1
+2026-06-08,Driver,13
+2026-06-08,Dispatcher,12
+2026-06-08,Unknown,8
+2026-06-08,Reporting,3
+2026-06-08,Biller,3
+2026-06-08,Company Admin,2
+2026-06-08,Foreman,1
+2026-06-09,Driver,21
+2026-06-09,Unknown,19
+2026-06-09,Dispatcher,17
+2026-06-09,Company Admin,3
+2026-06-09,Biller,3
+2026-06-09,Foreman,1
+2026-06-09,Reporting,1
+2026-06-10,Unknown,15
+2026-06-10,Dispatcher,14
+2026-06-10,Driver,14
+2026-06-10,Biller,8
+2026-06-10,Reporting,2
+2026-06-10,Platform Admin,1
+2026-06-10,Foreman,1
+2026-06-11,Unknown,11
+2026-06-11,Dispatcher,5
+2026-06-11,Driver,4
+2026-06-11,Reporting,2
+2026-06-11,Biller,1

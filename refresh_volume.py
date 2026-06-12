@@ -22,7 +22,7 @@ Writes (under support-pulse/):
   support_daily.csv  support_weekly.csv  support_monthly.csv
 """
 
-import argparse, csv, datetime, json, os, subprocess, sys, time, urllib.request, urllib.error
+import argparse, csv, datetime, json, os, re, subprocess, sys, time, urllib.request, urllib.error
 
 REPO_DIR = os.path.dirname(os.path.abspath(__file__))
 OUT_DIR  = os.path.join(REPO_DIR, "support-pulse")
@@ -85,6 +85,8 @@ SHEETS = [("Daily", "support_daily.csv"), ("Weekly", "support_weekly.csv"), ("Mo
 # can aggregate it across any selected date range and granularity.
 CATEGORIES_PATH = os.path.join(OUT_DIR, "support_categories_daily.csv")
 CATEGORIES_HEADER = ["date", "main", "sub", "count"]
+USERTYPES_PATH = os.path.join(OUT_DIR, "support_usertypes_daily.csv")
+USERTYPES_HEADER = ["date", "usertype", "count"]
 
 # ── http helpers ──────────────────────────────────────────────────────────────
 def http_post(url, headers, body, _retries=2):
@@ -103,6 +105,9 @@ def http_post(url, headers, body, _retries=2):
 
 def _empty_day():
     return {c: 0 for c in FETCH_COLS + HELPER_COLS}
+
+def strip_html(text):
+    return re.sub(r"<[^>]+>", " ", text or "").strip()
 
 # ── Volume-by-type taxonomy ───────────────────────────────────────────────────
 # Each conversation is assigned to ONE (main, sub) by the FIRST matching rule, in
@@ -169,21 +174,105 @@ CATEGORY_RULES = [
 # Tags that are channel/routing/noise — not topical; ignored when categorizing.
 CATEGORY_NOISE = {"email", "success@ email", "nar", "enterprise"}
 
-def categorize(tags):
-    """Return (main, sub) for one conversation from its tag list, or ('Other','Uncategorized')."""
+def categorize(tags, text=""):
+    """Return (main, sub) for one conversation from its tags + subject/body text.
+    Tags are the strong signal; text reclaims conversations that were never tagged."""
     lowered = [t.lower() for t in tags if t and t.lower() not in CATEGORY_NOISE]
+    body = (text or "").lower()
     for main, sub, kws in CATEGORY_RULES:
         for kw in kws:
-            if any(kw in t for t in lowered):
+            if any(kw in t for t in lowered) or kw in body:
                 return main, sub
     return "Other", "Uncategorized"
 
+# ── User-type (persona) taxonomy ──────────────────────────────────────────────
+# "Which user types need the most support." Each conversation gets ONE primary
+# persona: first from what the request is ABOUT (content keywords below), else
+# from the requesting contact's assigned platform Roles, else "Unknown".
+# Roles enum observed in Intercom contact "Roles" attribute.
+USERTYPE_PRIORITY = ["driver", "dispatcher", "biller", "reporting", "foreman",
+                     "manager", "companyAdmin", "itAdmin", "platformAdmin", "viewer"]
+USERTYPE_LABEL = {
+    "driver": "Driver", "dispatcher": "Dispatcher", "biller": "Biller",
+    "reporting": "Reporting", "foreman": "Foreman", "manager": "Manager",
+    "companyAdmin": "Company Admin", "itAdmin": "IT Admin",
+    "platformAdmin": "Platform Admin", "viewer": "Viewer", "Unknown": "Unknown",
+}
+USERTYPE_KW = {
+    "driver":      ["driver app", "my truck", "check in", "check-in", "clock in", "clock out",
+                    "clocking", "geofence", "log in to the app", "can't log into the app", "haul"],
+    "dispatcher":  ["dispatch", "assign truck", "assign driver", "schedule", "send drivers",
+                    "job board", "move ticket", "find ticket", "live map"],
+    "biller":      ["invoice", "invoicing", "billing", "settlement", "payment", "fuel surcharge", "rate"],
+    "reporting":   ["report", "dashboard", "cycle time", "insights", "export data", "prevailing wage"],
+    "foreman":     ["foreman", "field", "on site", "jobsite", "job site"],
+    "companyAdmin":["add driver", "add vendor", "add user", "add equipment", "add truck",
+                    "register", "registration", "permission", "set up account", "onboard", "invite user"],
+}
+
+def normalize_roles(raw):
+    """Parse the contact 'Roles' attribute value into known role tokens."""
+    if not raw:
+        return []
+    toks = [t.strip() for t in str(raw).replace(";", ",").split(",")]
+    return [t for t in toks if t in USERTYPE_PRIORITY]
+
+def user_type(text, roles):
+    """One primary persona for a conversation: content first, then assigned role, else Unknown."""
+    body = (text or "").lower()
+    hits = [r for r in USERTYPE_PRIORITY if r in USERTYPE_KW
+            and any(kw in body for kw in USERTYPE_KW[r])]
+    if hits:
+        return USERTYPE_LABEL[min(hits, key=USERTYPE_PRIORITY.index)]
+    roles = [r for r in roles if r in USERTYPE_PRIORITY]
+    if roles:
+        return USERTYPE_LABEL[min(roles, key=USERTYPE_PRIORITY.index)]
+    return "Unknown"
+
+# Contact→roles resolver with a persistent cache (kept OUT of the public repo).
+CONTACT_CACHE_PATH = os.path.join(REPO_DIR, ".contact_roles_cache.json")
+
+def load_contact_cache():
+    if os.path.exists(CONTACT_CACHE_PATH):
+        try:
+            with open(CONTACT_CACHE_PATH) as f:
+                return json.load(f)
+        except (ValueError, OSError):
+            return {}
+    return {}
+
+def save_contact_cache(cache):
+    try:
+        with open(CONTACT_CACHE_PATH, "w") as f:
+            json.dump(cache, f)
+    except OSError:
+        pass
+
+def resolve_roles(contact_id, cache, headers):
+    """Return the contact's role tokens, using/refreshing the cache. [] on miss/error."""
+    if not contact_id:
+        return []
+    if contact_id in cache:
+        return cache[contact_id]
+    try:
+        req = urllib.request.Request(f"https://api.intercom.io/contacts/{contact_id}", headers=headers)
+        with urllib.request.urlopen(req, timeout=30) as r:
+            ca = (json.loads(r.read()).get("custom_attributes") or {})
+        roles = normalize_roles(ca.get("Roles") or ca.get("Role") or "")
+    except (urllib.error.URLError, OSError, ValueError):
+        roles = []
+    cache[contact_id] = roles
+    return roles
+
 # ── Intercom ──────────────────────────────────────────────────────────────────
-def fetch_intercom(days, by_day, cat_by_day=None):
-    """Page all conversations created in [now-days, now]; bucket counts + timing per day."""
+def fetch_intercom(days, by_day, cat_by_day=None, ut_by_day=None, contact_cache=None):
+    """Page all conversations created in [now-days, now]; bucket counts + timing per day.
+    Also buckets volume-by-type (cat_by_day) and volume-by-user-type (ut_by_day)."""
     since = int((datetime.datetime.now() - datetime.timedelta(days=days)).timestamp())
     headers = {"Authorization": f"Bearer {INTERCOM_TOKEN}", "Accept": "application/json",
                "Intercom-Version": "2.11"}
+    if contact_cache is None:
+        contact_cache = {}
     starting_after, n = None, 0
     while True:
         body = {"query": {"operator": "AND", "value": [
@@ -211,11 +300,19 @@ def fetch_intercom(days, by_day, cat_by_day=None):
                     row["ic_support_email"] += 1
             else:
                 continue  # ignore admin_initiated / other source types for channel volume
+            text = (src.get("subject") or "") + " " + strip_html(src.get("body") or "")
             # volume-by-type: assign this conversation to one (main, sub)
             if cat_by_day is not None:
-                main, sub = categorize(tags)
+                main, sub = categorize(tags, text)
                 cat_by_day.setdefault(d, {}).setdefault(main, {}).setdefault(sub, 0)
                 cat_by_day[d][main][sub] += 1
+            # volume-by-user-type: one primary persona (content, then contact role)
+            if ut_by_day is not None:
+                cons = c.get("contacts", {}).get("contacts", [])
+                roles = resolve_roles(cons[0]["id"], contact_cache, headers) if cons else []
+                ut = user_type(text, roles)
+                ut_by_day.setdefault(d, {}).setdefault(ut, 0)
+                ut_by_day[d][ut] += 1
             # timing (only present once a human replied / closed)
             st = c.get("statistics") or {}
             ttr = st.get("time_to_admin_reply")
@@ -419,6 +516,28 @@ def write_categories(cat_by_day):
         w.writeheader(); w.writerows(rows)
     return len(rows)
 
+def read_usertypes():
+    out = {}
+    if not os.path.exists(USERTYPES_PATH):
+        return out
+    with open(USERTYPES_PATH, newline="") as f:
+        for r in csv.DictReader(f):
+            try:
+                out.setdefault(r["date"], {})[r["usertype"]] = int(float(r["count"]))
+            except (ValueError, KeyError):
+                continue
+    return out
+
+def write_usertypes(ut_by_day):
+    rows = []
+    for d in sorted(ut_by_day):
+        for ut, cnt in sorted(ut_by_day[d].items(), key=lambda x: -x[1]):
+            rows.append({"date": d, "usertype": ut, "count": cnt})
+    with open(USERTYPES_PATH, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=USERTYPES_HEADER)
+        w.writeheader(); w.writerows(rows)
+    return len(rows)
+
 def build_daily_rows(by_day, existing):
     rows = []
     for d in sorted(by_day):
@@ -498,8 +617,10 @@ def main():
 
     window = args.backfill if args.backfill else 10   # incremental refreshes a rolling 10d
     print(f"Fetching {'backfill ' if args.backfill else 'incremental '}{window}d…")
-    by_day, cat_by_day = {}, {}
-    fetch_intercom(window, by_day, cat_by_day)
+    by_day, cat_by_day, ut_by_day = {}, {}, {}
+    contact_cache = load_contact_cache()
+    fetch_intercom(window, by_day, cat_by_day, ut_by_day, contact_cache)
+    save_contact_cache(contact_cache)
     fetch_linear(window, by_day)
     fresh = build_daily_rows(by_day, man_daily)
 
@@ -537,6 +658,20 @@ def main():
         merged_cat.update(cat_by_day)   # refreshed days overwrite
     ncat = write_categories(merged_cat)
     print(f"  → support_categories_daily.csv ({ncat} rows, {len(merged_cat)} days)")
+
+    # volume-by-user-type: upsert the same window into the long-format usertypes file
+    ut_existing = read_usertypes()
+    if args.backfill:
+        cutoff = min(ut_by_day) if ut_by_day else None
+        merged_ut = dict(ut_by_day)
+        for d, v in ut_existing.items():
+            if cutoff and d < cutoff and d not in merged_ut:
+                merged_ut[d] = v
+    else:
+        merged_ut = dict(ut_existing)
+        merged_ut.update(ut_by_day)
+    nut = write_usertypes(merged_ut)
+    print(f"  → support_usertypes_daily.csv ({nut} rows, {len(merged_ut)} days)")
 
     write_xlsx()   # single deliverable workbook (3 tabs)
 

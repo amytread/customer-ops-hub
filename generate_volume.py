@@ -76,11 +76,27 @@ def load_categories():
             out.setdefault(r["date"], {}).setdefault(r["main"], {})[r["sub"]] = c
     return out
 
+def load_usertypes():
+    """Long-format usertypes CSV → {date: {usertype: count}}."""
+    out = {}
+    p = os.path.join(VOL_DIR, "support_usertypes_daily.csv")
+    if not os.path.exists(p):
+        return out
+    with open(p, newline="") as f:
+        for r in csv.DictReader(f):
+            try:
+                out.setdefault(r["date"], {})[r["usertype"]] = int(float(r["count"]))
+            except (ValueError, KeyError):
+                continue
+    return out
+
 def main():
     data = {g: series(load(f"support_{g}.csv")) for g in ("daily", "weekly", "monthly")}
     cats = load_categories()
+    utypes = load_usertypes()
     html = (TEMPLATE.replace("/*DATA*/", json.dumps(data))
                     .replace("/*CATS*/", json.dumps(cats))
+                    .replace("/*UTYPES*/", json.dumps(utypes))
                     .replace("__WORDMARK__", TREAD_WORDMARK)
                     .replace("__DATE__", TODAY))
     os.makedirs(VOL_DIR, exist_ok=True)
@@ -177,6 +193,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 2
   <div class="vtabs" id="vt">
     <button data-v="overview" class="on">Overview</button>
     <button data-v="type">By type</button>
+    <button data-v="usertype">By user type</button>
   </div>
 
  <div id="viewOverview">
@@ -215,7 +232,25 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 2
     <div class="card full">
       <h2>Category breakdown</h2><div class="meta">Main category › sub-category, by conversation volume</div>
       <table class="tbl"><thead><tr><th>Category</th><th style="text-align:right">Volume</th><th>Share</th></tr></thead><tbody id="catTbody"></tbody></table>
-      <div class="note">Type is derived from Intercom conversation tags (one category per conversation). “Uncategorized” = conversations with only channel/routing tags or none. Mapping lives in <code>refresh_volume.py</code> and is easy to refine.</div>
+      <div class="note">Type is derived from Intercom conversation tags + subject/body text (one category per conversation). “Uncategorized” = no recognizable topic. Mapping lives in <code>refresh_volume.py</code> and is easy to refine.</div>
+    </div>
+  </div>
+ </div>
+
+ <div id="viewUtype" style="display:none">
+  <div class="grid">
+    <div class="card full">
+      <h2>Which user types need the most support — trend</h2><div class="meta">Conversations by requester persona over the selected range</div>
+      <div class="wrapc"><canvas id="cUtTrend"></canvas></div>
+    </div>
+    <div class="card full">
+      <h2>Support volume by user type</h2><div class="meta">Total conversations per persona, over the selected range</div>
+      <div class="wrapc"><canvas id="cUtBar"></canvas></div>
+    </div>
+    <div class="card full">
+      <h2>User-type breakdown</h2><div class="meta">Requester persona by conversation volume</div>
+      <table class="tbl"><thead><tr><th>User type</th><th style="text-align:right">Volume</th><th>Share</th></tr></thead><tbody id="utTbody"></tbody></table>
+      <div class="note">Persona is assigned per conversation: first from what the request is about (content), then the requester’s Intercom platform <em>Roles</em> attribute, else “Unknown.” A user can hold several platform roles; this picks one primary persona so the split sums to total volume.</div>
     </div>
   </div>
  </div>
@@ -232,6 +267,9 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 2
 <script>
 const DATA=/*DATA*/;
 const CATS=/*CATS*/;
+const UTYPES=/*UTYPES*/;
+const UTCOLORS={'Driver':'#4DA3FF','Dispatcher':'#58C7C2','Biller':'#FFAA13','Reporting':'#FFE500','Foreman':'#A3E635','Manager':'#9B8CFF','Company Admin':'#FF8FB1','IT Admin':'#F472B6','Platform Admin':'#C084FC','Viewer':'#7DD3FC','Unknown':'#6B828C'};
+const utColor=(u,i)=>UTCOLORS[u]||['#4DA3FF','#58C7C2','#FFAA13','#FFE500','#A3E635','#9B8CFF','#FF8FB1'][i%7];
 const C={ink:'#EAF2F6',mut:'#8FA8B4',grid:'rgba(143,168,180,.14)',yellow:'#FFE500',amber:'#FFAA13',chat:'#58C7C2',cus:'#9B8CFF',rep:'#4DA3FF',red:'#FF6B6B',green:'#4ADE80'};
 const MAINCOLORS={'Account & Access':'#9B8CFF','Tickets':'#4DA3FF','Dispatch':'#58C7C2','Jobs':'#4ADE80','Billing & Rates':'#FFAA13','Integrations':'#FF8FB1','Reporting & Insights':'#FFE500','Mobile & App':'#7DD3FC','Compliance':'#F472B6','Feature Requests':'#A3E635','Bugs':'#FF6B6B','Other':'#6B828C'};
 const catColor=(m,i)=>MAINCOLORS[m]||['#9B8CFF','#4DA3FF','#58C7C2','#4ADE80','#FFAA13','#FF8FB1','#FFE500'][i%7];
@@ -367,10 +405,34 @@ function shade(hex,k){ // lighten a hex color by step k for sub-segment contrast
   const f=1-Math.min(k*0.13,0.6); const mix=v=>Math.round(v*f+255*(1-f));
   return `rgb(${mix(r)},${mix(gg)},${mix(b)})`;
 }
+// ── By user type (UTYPES is per-day {usertype:count}) ──
+function sumUt(d0,d1){const acc={};for(const dt in UTYPES){if(dt>=d0&&dt<=d1){for(const u in UTYPES[dt])acc[u]=(acc[u]||0)+UTYPES[dt][u];}}return acc;}
+function drawUtype(){
+  const f=Math.min(range.from,range.to), t=Math.max(range.from,range.to);
+  const L=cur.labels;
+  const agg=sumUt(...winDates());
+  const types=Object.keys(agg).sort((a,b)=>agg[b]-agg[a]);
+  // Trend: stacked area, one series per user type across visible periods
+  const ds=types.map((u,i)=>{
+    const data=L.map((_,j)=>{const a=sumUt(DATA[g].period_start[f+j],DATA[g].period_end[f+j]);return a[u]||0;});
+    const col=utColor(u,i);
+    return {label:u,data,borderColor:col,backgroundColor:col+'33',fill:true,stack:'s',tension:.35,borderWidth:1.5,pointRadius:0,pointHoverRadius:4};
+  });
+  charts.ut=new Chart(cUtTrend,{type:'line',data:{labels:L,datasets:ds},options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},scales:{x:X,y:Y({stacked:true})},plugins:{legend:{labels:{boxWidth:10}}}}});
+  // Totals bar (one bar per user type, sorted)
+  charts.ub=new Chart(cUtBar,{type:'bar',data:{labels:types,datasets:[{data:types.map(u=>agg[u]),backgroundColor:types.map((u,i)=>utColor(u,i)),borderRadius:4,maxBarThickness:40}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:X,y:Y({ticks:{precision:0}})}}});
+  // Table
+  const grand=types.reduce((a,u)=>a+agg[u],0)||1;
+  document.getElementById('utTbody').innerHTML = types.map((u,i)=>
+    `<tr><td><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${utColor(u,i)};margin-right:8px"></span>${u}</td><td class="n">${agg[u]}</td><td>${(100*agg[u]/grand).toFixed(1)}%</td></tr>`
+  ).join('') || '<tr><td colspan="3" style="color:var(--mut)">No conversations in range.</td></tr>';
+}
 function render(){
   cur=view();
   Object.values(charts).forEach(c=>c.destroy());charts={};
-  if(vmode==='overview'){mkKpis();drawOverview();} else {drawType();}
+  if(vmode==='overview'){mkKpis();drawOverview();}
+  else if(vmode==='type'){drawType();}
+  else {drawUtype();}
   const L=cur.labels;
   document.getElementById('asof').textContent = !L.length?'' : (L.length===1?`Showing ${L[0]}`:`Showing ${L[0]} → ${L[L.length-1]}`);
 }
@@ -380,6 +442,7 @@ document.getElementById('vt').addEventListener('click',e=>{
   [...vt.children].forEach(b=>b.classList.toggle('on',b.dataset.v===vmode));
   document.getElementById('viewOverview').style.display = vmode==='overview'?'':'none';
   document.getElementById('viewType').style.display = vmode==='type'?'':'none';
+  document.getElementById('viewUtype').style.display = vmode==='usertype'?'':'none';
   render();
 });
 document.getElementById('tg').addEventListener('click',e=>{
