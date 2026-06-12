@@ -48,7 +48,7 @@ def load(name):
 
 def series(rows):
     """Shape one granularity's rows into the JSON the dashboard charts consume."""
-    cols = ["ic_success_email", "ic_support_email", "ic_chat", "ic_total",
+    cols = ["ic_success_email", "ic_support_email", "ic_chat", "ic_total", "ic_no_effort",
             "lin_cus_created", "lin_cus_p0", "lin_cus_p1",
             "lin_rep_created", "lin_rep_p0", "lin_rep_p1", "lin_total_created",
             "grand_total", "metric_created_completed_1wk_pct",
@@ -201,7 +201,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:16px 2
 
   <div class="grid">
     <div class="card full">
-      <h2>Support volume by channel</h2><div class="meta">Inbound conversations — success@ · support@ · chat, stacked</div>
+      <h2>Support volume by channel</h2><div class="meta">Inbound conversations — success@ · support@ · chat, stacked. Dashed line = no-effort volume (fast/spam/no-reply closes) to gauge true workload.</div>
       <div class="wrapc"><canvas id="cVol"></canvas></div>
     </div>
 
@@ -340,6 +340,7 @@ function drawOverview(){
     Object.assign({label:'success@'},area('ic_success_email',C.yellow)),
     Object.assign({label:'support@'},area('ic_support_email',C.amber)),
     Object.assign({label:'chat'},area('ic_chat',C.chat)),
+    {label:'no-effort (fast/spam/no-reply)',data:cur.ic_no_effort,borderColor:C.red,backgroundColor:C.red,fill:false,stack:'ne',tension:.35,borderWidth:2,borderDash:[5,4],pointRadius:0,pointHoverRadius:4},
   ]},options:{maintainAspectRatio:false,interaction:{mode:'index',intersect:false},scales:{x:X,y:Y({stacked:true})}}});
 
   charts.m=new Chart(cMetric,{type:'line',data:{labels:L,datasets:[

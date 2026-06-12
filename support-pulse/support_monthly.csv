@@ -1,5 +1,5 @@
-period_label,period_start,period_end,ic_success_email,ic_support_email,ic_chat,ic_total,support_marco_escalations,lin_cus_created,lin_cus_p0,lin_cus_p1,lin_rep_created,lin_rep_p0,lin_rep_p1,lin_total_created,grand_total,metric_created_completed_1wk_pct,ic_avg_first_response_min,ic_avg_resolution_hr,_ic_resp_sum_sec,_ic_resp_n,_ic_res_sum_sec,_ic_res_n,_metric_num,_metric_den
-2026-03,2026-03-01,2026-03-31,0,22,154,176,,19,0,0,21,0,0,40,216,17.5,34.5,33.1,285533,138,19302096,162,7,40
-2026-04,2026-04-01,2026-04-30,0,64,379,443,,63,1,2,58,0,0,121,564,10.7,117.2,41.6,2249747,320,60117894,401,13,121
-2026-05,2026-05-01,2026-05-31,15,85,378,478,,68,0,2,60,0,1,128,606,14.1,62.1,19.0,1162582,312,28135088,411,18,128
-2026-06,2026-06-01,2026-06-30,32,171,158,361,,21,0,4,24,0,0,45,406,8.9,45.7,3.8,539679,197,3963071,290,4,45
+period_label,period_start,period_end,ic_success_email,ic_support_email,ic_chat,ic_total,support_marco_escalations,ic_no_effort,lin_cus_created,lin_cus_p0,lin_cus_p1,lin_rep_created,lin_rep_p0,lin_rep_p1,lin_total_created,grand_total,metric_created_completed_1wk_pct,ic_avg_first_response_min,ic_avg_resolution_hr,_ic_resp_sum_sec,_ic_resp_n,_ic_res_sum_sec,_ic_res_n,_metric_num,_metric_den
+2026-03,2026-03-01,2026-03-31,0,22,154,176,,35,19,0,0,21,0,0,40,216,17.5,34.5,33.1,285533,138,19302096,162,7,40
+2026-04,2026-04-01,2026-04-30,0,64,379,443,,111,63,1,2,58,0,0,121,564,10.7,117.2,42.9,2249747,320,62142546,402,13,121
+2026-05,2026-05-01,2026-05-31,15,85,378,478,,146,68,0,2,60,0,1,128,606,14.1,62.1,19.6,1162582,312,29093087,412,18,128
+2026-06,2026-06-01,2026-06-30,32,176,166,374,,160,25,0,4,25,0,0,50,424,10.0,45.2,4.1,558343,206,4459317,304,5,50

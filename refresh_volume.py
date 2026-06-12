@@ -53,6 +53,7 @@ SAME_WINDOW_DAYS = 7
 # weekly/monthly recompute exactly from daily without re-querying the APIs).
 FETCH_COLS = [
     "ic_success_email", "ic_support_email", "ic_chat", "ic_total",
+    "ic_no_effort",
     "lin_cus_created", "lin_cus_p0", "lin_cus_p1",
     "lin_rep_created", "lin_rep_p0", "lin_rep_p1", "lin_total_created",
     "grand_total", "metric_created_completed_1wk_pct",
@@ -71,6 +72,7 @@ PRETTY = {
     "period_label": "Period", "period_start": "Start", "period_end": "End",
     "ic_success_email": "IC success@", "ic_support_email": "IC support@",
     "ic_chat": "IC chat", "ic_total": "IC total",
+    "ic_no_effort": "No-effort closes (fast/spam/no-reply)",
     "support_marco_escalations": "Marco prod/eng escalations (manual)",
     "lin_cus_created": "CUS created", "lin_cus_p0": "CUS P0", "lin_cus_p1": "CUS P1",
     "lin_rep_created": "REP created", "lin_rep_p0": "REP P0", "lin_rep_p1": "REP P1",
@@ -321,6 +323,16 @@ def fetch_intercom(days, by_day, cat_by_day=None, ut_by_day=None, contact_cache=
             ttc = st.get("time_to_last_close")
             if isinstance(ttc, (int, float)) and ttc >= 0:
                 row["_ic_res_sum_sec"] += ttc; row["_ic_res_n"] += 1
+            # no-effort volume: closed but took ~no work (auto/spam/instant close)
+            tags_l = [t.lower() for t in tags]
+            is_closed = c.get("state") == "closed" or st.get("first_close_at") is not None
+            tfc = st.get("time_to_first_close")
+            if is_closed and (
+                "spam" in tags_l or "test" in tags_l
+                or ttr is None                                      # closed, no admin ever replied
+                or (isinstance(tfc, (int, float)) and tfc < 120)    # closed in under 2 minutes
+            ):
+                row["ic_no_effort"] += 1
         pages = data.get("pages", {})
         nxt = pages.get("next")
         starting_after = nxt.get("starting_after") if isinstance(nxt, dict) else None
@@ -557,7 +569,7 @@ def _agg(rows, key_fn, label_fn, span_fn, existing_manual):
         d = datetime.date.fromisoformat(r["period_start"])
         k = key_fn(d)
         b = buckets.setdefault(k, _empty_day())
-        for c in ["ic_success_email", "ic_support_email", "ic_chat",
+        for c in ["ic_success_email", "ic_support_email", "ic_chat", "ic_no_effort",
                   "lin_cus_created", "lin_cus_p0", "lin_cus_p1",
                   "lin_rep_created", "lin_rep_p0", "lin_rep_p1", "lin_total_created"] + HELPER_COLS:
             b[c] += int(float(r.get(c) or 0))
