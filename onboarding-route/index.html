@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2060%2060%22%3E%0A%20%20%3Crect%20width%3D%2260%22%20height%3D%2260%22%20fill%3D%22%230A1820%22%20rx%3D%2212%22%2F%3E%0A%20%20%3Cg%20transform%3D%22translate%281%2C%2015%29%20scale%280.966%29%22%3E%0A%20%20%20%20%3Cpath%20d%3D%22M38.4037%2015.2638L28.8771%205.73713L19.3504%2015.2638L16.7622%2012.6756L28.8771%200.561646L40.991%2012.6756L38.4037%2015.2638Z%22%20fill%3D%22%23FFAA13%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M38.4037%2021.8914L28.8771%2012.3647L19.3504%2021.8914L16.7622%2019.3032L28.8771%207.18921L40.991%2019.3032L38.4037%2021.8914Z%22%20fill%3D%22%23FFAA13%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M40.991%2025.9307L40.2975%2026.6241L35.7826%2025.8968L28.8771%2018.9913L21.9715%2025.8968L17.4566%2026.6241L16.7622%2025.9307L28.8771%2013.8158L40.991%2025.9307Z%22%20fill%3D%22%23FFE500%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M34.0509%2025.6177L28.8772%2024.7833L23.7026%2025.6177L28.8772%2020.4431L34.0509%2025.6177Z%22%20fill%3D%22%23FFE500%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16.0143%2013.423L13.4272%2016.01L15.9936%2018.5763L18.5806%2015.9893L16.0143%2013.423Z%22%20fill%3D%22%23FFAA13%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M12.7003%2016.7372L10.1133%2019.3242L15.9931%2025.2041L18.5802%2022.617L12.7003%2016.7372Z%22%20fill%3D%22%23FFAA13%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M16.1692%2026.8316L11.7128%2027.5498L6.80078%2022.6378L9.38898%2020.0505L16.1692%2026.8316Z%22%20fill%3D%22%23FFE500%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M10.4626%2027.752L0%2029.4382L6.07481%2023.3643L10.4626%2027.752Z%22%20fill%3D%22%23FFE500%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M41.7406%2013.4231L39.1738%2015.989L41.7611%2018.5771L44.3278%2016.0113L41.7406%2013.4231Z%22%20fill%3D%22%23FFAA13%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M45.0522%2016.7337L39.1724%2022.6135L41.76%2025.2012L47.6399%2019.3214L45.0522%2016.7337Z%22%20fill%3D%22%23FFAA13%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M50.9548%2022.6387L46.0428%2027.5498L41.5854%2026.8316L48.3665%2020.0505L50.9548%2022.6387Z%22%20fill%3D%22%23FFE500%22%2F%3E%0A%20%20%20%20%3Cpath%20d%3D%22M57.7542%2029.4382L47.2925%2027.752L51.6803%2023.3643L57.7542%2029.4382Z%22%20fill%3D%22%23FFE500%22%2F%3E%0A%20%20%3C%2Fg%3E%0A%3C%2Fsvg%3E"/>
+<title>Onboarding Route — First 30 Days · Tread CS</title>
+<meta name="description" content="The Tread customer onboarding cadence as a 30-day haul route — each stop carries its outbound trigger, the full copy-paste email template, tracker update, and milestone.">
+<style>
+  :root{
+    --ground:#0E1F29;
+    --ground-2:#0B1820;
+    --road:#1B2E39;
+    --road-edge:#2E4756;
+    --panel:#16293440;
+    --panel-solid:#152732;
+    --panel-2:#1B313D;
+    --ink:#EAF2F5;
+    --ink-soft:#C2D2DA;
+    --muted:#8AA0AC;
+    --faint:#5E747F;
+    --hair:rgba(255,255,255,.09);
+    --hair-2:rgba(255,255,255,.06);
+    --yellow:#FFE500;
+    --yellow-dim:#C9B400;
+    --vendor:#3FD0DC;
+    --vendor-dim:#1d6f78;
+    --ent:#F4B73F;
+    --ent-dim:#8a6311;
+    --warn:#FF7A4D;
+    --ink-dk:#10202a;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono","SFMono-Regular",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0}
+  .page{
+    background:
+      radial-gradient(1200px 500px at 80% -10%, rgba(255,229,0,.05), transparent 60%),
+      var(--ground);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:80px;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  .eyebrow{
+    font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--faint);margin:0;
+  }
+
+  /* ---------- Masthead ---------- */
+  .masthead{padding:40px 0 30px;border-bottom:1px solid var(--hair)}
+  .brandrow{display:flex;align-items:center;gap:13px;margin-bottom:30px}
+  .wordmark{font-weight:800;font-size:20px;letter-spacing:-.02em;color:#fff}
+  .wordmark .dot{color:var(--yellow)}
+  .brandrow .div{width:1px;height:18px;background:var(--hair)}
+  .brandrow .role{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .masthead h1{
+    font-size:clamp(30px,5.4vw,56px);line-height:.98;letter-spacing:-.03em;font-weight:900;
+    text-transform:uppercase;margin:0 0 16px;text-wrap:balance;max-width:14ch;
+  }
+  .masthead h1 .y{color:var(--yellow)}
+  .lede{color:var(--ink-soft);max-width:64ch;margin:0;font-size:16.5px}
+  .od{display:flex;align-items:center;gap:14px;margin-top:26px;flex-wrap:wrap}
+  .od .pt{display:flex;flex-direction:column;gap:2px}
+  .od .pt .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .od .pt .v{font-weight:700;font-size:14px;letter-spacing:.01em}
+  .od .arrow{flex:1;min-width:60px;height:2px;background:
+      repeating-linear-gradient(90deg,var(--yellow) 0 16px,transparent 16px 28px);
+    position:relative;opacity:.8}
+  .od .arrow::after{content:"";position:absolute;right:-2px;top:-4px;border:5px solid transparent;border-left-color:var(--yellow)}
+
+  /* how-to strip */
+  .howto{display:flex;flex-wrap:wrap;gap:10px 20px;margin-top:22px;padding:13px 16px;background:var(--panel-2);border:1px solid var(--hair);border-radius:10px}
+  .howto .h{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft)}
+  .howto .h .b{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--yellow);background:rgba(255,229,0,.12);border:1px solid var(--yellow-dim);border-radius:5px;padding:2px 7px}
+  .howto .h .chipdemo{background:var(--yellow);color:var(--ink-dk);font-weight:700;border-radius:4px;padding:1px 6px;font-size:12px}
+
+  /* ---------- Route legend / hint ---------- */
+  .routehead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin:34px 0 0}
+  .routehead h2{font-size:14px;font-family:var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0}
+  .legend{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+  .key{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--ink-soft);font-family:var(--mono);letter-spacing:.02em}
+  .dot-k{width:11px;height:11px;border-radius:50%;flex:none}
+  .dot-k.c{background:var(--yellow)}
+  .dot-k.v{background:var(--vendor)}
+  .dot-k.e{background:var(--ent)}
+  .scrollhint{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.1em;text-transform:uppercase}
+
+  /* ---------- Horizontal route ---------- */
+  .route-scroll{
+    overflow-x:auto;overflow-y:hidden;margin-top:18px;padding-bottom:14px;
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;
+    scrollbar-color:var(--road-edge) transparent;
+  }
+  .route-scroll::-webkit-scrollbar{height:10px}
+  .route-scroll::-webkit-scrollbar-thumb{background:var(--road-edge);border-radius:99px}
+  .route-scroll::-webkit-scrollbar-track{background:transparent}
+  .route{display:flex;align-items:stretch;min-width:min-content;padding:0 4px}
+  .station{
+    flex:0 0 348px;display:flex;flex-direction:column;scroll-snap-align:start;
+  }
+  @media(max-width:520px){ .station{flex-basis:86vw} }
+
+  /* sign */
+  .sign-area{height:120px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 12px}
+  .sign{
+    background:#0F2430;border:2px solid var(--yellow);border-radius:9px;
+    padding:9px 16px 10px;text-align:center;min-width:120px;position:relative;
+    box-shadow:0 6px 18px rgba(0,0,0,.35);
+  }
+  .station.vendor .sign{border-color:var(--vendor)}
+  .station.ent .sign{border-color:var(--ent);border-style:dashed}
+  .sign .exit{
+    position:absolute;top:-11px;left:50%;transform:translateX(-50%);
+    font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+    background:var(--yellow);color:var(--ink-dk);font-weight:700;padding:2px 8px;border-radius:4px;white-space:nowrap;
+  }
+  .station.vendor .sign .exit{background:var(--vendor);color:#062b30}
+  .station.ent .sign .exit{background:var(--ent);color:#3a2700}
+  .sign .day{font-weight:900;font-size:26px;letter-spacing:-.02em;line-height:1;color:#fff}
+  .sign .day .u{color:var(--yellow);font-size:13px;display:block;letter-spacing:.16em;font-weight:700;margin-bottom:3px}
+  .station.vendor .sign .day .u{color:var(--vendor)}
+  .station.ent .sign .day .u{color:var(--ent)}
+  .post{width:3px;height:14px;background:var(--road-edge);margin:0 auto}
+
+  /* road segment (tiles into continuous road) */
+  .road{
+    height:46px;position:relative;background:var(--road);
+    border-top:2px solid var(--road-edge);border-bottom:2px solid var(--road-edge);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .road::before{
+    content:"";position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);height:3px;
+    background:repeating-linear-gradient(90deg,var(--yellow) 0 26px,transparent 26px 50px);
+    opacity:.85;
+  }
+  .node{
+    width:18px;height:18px;border-radius:50%;background:var(--yellow);
+    border:3px solid var(--road);box-shadow:0 0 0 2px var(--yellow-dim),0 0 14px rgba(255,229,0,.5);
+    position:relative;z-index:2;
+  }
+  .station.vendor .node{background:var(--vendor);box-shadow:0 0 0 2px var(--vendor-dim),0 0 14px rgba(63,208,220,.5)}
+  .station.ent .node{background:var(--ent);box-shadow:0 0 0 2px var(--ent-dim),0 0 14px rgba(244,183,63,.5)}
+
+  /* card */
+  .card{
+    margin:16px 12px 0;flex:1;background:var(--panel-solid);
+    border:1px solid var(--hair);border-top:3px solid var(--yellow);
+    border-radius:12px;padding:16px 17px 16px;
+    display:flex;flex-direction:column;
+    transition:transform .18s ease,box-shadow .18s ease;
+  }
+  .card:hover{transform:translateY(-3px);box-shadow:0 14px 30px rgba(0,0,0,.4)}
+  .station.vendor .card{border-top-color:var(--vendor)}
+  .station.ent .card{border-top-color:var(--ent);border-top-style:dashed}
+  .station.finish .card{border-top-color:var(--yellow);background:linear-gradient(180deg,#1c2f1f,var(--panel-solid))}
+
+  /* outbound trigger block */
+  .trigger{
+    display:flex;gap:9px;align-items:flex-start;
+    background:rgba(255,229,0,.07);border:1px solid var(--hair);border-left:3px solid var(--yellow);
+    border-radius:8px;padding:9px 11px;margin:0 0 13px;
+  }
+  .station.vendor .trigger{border-left-color:var(--vendor);background:rgba(63,208,220,.07)}
+  .station.ent .trigger{border-left-color:var(--ent);background:rgba(244,183,63,.07)}
+  .trigger .ic{font-size:12px;line-height:1.5;flex:none}
+  .trigger .tx{font-family:var(--mono);font-size:10.5px;line-height:1.55;color:var(--ink-soft);letter-spacing:.01em}
+  .trigger .tx .lab{display:block;color:var(--faint);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:3px}
+  .trigger .tx b{color:#fff}
+
+  .card h3{font-size:16px;font-weight:800;letter-spacing:-.01em;margin:0 0 8px;line-height:1.2;text-wrap:balance}
+  .tag{
+    display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;
+    font-weight:700;padding:3px 7px;border-radius:5px;margin-bottom:10px;
+    background:var(--hair-2);color:var(--muted);border:1px solid var(--hair);
+  }
+  .tag.cond{background:rgba(255,229,0,.13);color:var(--yellow);border-color:var(--yellow-dim)}
+  .tag.vendor{background:rgba(63,208,220,.12);color:var(--vendor);border-color:var(--vendor-dim)}
+  .tag.ent{background:rgba(244,183,63,.12);color:var(--ent);border-color:var(--ent-dim)}
+
+  .blist{list-style:none;margin:0 0 13px;padding:0;display:flex;flex-direction:column;gap:6px}
+  .blist li{position:relative;padding-left:18px;font-size:13px;color:var(--ink-soft);line-height:1.42}
+  .blist li::before{content:"";position:absolute;left:0;top:6px;width:6px;height:6px;border-radius:1px;background:var(--yellow)}
+  .station.vendor .blist li::before{background:var(--vendor)}
+  .station.ent .blist li::before{background:var(--ent)}
+  .blist li b{color:#fff;font-weight:600}
+
+  .foot{margin-top:auto;border-top:1px solid var(--hair);padding-top:11px}
+  .foot .lab{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin:0 0 5px}
+  .foot .trk{font-size:12px;color:var(--ink-soft);line-height:1.4;margin:0 0 10px}
+  .chips{display:flex;flex-wrap:wrap;gap:4px}
+  .chip{font-family:var(--mono);font-size:10.5px;font-weight:600;background:#0c1c24;color:var(--ink-soft);border:1px solid var(--hair);border-radius:5px;padding:2px 7px}
+  .chip.stall{background:rgba(255,122,77,.16);color:#FFB59A;border-color:rgba(255,122,77,.4)}
+
+  .open-tpl{
+    margin-top:13px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;
+    background:var(--yellow);color:var(--ink-dk);border:none;border-radius:9px;padding:11px 12px;
+    font-weight:800;font-size:13px;font-family:var(--sans);cursor:pointer;letter-spacing:.01em;
+    transition:filter .15s;
+  }
+  .open-tpl:hover{filter:brightness(1.08)}
+  .station.vendor .open-tpl{background:var(--vendor);color:#052a2e}
+  .station.ent .open-tpl{background:var(--ent);color:#3a2700}
+  .open-tpl:focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+  /* end caps */
+  .cap{flex:0 0 150px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start}
+  .cap .sign-area{justify-content:flex-end}
+  .cap .badge-cap{
+    text-align:center;padding:10px 12px;border-radius:9px;font-family:var(--mono);
+    font-size:10px;letter-spacing:.14em;text-transform:uppercase;line-height:1.5;
+  }
+  .cap.origin .badge-cap{background:#0F2430;border:2px solid var(--road-edge);color:var(--muted)}
+  .cap.origin .badge-cap b{color:#fff;font-size:13px;display:block;letter-spacing:.04em}
+  .cap.dest .badge-cap{background:linear-gradient(180deg,#27451f,#16331a);border:2px solid #3a6b2e;color:#bfe6b0}
+  .cap.dest .badge-cap b{color:#fff;font-size:13px;display:block;letter-spacing:.04em}
+  .cap .road.half-r::before{left:50%}
+  .cap .road.half-l::before{right:50%;left:auto}
+  .checker{
+    width:22px;height:22px;border-radius:4px;z-index:2;
+    background:conic-gradient(#fff 90deg,var(--ink-dk) 0 180deg,#fff 0 270deg,var(--ink-dk) 0);
+    background-size:11px 11px;border:2px solid var(--road);
+  }
+
+  /* ---------- modal ---------- */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(6,14,19,.76);display:flex;align-items:flex-start;justify-content:center;padding:5vh 18px;z-index:100;overflow-y:auto}
+  .modal-backdrop[hidden]{display:none}
+  .modal{
+    background:#0f222c;border:1px solid var(--hair);border-top:4px solid var(--yellow);
+    border-radius:16px;max-width:680px;width:100%;padding:26px 26px 22px;position:relative;
+    box-shadow:0 30px 80px rgba(0,0,0,.6);animation:pop .18s ease;
+  }
+  @keyframes pop{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+  .m-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border-radius:8px;background:var(--hair-2);border:1px solid var(--hair);color:var(--ink);font-size:20px;line-height:1;cursor:pointer}
+  .m-close:hover{background:var(--hair)}
+  .m-day{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--yellow)}
+  .modal h3{font-size:23px;font-weight:800;margin:5px 0 13px;letter-spacing:-.015em;padding-right:40px}
+  .m-trig{font-family:var(--mono);font-size:11px;color:var(--ink-soft);background:rgba(255,229,0,.07);border:1px solid var(--hair);border-left:3px solid var(--yellow);border-radius:8px;padding:9px 12px;margin-bottom:16px;line-height:1.6}
+  .m-trig .lab{display:block;color:var(--faint);font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;margin-bottom:3px}
+  .m-trig b{color:#fff}
+  .m-variants{display:flex;gap:8px;margin-bottom:15px}
+  .vbtn{flex:1;padding:10px;border-radius:9px;border:1px solid var(--hair);background:var(--panel-2);color:var(--ink-soft);font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--sans)}
+  .vbtn.active{background:var(--yellow);color:var(--ink-dk);border-color:var(--yellow)}
+  .ph-legend{font-size:12.5px;color:var(--muted);margin-bottom:13px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .ph-legend .ex{background:var(--yellow);color:var(--ink-dk);font-weight:700;padding:1px 6px;border-radius:4px;box-shadow:0 0 0 1px var(--yellow-dim)}
+  .m-subject{background:#0b1c24;border:1px solid var(--hair);border-radius:9px;padding:10px 13px;margin-bottom:10px}
+  .m-flab{font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);display:block;margin-bottom:5px}
+  .m-subject-text{font-size:15px;font-weight:600;color:#fff;line-height:1.5;white-space:pre-wrap;word-break:break-word}
+  .m-body{
+    background:#0b1c24;border:1px solid var(--hair);border-radius:9px;padding:16px;
+    font-size:13.5px;line-height:1.62;color:var(--ink-soft);white-space:pre-wrap;word-break:break-word;
+    max-height:44vh;overflow-y:auto;
+  }
+  .ph{background:var(--yellow);color:var(--ink-dk);font-weight:700;padding:1px 5px;border-radius:4px;box-shadow:0 0 0 1px var(--yellow-dim)}
+  .m-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;align-items:center}
+  .btn-primary{background:var(--yellow);color:var(--ink-dk);border:none;border-radius:9px;padding:11px 18px;font-weight:800;font-size:13.5px;cursor:pointer;font-family:var(--sans)}
+  .btn-primary:hover{filter:brightness(1.08)}
+  .btn-ghost{background:transparent;border:1px solid var(--hair);color:var(--ink-soft);border-radius:9px;padding:11px 18px;font-weight:600;font-size:13.5px;cursor:pointer;font-family:var(--sans)}
+  .btn-ghost:hover{background:var(--hair-2)}
+  .btn-primary:focus-visible,.btn-ghost:focus-visible,.vbtn:focus-visible,.m-close:focus-visible{outline:2px solid #fff;outline-offset:2px}
+
+  .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--yellow);color:var(--ink-dk);font-weight:800;font-size:13px;padding:11px 22px;border-radius:99px;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:200;font-family:var(--sans);box-shadow:0 10px 30px rgba(0,0,0,.4)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ---------- lower panels ---------- */
+  .lower{margin-top:60px}
+  .grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}
+  @media(max-width:780px){ .grid2{grid-template-columns:1fr} }
+  .panel{background:var(--panel-solid);border:1px solid var(--hair);border-radius:14px;padding:24px}
+  .panel h2{font-size:18px;font-weight:800;letter-spacing:-.01em;margin:6px 0 4px;text-transform:uppercase}
+  .panel .sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+  .ms{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+  .ms li{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--hair-2)}
+  .ms li:last-child{border-bottom:none}
+  .ms .n{font-family:var(--mono);font-weight:700;font-size:12px;color:var(--yellow-dim);width:22px;text-align:right;flex:none;padding-top:1px}
+  .ms .t{font-size:13.5px;color:var(--ink-soft);line-height:1.4}
+  .ms .t b{color:#fff;font-weight:600}
+  .ms li.stall{background:rgba(255,122,77,.08);margin:0 -12px;padding:9px 12px;border-radius:8px;border-bottom:none}
+  .ms li.stall .n{color:var(--warn)}
+  .stalltag{display:inline-block;font-family:var(--mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-dk);background:var(--warn);border-radius:4px;padding:1px 6px;margin-left:8px;font-weight:700}
+  .dod{margin-top:15px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--hair);padding-top:13px;line-height:1.55}
+  .dod b{color:var(--ink)}
+  .seg{display:flex;flex-direction:column;gap:14px}
+  .seg .s{border:1px solid var(--hair);border-radius:10px;padding:14px 16px;background:var(--panel-2)}
+  .seg .s.ent{border-color:var(--ent-dim);background:rgba(244,183,63,.06)}
+  .seg .s h4{margin:0 0 9px;display:flex;align-items:center;gap:9px;font-size:12px}
+  .seg .s h4 .t{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;padding:3px 9px;border-radius:99px;font-weight:700}
+  .seg .s.ent h4 .t{background:var(--ent);color:#3a2700}
+  .seg .s.mm h4 .t{background:var(--yellow);color:var(--ink-dk)}
+  .seg .s ul{margin:0;padding-left:17px;font-size:13px;color:var(--ink-soft);line-height:1.5}
+  .seg .s ul li{margin-bottom:4px}
+  .prep{margin-top:22px;background:linear-gradient(180deg,var(--panel-2),var(--panel-solid));border:1px solid var(--hair);border-radius:14px;padding:24px}
+  .prep h2{font-size:16px;text-transform:uppercase;letter-spacing:.01em;margin:8px 0 16px;font-weight:800}
+  .prep-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:680px){ .prep-grid{grid-template-columns:1fr} }
+  .pi .s{display:flex;align-items:center;gap:9px;margin-bottom:5px}
+  .pi .num{font-family:var(--mono);font-weight:700;color:var(--yellow);font-size:13px}
+  .pi .ti{font-weight:700;font-size:14px}
+  .pi p{margin:0;font-size:12.5px;color:var(--muted);line-height:1.45}
+  .prep code{font-family:var(--mono);font-size:12px;background:rgba(255,229,0,.12);color:var(--yellow);padding:2px 6px;border-radius:5px}
+  .ftr{margin-top:34px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.06em}
+
+  @media(prefers-reduced-motion:reduce){
+    .card,.toast{transition:none}
+    .card:hover{transform:none}
+    .modal{animation:none}
+  }
+</style>
+</head>
+<body>
+
+
+<div class="page">
+  <header class="masthead">
+    <div class="wrap">
+      <div class="brandrow">
+        <span class="wordmark">tread<span class="dot">.</span></span>
+        <span class="div"></span>
+        <span class="role">Customer Success</span>
+      </div>
+      <p class="eyebrow" style="margin-bottom:14px">Onboarding playbook · the haul</p>
+      <h1>The 30-day <span class="y">onboarding route</span></h1>
+      <p class="lede">Every new customer is a load to move — from the depot the day they sign, to a fully running account 30 days out. Nine timed stops, each with its outbound trigger, the full copy-paste email, the tracker update it drives, and the milestone it unlocks.</p>
+      <div class="od">
+        <div class="pt"><span class="k">Origin</span><span class="v">📍 Contract signed</span></div>
+        <div class="arrow"></div>
+        <div class="pt" style="text-align:right;align-items:flex-end"><span class="k">Destination</span><span class="v">🏁 Account running</span></div>
+      </div>
+      <div class="howto">
+        <span class="h"><span class="b">Trigger</span> the top block on each stop = future Intercom Series logic</span>
+        <span class="h"><span class="b">Click a stop</span> opens the full email + one-click copy</span>
+        <span class="h"><span class="chipdemo">[ like this ]</span> = a field you must replace before sending</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="routehead">
+      <h2>Follow the route →</h2>
+      <div class="legend">
+        <span class="key"><span class="dot-k c"></span>Customer</span>
+        <span class="key"><span class="dot-k v"></span>Vendor flow</span>
+        <span class="key"><span class="dot-k e"></span>Enterprise only</span>
+        <span class="scrollhint">scroll to drive →</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="route-scroll">
+    <div class="route">
+
+      <!-- ORIGIN -->
+      <div class="cap origin">
+        <div class="sign-area"><div class="badge-cap"><b>Depot</b>Contract signed<br>account provisioned</div></div>
+        <div class="post"></div>
+        <div class="road half-r"><span class="node" style="background:#fff;box-shadow:0 0 0 2px var(--road-edge)"></span></div>
+      </div>
+
+      <!-- DAY 0 -->
+      <div class="station">
+        <div class="sign-area"><div class="sign"><span class="exit">Email 1</span><span class="day"><span class="u">Day</span>0</span></div></div>
+        <div class="post"></div>
+        <div class="road"><span class="node"></span></div>
+        <article class="card">
+          <div class="trigger"><span class="ic">⚡</span><span class="tx"><span class="lab">Outbound trigger</span><b>ENTRY:</b> Deal = Closed Won + account provisioned → <b>send now</b></span></div>
+          <h3>Welcome email</h3>
+          <span class="tag cond">Version A: new · B: existing</span>
+          <ul class="blist">
+            <li>3 steps: <b>log in</b>, <b>upload data</b>, <b>create first Project & Order</b></li>
+            <li>Sets the "first live dispatch" expectation</li>
+          </ul>
+          <div class="foot">
+            <p class="lab">Tracker</p>
+            <p class="trk">Log closed date · Status = <b>Onboarding</b> · note send date</p>
+            <div class="chips"><span class="chip">M1 · Data</span></div>
+          </div>
+          <button class="open-tpl" data-tpl="day0">📋 View &amp; copy template</button>
+        </article>
+      </div>
+
+      <!-- DAY 1 -->
+      <div class="station">
+        <div class="sign-area"><div class="sign"><span class="exit">Email 2</span><span class="day"><span class="u">Day</span>1</span></div></div>
+        <div class="post"></div>
+        <div class="road"><span class="node"></span></div>
+        <article class="card">
+          <div class="trigger"><span class="ic">⚡</span><span class="tx"><span class="lab">Outbound trigger</span><b>WAIT 24h</b> → IF no login event → <b>send</b> · ELSE skip</span></div>
+          <h3>Data-upload reminder</h3>
+          <span class="tag cond">Only if no login</span>
+          <ul class="blist">
+            <li>Re-states the 3 steps; frames effort at ~30–60 min</li>
+            <li>Offers a live walkthrough call</li>
+          </ul>
+          <div class="foot">
+            <p class="lab">Tracker</p>
+            <p class="trk">Note in Activity Tracking if no login after 24h</p>
+            <div class="chips"><span class="chip">M1 · Data</span></div>
+          </div>
+          <button class="open-tpl" data-tpl="day1">📋 View &amp; copy template</button>
+        </article>
+      </div>
+
+      <!-- DAY 3 -->
+      <div class="station">
+        <div class="sign-area"><div class="sign"><span class="exit">Email 3</span><span class="day"><span class="u">Day</span>3</span></div></div>
+        <div class="post"></div>
+        <div class="road"><span class="node"></span></div>
+        <article class="card">
+          <div class="trigger"><span class="ic">⚡</span><span class="tx"><span class="lab">Outbound trigger</span><b>WAIT to Day 3</b> → <b>send to all</b> (no condition)</span></div>
+          <h3>First Project & Order nudge</h3>
+          <span class="tag">Send regardless of login</span>
+          <ul class="blist">
+            <li>Pushes the first live dispatch — the value moment</li>
+            <li>Names the 3 common early trip-ups (sites / equipment / drivers)</li>
+          </ul>
+          <div class="foot">
+            <p class="lab">Tracker</p>
+            <p class="trk">Check Settings / Data Uploaded — mark Done if confirmed</p>
+            <div class="chips"><span class="chip">M1 · Data</span><span class="chip stall">M3 · Dispatch</span></div>
+          </div>
+          <button class="open-tpl" data-tpl="day3">📋 View &amp; copy template</button>
+        </article>
+      </div>
+
+      <!-- DAY 7 -->
+      <div class="station">
+        <div class="sign-area"><div class="sign"><span class="exit">Email 4</span><span class="day"><span class="u">Day</span>7</span></div></div>
+        <div class="post"></div>
+        <div class="road"><span class="node"></span></div>
+        <article class="card">
+          <div class="trigger"><span class="ic">⚡</span><span class="tx"><span class="lab">Outbound trigger</span><b>WAIT to Day 7</b> → send · branch: no dispatch event → tag <b>"Needs Scheduling"</b></span></div>
+          <h3>Week-1 check-in + vendor prompt</h3>
+          <span class="tag">Check-in</span>
+          <ul class="blist">
+            <li>Benchmarks where most teams are at one week</li>
+            <li>Primes adding subhaulers under Settings → Vendors</li>
+          </ul>
+          <div class="foot">
+            <p class="lab">Tracker</p>
+            <p class="trk">Update Projects/Orders/Jobs. If stalled → "Needs Scheduling" + book call</p>
+            <div class="chips"><span class="chip stall">M3 · Dispatch</span><span class="chip">M2 · Vendors</span></div>
+          </div>
+          <button class="open-tpl" data-tpl="day7">📋 View &amp; copy template</button>
+        </article>
+      </div>
+
+      <!-- DAY 10 -->
+      <div class="station vendor">
+        <div class="sign-area"><div class="sign"><span class="exit">Email 5</span><span class="day"><span class="u">Day</span>10</span></div></div>
+        <div class="post"></div>
+        <div class="road"><span class="node"></span></div>
+        <article class="card">
+          <div class="trigger"><span class="ic">⚡</span><span class="tx"><span class="lab">Outbound trigger</span><b>WAIT to Day 10</b> + vendor records exist → <b>send</b></span></div>
+          <h3>Vendor invitation flow</h3>
+          <span class="tag vendor">CSM → Customer → Vendors</span>
+          <ul class="blist">
+            <li>Includes a <b>ready-to-forward</b> block for each subhauler</li>
+            <li>CSM: confirm accepts within 3 days; chase by SMS</li>
+          </ul>
+          <div class="foot">
+            <p class="lab">Tracker</p>
+            <p class="trk">Vendors / Drivers Onboarded → In Progress</p>
+            <div class="chips"><span class="chip">M2 · Vendors</span></div>
+          </div>
+          <button class="open-tpl" data-tpl="day10">📋 View &amp; copy template</button>
+        </article>
+      </div>
+
+      <!-- DAY 14 -->
+      <div class="station">
+        <div class="sign-area"><div class="sign"><span class="exit">Email 6</span><span class="day"><span class="u">Day</span>14</span></div></div>
+        <div class="post"></div>
+        <div class="road"><span class="node"></span></div>
+        <article class="card">
+          <div class="trigger"><span class="ic">⚡</span><span class="tx"><span class="lab">Outbound trigger</span><b>WAIT to Day 14</b> → <b>send</b></span></div>
+          <h3>Mid-point — activate next</h3>
+          <span class="tag">Feature activation</span>
+          <ul class="blist">
+            <li>Drives Approvals, Reports & Exports, Notifications</li>
+          </ul>
+          <div class="foot">
+            <p class="lab">Tracker</p>
+            <p class="trk">Review Approve Tickets, Driver Hours, Billing — mark any Done</p>
+            <div class="chips"><span class="chip">M4 · Tickets</span><span class="chip">M9 · Reports</span></div>
+          </div>
+          <button class="open-tpl" data-tpl="day14">📋 View &amp; copy template</button>
+        </article>
+      </div>
+
+      <!-- DAY 21 -->
+      <div class="station">
+        <div class="sign-area"><div class="sign"><span class="exit">Email 7</span><span class="day"><span class="u">Day</span>21</span></div></div>
+        <div class="post"></div>
+        <div class="road"><span class="node"></span></div>
+        <article class="card">
+          <div class="trigger"><span class="ic">⚡</span><span class="tx"><span class="lab">Outbound trigger</span><b>WAIT to Day 21</b> → <b>send</b> (before month-end close)</span></div>
+          <h3>Billing & approvals activation</h3>
+          <span class="tag">Before month-end</span>
+          <ul class="blist">
+            <li>First-billing-cycle checklist + one test export</li>
+          </ul>
+          <div class="foot">
+            <p class="lab">Tracker</p>
+            <p class="trk">Billing: Payables, Receivables, Settlements. TBD → "Needs Scheduling"</p>
+            <div class="chips"><span class="chip">M7 · Billing</span><span class="chip">M8 · Foreman</span></div>
+          </div>
+          <button class="open-tpl" data-tpl="day21">📋 View &amp; copy template</button>
+        </article>
+      </div>
+
+      <!-- DAY 25 -->
+      <div class="station ent">
+        <div class="sign-area"><div class="sign"><span class="exit">Email 8</span><span class="day"><span class="u">Day</span>25</span></div></div>
+        <div class="post"></div>
+        <div class="road"><span class="node"></span></div>
+        <article class="card">
+          <div class="trigger"><span class="ic">⚡</span><span class="tx"><span class="lab">Outbound trigger</span><b>WAIT to Day 25</b> + plan = Enterprise → <b>send</b> · ELSE skip</span></div>
+          <h3>Integration flows check</h3>
+          <span class="tag ent">Enterprise only — skip MM</span>
+          <ul class="blist">
+            <li>Status the named integration; assign owners to gaps pre-30-day</li>
+          </ul>
+          <div class="foot">
+            <p class="lab">Tracker</p>
+            <p class="trk">Integration Flows → In Progress / Done · check Identified Gaps</p>
+            <div class="chips"><span class="chip">M10 · Integrations</span></div>
+          </div>
+          <button class="open-tpl" data-tpl="day25">📋 View &amp; copy template</button>
+        </article>
+      </div>
+
+      <!-- DAY 28 -->
+      <div class="station finish">
+        <div class="sign-area"><div class="sign"><span class="exit">Email 9</span><span class="day"><span class="u">Day</span>28</span></div></div>
+        <div class="post"></div>
+        <div class="road"><span class="node"></span></div>
+        <article class="card">
+          <div class="trigger"><span class="ic">⚡</span><span class="tx"><span class="lab">Outbound trigger</span><b>WAIT to Day 28</b> (or first month dispatched) → <b>send</b></span></div>
+          <h3>30-day success review</h3>
+          <span class="tag">Milestone close-out</span>
+          <ul class="blist">
+            <li>Books the review; surfaces unexplored features</li>
+          </ul>
+          <div class="foot">
+            <p class="lab">Tracker</p>
+            <p class="trk">Review all 10 columns. Status = "Next Steps In Progress" / "Clear"</p>
+            <div class="chips"><span class="chip">Reviews M1–M10</span></div>
+          </div>
+          <button class="open-tpl" data-tpl="day28">📋 View &amp; copy template</button>
+        </article>
+      </div>
+
+      <!-- ONGOING (service stop) -->
+      <div class="station vendor">
+        <div class="sign-area"><div class="sign"><span class="exit">As needed</span><span class="day" style="font-size:18px;letter-spacing:.04em"><span class="u">Service stop</span>SMS</span></div></div>
+        <div class="post"></div>
+        <div class="road"><span class="node"></span></div>
+        <article class="card">
+          <div class="trigger"><span class="ic">⚡</span><span class="tx"><span class="lab">Outbound trigger</span><b>MANUAL / behavioral:</b> invite unaccepted + job &lt; 48h → <b>SMS</b></span></div>
+          <h3>Text vendor notification</h3>
+          <span class="tag vendor">SMS · project-specific</span>
+          <ul class="blist">
+            <li>Last-mile nudge before a job that depends on the vendor</li>
+            <li>Confirm app download before job start</li>
+          </ul>
+          <div class="foot">
+            <p class="lab">Tracker</p>
+            <p class="trk">Activity Tracking</p>
+            <div class="chips"><span class="chip">M2 · Vendors</span></div>
+          </div>
+          <button class="open-tpl" data-tpl="sms">📋 View &amp; copy template</button>
+        </article>
+      </div>
+
+      <!-- DESTINATION -->
+      <div class="cap dest">
+        <div class="sign-area"><div class="badge-cap"><b>Destination</b>Account running<br>10 / 10 milestones</div></div>
+        <div class="post"></div>
+        <div class="road half-l"><span class="checker"></span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LOWER -->
+  <div class="wrap lower">
+    <div class="grid2">
+      <div class="panel">
+        <p class="eyebrow">Definition of done</p>
+        <h2>The 10 milestones</h2>
+        <p class="sub">Map directly to the columns in the Onboarding Tracker.</p>
+        <ol class="ms">
+          <li><span class="n">1</span><span class="t"><b>Settings / Data uploaded</b></span></li>
+          <li><span class="n">2</span><span class="t"><b>Vendors / Drivers onboarded</b></span></li>
+          <li class="stall"><span class="n">3</span><span class="t"><b>Projects / Orders / Jobs</b> — live dispatching<span class="stalltag">Most common stall</span></span></li>
+          <li><span class="n">4</span><span class="t"><b>Approve tickets</b></span></li>
+          <li><span class="n">5</span><span class="t"><b>Approve internal driver hours</b> (shifts)</span></li>
+          <li><span class="n">6</span><span class="t"><b>Approving driver hours per job</b></span></li>
+          <li><span class="n">7</span><span class="t"><b>Billing</b> — payables, receivables, settlements</span></li>
+          <li><span class="n">8</span><span class="t"><b>Foreman approvals</b></span></li>
+          <li><span class="n">9</span><span class="t"><b>Exports / Reports</b></span></li>
+          <li><span class="n">10</span><span class="t"><b>Integration flows</b></span></li>
+        </ol>
+        <p class="dod">A customer reaches the <b>destination</b> when all 10 are Done. The route's recurring breakdown is milestone 3 — <b>"trained, not yet dispatching."</b> Every stop pushes toward the first live job.</p>
+      </div>
+
+      <div class="panel">
+        <p class="eyebrow">Tailor the path</p>
+        <h2>Enterprise vs. Mid-market</h2>
+        <p class="sub">Same route, different emphasis and runway.</p>
+        <div class="seg">
+          <div class="s ent">
+            <h4><span class="t">Enterprise</span></h4>
+            <ul>
+              <li>More coordination on integration flows</li>
+              <li>Longer billing runway — <b>45–60 days</b></li>
+              <li>Onsite training common</li>
+              <li>Internal driver hours often N/A</li>
+            </ul>
+          </div>
+          <div class="s mm">
+            <h4><span class="t">Mid-market</span></h4>
+            <ul>
+              <li>Faster path to dispatching</li>
+              <li>More hands-on vendor onboarding</li>
+              <li>Push harder on billing & approvals at Day 21</li>
+              <li>Skip the Day 25 integration stop</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="prep">
+      <p class="eyebrow">Before the route begins · Day 0 prep</p>
+      <h2>Customer Success first steps</h2>
+      <div class="prep-grid">
+        <div class="pi"><div class="s"><span class="num">01</span><span class="ti">Create the Customer account</span></div><p>Provision the moment the deal closes won.</p></div>
+        <div class="pi"><div class="s"><span class="num">02</span><span class="ti">Create user accounts</span></div><p>Set up named users so invites land on Day 0.</p></div>
+        <div class="pi"><div class="s"><span class="num">03</span><span class="ti">Set the support alias</span></div><p>Route their thread to <code>app_support+[customer]@tread.io</code>.</p></div>
+      </div>
+    </div>
+
+    <p class="ftr">Tread Customer Success · Onboarding Route · Origin → Destination in 30 days · v June 2026</p>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="mb" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-title">
+    <button class="m-close" id="m-close" aria-label="Close template">×</button>
+    <span class="m-day" id="m-day"></span>
+    <h3 id="m-title"></h3>
+    <div class="m-trig" id="m-trig"></div>
+    <div class="m-variants" id="m-variants" hidden></div>
+    <div class="ph-legend"><span class="ex">[ field ]</span> = replace before sending — copying keeps the brackets so nothing ships half-filled</div>
+    <div class="m-subject" id="m-subject-wrap">
+      <span class="m-flab">Subject line</span>
+      <div class="m-subject-text" id="m-subject"></div>
+    </div>
+    <span class="m-flab" style="margin-bottom:6px">Body</span>
+    <div class="m-body" id="m-body"></div>
+    <div class="m-actions">
+      <button class="btn-primary" id="copy-all">📋 Copy full email</button>
+      <button class="btn-ghost" id="copy-body">Copy body only</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast">Copied to clipboard</div>
+
+<script>
+(function(){
+  var T = {
+    day0:{
+      day:"Day 0 · Email 1", title:"Welcome email",
+      trig:"<span class='lab'>Outbound trigger</span><b>ENTRY:</b> Deal stage = Closed Won AND account provisioned &rarr; send immediately. This is the entry step of the Series.",
+      variants:[
+        {name:"Version A — New account",
+         subject:"Welcome to Tread — here's how to get started",
+         body:"Hi [Name],\n\nWelcome to Tread! We're excited to have you on board!\n\nHere are 3 steps to get started in Tread:\n\n1. Log in: Check your inbox for a separate invite email and click the link to activate your account (check your spam folder if you don't see it). [Tread login URL]\n\n2. Upload your data: Go to Settings and upload your existing data. Add 5 sites you frequently pick up from / 3 customers / 3 materials. Watch the setup guide: [setup guide link]\n\n3. Create your first Project and Order: Projects represent your recurring customer jobs. Set up 1–3 Projects, create an Order, and learn the basics of dispatching in Tread: [getting started guide link]\n\nWe'll reach out in a few days to see how things are going and make sure you're set up for success. If anything comes up before then, we're here — reach us at support@tread.io, chat with us in the app (bubble, top right), or browse our Help Center anytime.\n\n[Your name]\nTread Customer Success"},
+        {name:"Version B — Existing account",
+         subject:"Welcome to Tread — here's how to get started",
+         body:"Hi [Name],\n\nWelcome to Tread! We're looking forward to working with you and your team!\n\nHere are 3 steps to get started in Tread:\n\n1. Log in: Since you're already using Tread, simply log in the same way as you do today at app.tread-horizon.com\n\n2. Upload your data: Go to Settings and upload your existing data (start with at least your customers, sites, equipment, materials, and users): [setup guide link]\n\n3. Create your first Project and Order: Projects represent your recurring customer jobs. Set up 1–3 Projects, create an Order, and learn the basics of dispatching in Tread: [getting started guide link]\n\nWe'll reach out in a few days to see how things are going and make sure you're set up for success. If anything comes up before then, we're here — reach us at support@tread.io, chat with us in the app (bubble, top right), or browse our Help Center anytime.\n\n[Your name]\nTread Customer Success"}
+      ]
+    },
+    day1:{
+      day:"Day 1 · Email 2", title:"Data-upload reminder",
+      trig:"<span class='lab'>Outbound trigger</span><b>WAIT 24h</b> after Day 0 &rarr; check for a login event. IF no login &rarr; send. ELSE &rarr; skip this step.",
+      subject:"Quick reminder — 3 steps to get Tread running for your team",
+      body:"Hi [Name],\n\nJust checking in — did you get a chance to log in to Tread yet?\n\nThe quickest way to get value fast is to complete these 3 steps this week:\n\n1. Log in and activate your account\n2. Upload your data (customers, sites, equipment, materials, users) → [guide link]\n3. Create your first Project and Order → [guide link]\n\nIt takes about 30–60 minutes total. Your CSM [CSM Name] is available to walk through it live if that's easier — just reply and we'll set up a quick call.\n\n— [CSM Name], Tread Customer Success"
+    },
+    day3:{
+      day:"Day 3 · Email 3", title:"First Project & Order nudge",
+      trig:"<span class='lab'>Outbound trigger</span><b>WAIT to Day 3</b> after account creation &rarr; send to all (no condition / regardless of login).",
+      subject:"Have you created your first Project yet?",
+      body:"Hi [Name],\n\nBy now you should have your data uploaded and your first Project set up. If not — here's the shortcut: [Loom / Help Center link]\n\nA Project in Tread represents one of your recurring customer jobs. Once you have even one Project live, you can start dispatching immediately.\n\n⚠️ Many new customers get trained but don't send their first real dispatch for days or weeks after. Don't let that be you — the value of Tread clicks the moment you run your first live job through it.\n\nA few things that trip people up early:\n• Site not showing up → make sure it's uploaded under Settings → Sites first\n• Equipment type missing → add it under Settings → Equipment Types\n• Drivers not appearing → they need to be invited before they show in the dispatch panel\n\nNeed a hand? Hit reply — we respond same day.\n\n— [CSM Name]"
+    },
+    day7:{
+      day:"Day 7 · Email 4", title:"Week-1 check-in + vendor prompt",
+      trig:"<span class='lab'>Outbound trigger</span><b>WAIT to Day 7</b> &rarr; send. Branch: IF no dispatch event recorded &rarr; tag \"Needs Scheduling\" and route to CSM to book a call.",
+      subject:"Your first week in Tread — how's it going?",
+      body:"Hi [Name],\n\nOne week in. Here's where most teams are at this point:\n\n✓ Data uploaded (customers, sites, equipment, materials)\n✓ 1–3 Projects created\n✓ First Order dispatched\n✓ Drivers invited and using the app\n\nIf you're trained but haven't sent a live dispatch yet — let's fix that this week. Reply and we'll get on a 15-min call to run through it together.\n\nNEXT: Vendors & Subhaulers\nIf you work with subhaulers, now is the time to add them under Settings → Vendors. We'll follow up shortly with a ready-to-send email you can forward to each of them.\n\nQuestions? Reply here or book time: [Calendly link]\n\n— [CSM Name]"
+    },
+    day10:{
+      day:"Day 10 · Email 5", title:"Vendor invitation flow",
+      trig:"<span class='lab'>Outbound trigger</span><b>WAIT to Day 10</b> AND vendor records exist in Settings &rarr; send. The forward block below is the reusable asset the customer sends to each subhauler.",
+      subject:"Time to invite your vendors — here's what to send them",
+      body:"Hi [Name],\n\nYour vendors are set up in Tread. Now it's time to loop them in so they're ready to receive job assignments.\n\nBelow is a ready-to-send email you can forward directly to each subhauler. We've also included a text-friendly version if you'd prefer SMS.\n\nACTION: Send the vendor notification to each subhauler before your first dispatched job that involves them.\n\n--- FORWARD TO YOUR VENDORS ---\n\nHi [Vendor Name],\n\nWe are excited to announce that starting [Launch Date], all dispatching will be managed through Tread's web and mobile application. This will make it easier for you to receive our job assignments and dispatch them to your drivers.\n\nPlease expect an invitation from Tread via email or SMS soon so you can get started.\n\nAction Required:\n• Accept the Tread invitation via text and/or email\n• Follow the instructions to download the new app and set up your account\n• Review this Training Guide to set up your Trucks and Drivers: [Training Guide link]\n• Share this Driver Guide with your drivers: [Driver Guide link]\n\nWe appreciate your help and are here to support you during this transition. Please feel free to reach out to Tread Support directly at support@tread.io.\n\nThank you,\n[Your name / Company name]\n\n--- END FORWARD ---\n\nNeed us to send it on your behalf? Share the vendor contact info and we'll handle it.\n\n— [CSM Name]"
+    },
+    day14:{
+      day:"Day 14 · Email 6", title:"Mid-point — activate next",
+      trig:"<span class='lab'>Outbound trigger</span><b>WAIT to Day 14</b> after account creation &rarr; send.",
+      subject:"Two weeks in — here's what to activate next",
+      body:"Hi [Name],\n\nTwo weeks in — by now you should be dispatching regularly. Here's what the most successful Tread customers activate next:\n\n─ APPROVALS (Billing & Foreman) ─\nStop chasing paper tickets. Tread's approval workflow lets your foreman confirm loads and your biller approve hours — all in one place.\n→ How to set up Approvals: [link]\n\n─ REPORTS & EXPORTS ─\nYour first P&L summary and driver payroll report are a few clicks away. Run your first job cost report now so you have a baseline for the month.\n→ Run your first report: [link]\n\n─ REAL-TIME NOTIFICATIONS ─\nKeep your whole team in the know via SMS, email, or push — so everyone always knows what's happening, the moment it does.\n→ Set up notifications: [link]\n\nAny of these feel unclear? Book a 20-min walkthrough: [Calendly link]\n\n— [CSM Name]"
+    },
+    day21:{
+      day:"Day 21 · Email 7", title:"Billing & approvals activation",
+      trig:"<span class='lab'>Outbound trigger</span><b>WAIT to Day 21</b> after account creation &rarr; send (ahead of first month-end close).",
+      subject:"Almost at 30 days — let's make sure billing is set up",
+      body:"Hi [Name],\n\nThree weeks in. Before your first full month closes, let's make sure your billing workflow is ready.\n\nFIRST BILLING CYCLE CHECKLIST:\n☐ Ticket review configured (Approvals → Ticket Review)\n☐ Driver and vendor payables set up\n☐ Settlement add-ons in place (if applicable)\n☐ At least one test export run (CSV or PDF)\n☐ Foreman approvals enabled (if you use foremen)\n\nIf any of these are unchecked, now is the time. Getting this right before month-end saves significant back-and-forth.\n\n→ Billing workflow guide: [link]\n\nYour CSM can walk through this live — just reply to book time.\n\n— [CSM Name]"
+    },
+    day25:{
+      day:"Day 25 · Email 8", title:"Integration flows check (Enterprise only)",
+      trig:"<span class='lab'>Outbound trigger</span><b>WAIT to Day 25</b> AND plan = Enterprise &rarr; send. ELSE (Mid-market) &rarr; skip this step entirely. Personalise before sending.",
+      subject:"Let's close out your integration setup",
+      body:"Hi [Name],\n\nAs we head into your 30-day mark, I want to make sure we've addressed your integration setup before we wrap the formal onboarding phase.\n\nBased on what we discussed during kickoff, here's where things stand on [integration name — e.g. Vista export / ERP sync / accounting system]:\n\n[Update based on tracker status — complete / in progress / gaps need dev]\n\nIf there are outstanding technical gaps, let's flag them now and assign owners so nothing gets lost after the 30-day mark.\n\n→ Book a technical integration call: [Calendly link]\n\n— [CSM Name]"
+    },
+    day28:{
+      day:"Day 28 · Email 9", title:"30-day success review",
+      trig:"<span class='lab'>Outbound trigger</span><b>WAIT to Day 28</b> (or once first dispatched month completes) &rarr; send. Final step of the Series.",
+      subject:"30-day check-in — how is Tread working for your team?",
+      body:"Hi [Name],\n\nOne month in — congratulations on getting your team running on Tread.\n\nI'd love to connect for a quick 30-day review to cover:\n• What's working well\n• Any friction points to address\n• What to focus on in the next 30–60 days (advanced workflows, reporting, integrations, bulk actions, project rates)\n\n→ Book your 30-day review: [Calendly link]\n\nIn the meantime, here are features you may not have explored yet:\n• Data Exports — tickets, hours, loads to CSV/PDF\n• P&L Summary — job profitability at a glance\n• Advanced Dispatching — running loads, copy/edit orders, bulk actions, project rates\n• Integrations — connect Tread to your ERP or accounting system: [link]\n\nThank you for trusting Tread. We're here for every step ahead.\n\n— [CSM Name]"
+    },
+    sms:{
+      day:"Ongoing · Service stop", title:"Text vendor notification (SMS)",
+      trig:"<span class='lab'>Outbound trigger</span><b>MANUAL / behavioral:</b> vendor invite still unaccepted AND a job involving them is within 48 hours &rarr; send SMS to the vendor contact.",
+      subject:"",
+      body:"Hi — Starting [Date], [Company Name] is dispatching the job we talked about through the Tread app.\n\nLook out for a Tread invite via text or email and:\n• Accept the invite\n• Download the Tread Materials Logistics app: [app link]\n• Check out the Setup Guide & share the Driver Guide with your drivers:\n  Setup Guide: [Setup Guide link]\n  Driver Guide: [Driver Guide link]\n\nQuestions? Email support@tread.io or text us back here."
+    }
+  };
+
+  var mb=document.getElementById('mb'),
+      mDay=document.getElementById('m-day'),
+      mTitle=document.getElementById('m-title'),
+      mTrig=document.getElementById('m-trig'),
+      mVars=document.getElementById('m-variants'),
+      mSubjWrap=document.getElementById('m-subject-wrap'),
+      mSubj=document.getElementById('m-subject'),
+      mBody=document.getElementById('m-body'),
+      copyAll=document.getElementById('copy-all'),
+      copyBody=document.getElementById('copy-body'),
+      toast=document.getElementById('toast');
+  var lastFocus=null, cur={subject:'',body:''}, toastTimer=null;
+
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function hl(s){return esc(s).replace(/\[[^\]]+\]/g,function(m){return '<mark class="ph">'+m+'</mark>';});}
+
+  function showToast(msg){
+    toast.textContent=msg||'Copied to clipboard';
+    toast.classList.add('show');
+    if(toastTimer)clearTimeout(toastTimer);
+    toastTimer=setTimeout(function(){toast.classList.remove('show');},1700);
+  }
+  function copy(text){
+    function done(){showToast();}
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done,fallback);
+    } else { fallback(); }
+    function fallback(){
+      var ta=document.createElement('textarea');
+      ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+      document.body.appendChild(ta);ta.focus();ta.select();
+      try{document.execCommand('copy');showToast();}catch(e){showToast('Press ⌘/Ctrl+C to copy');}
+      document.body.removeChild(ta);
+    }
+  }
+
+  function renderTpl(t){
+    cur.subject=t.subject||'';
+    cur.body=t.body||'';
+    if(cur.subject){mSubjWrap.style.display='';mSubj.innerHTML=hl(cur.subject);copyBody.style.display='';copyAll.textContent='📋 Copy full email';}
+    else{mSubjWrap.style.display='none';copyBody.style.display='none';copyAll.textContent='📋 Copy message';}
+    mBody.innerHTML=hl(cur.body);
+    mBody.scrollTop=0;
+  }
+  function buildVariants(t){
+    mVars.innerHTML='';
+    if(t.variants&&t.variants.length){
+      mVars.hidden=false;
+      t.variants.forEach(function(v,i){
+        var b=document.createElement('button');
+        b.className='vbtn'+(i===0?' active':'');
+        b.textContent=v.name;
+        b.addEventListener('click',function(){
+          mVars.querySelectorAll('.vbtn').forEach(function(x){x.classList.remove('active');});
+          b.classList.add('active');
+          renderTpl(v);
+        });
+        mVars.appendChild(b);
+      });
+      renderTpl(t.variants[0]);
+    } else {
+      mVars.hidden=true;
+      renderTpl(t);
+    }
+  }
+  function open(key,trigger){
+    var t=T[key]; if(!t)return;
+    lastFocus=trigger||document.activeElement;
+    mDay.textContent=t.day;
+    mTitle.textContent=t.title;
+    mTrig.innerHTML=t.trig;
+    buildVariants(t);
+    mb.hidden=false;
+    document.body.style.overflow='hidden';
+    document.getElementById('m-close').focus();
+  }
+  function close(){
+    mb.hidden=true;
+    document.body.style.overflow='';
+    if(lastFocus&&lastFocus.focus)lastFocus.focus();
+  }
+
+  document.querySelectorAll('.open-tpl').forEach(function(btn){
+    btn.addEventListener('click',function(){open(btn.getAttribute('data-tpl'),btn);});
+  });
+  document.getElementById('m-close').addEventListener('click',close);
+  mb.addEventListener('click',function(e){if(e.target===mb)close();});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!mb.hidden)close();});
+  copyAll.addEventListener('click',function(){
+    var text=cur.subject?('Subject: '+cur.subject+'\n\n'+cur.body):cur.body;
+    copy(text);
+  });
+  copyBody.addEventListener('click',function(){copy(cur.body);});
+})();
+</script>
+
+</body>
+</html>
